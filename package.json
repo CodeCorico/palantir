@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve serve:storybook -p 9000 -c src/bootstrap/storybook",
-    "build": "vue-cli-service build",
+    "serve": "vue-cli-service serve ./src/bootstrap/index.js",
+    "build": "vue-cli-service build ./src/bootstrap/index.js",
     "lint": "vue-cli-service lint",
-    "storybook": "start-storybook -p 9001 -c .storybook"
+    "storybook": "start-storybook -p 9001 -c ./src/bootstrap/storybook"
   },
   "dependencies": {
     "vue": "^2.5.17"
@@ -19,6 +19,8 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0-0",
+    "node-sass": "^4.10.0",
+    "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.5.17"
   },
   "eslintConfig": {
