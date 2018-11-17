@@ -6,9 +6,11 @@
     "serve": "vue-cli-service serve ./src/bootstrap/index.js",
     "build": "vue-cli-service build ./src/bootstrap/index.js",
     "lint": "vue-cli-service lint",
-    "storybook": "start-storybook -p 9001 -c ./src/bootstrap/storybook"
+    "storybook": "start-storybook -p 9000 -c ./src/bootstrap/storybook"
   },
   "dependencies": {
+    "@storybook/addon-knobs": "^4.0.7",
+    "babel-preset-vue": "^2.0.2",
     "vue": "^2.5.17"
   },
   "devDependencies": {
