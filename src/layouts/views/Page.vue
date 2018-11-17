@@ -1,15 +1,19 @@
 <template>
   <div id="page">
     <ui-header>
-
+      <template slot="left">
+        <button @click="sidebarOpened = !sidebarOpened">toggle</button>
+      </template>
     </ui-header>
 
     <div class="page-content">
 
     </div>
 
-    <ui-sidebar>
-
+    <ui-sidebar class="page-sidebar-left" :opened="sidebarOpened">
+      <template slot="content">
+        <h2>Hello</h2>
+      </template>
     </ui-sidebar>
   </div>
 </template>
@@ -23,6 +27,11 @@ export default {
   components: {
     UiHeader,
     UiSidebar,
+  },
+  data() {
+    return {
+      sidebarOpened: false,
+    };
   },
 };
 </script>
@@ -58,6 +67,13 @@ body {
 
   .page-content {
     flex: 1;
+  }
+
+  .page-sidebar-left {
+    position: fixed;
+    left: 0;
+    top: 70px;
+    bottom: 0;
   }
 }
 </style>
