@@ -41,6 +41,7 @@ export default {
   }
 
   h1 {
+    user-select: none;
     position: absolute;
     top: 50%;
     left: 50%;

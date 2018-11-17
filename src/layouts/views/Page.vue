@@ -21,9 +21,30 @@
     </ui-sidebar>
 
     <ui-sidebar class="page-sidebar-right" :opened="sidebarRightOpened">
-      <h2>Hello 3</h2>
-
-      <h2>Hello 4</h2>
+      <ui-task
+        name="Repository health checker"
+        description="Check every 5min for new content"
+        :remaining-time="2000"
+      ></ui-task>
+      <ui-task
+        name="Repository fetcher"
+        description="Download the repository content"
+      ></ui-task>
+      <ui-task
+        name="Repository builder"
+        state="running"
+        description="Build the repository"
+        ></ui-task>
+      <ui-task
+        name="Success task"
+        description="A task in success"
+        state="success"
+      ></ui-task>
+      <ui-task
+        name="Error task"
+        description="A task in error"
+        state="error"
+      ></ui-task>
     </ui-sidebar>
   </div>
 </template>
@@ -31,12 +52,14 @@
 <script>
 import UiHeader from '@/ui/views/Header.vue';
 import UiSidebar from '@/ui/views/Sidebar.vue';
+import UiTask from '@/ui/views/Task.vue';
 
 export default {
   name: 'app',
   components: {
     UiHeader,
     UiSidebar,
+    UiTask,
   },
   data() {
     return {
