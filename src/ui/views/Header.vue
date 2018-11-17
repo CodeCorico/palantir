@@ -1,6 +1,9 @@
 <template>
   <header class="ui-header">
-    <h1>Palantir</h1>
+    <h1>
+      <img src="../assets/logo.png" />
+      Palantir
+    </h1>
   </header>
 </template>
 
@@ -10,9 +13,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 @import '@/ui/assets/variables.scss';
 
+.ui-header {
   position: relative;
   background: $colorPanelBg;
 
@@ -25,5 +29,12 @@ export default {
     padding: 0;
     font-family: 'Montserrat', sans-serif;
     font-size: 23px;
+
+    img {
+      height: 30px;
+      display: inline-block;
+      vertical-align: bottom;
+    }
   }
+}
 </style>
