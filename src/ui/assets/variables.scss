@@ -1,3 +1,7 @@
 $colorBg: #102027;
-$colorPanelBg: #1f3d4a;
+$colorPanelLighter: #1f3d4a;
+$colorPanelDarker: #081419;
 $colorText: white;
+
+$easeOutQuart: cubic-bezier(0.165, 0.84, 0.44, 1);
+$easeOutCirc: cubic-bezier(0.075, 0.820, 0.165, 1);

@@ -2,7 +2,11 @@
   <div id="page">
     <ui-header>
       <template slot="left">
-        <button @click="sidebarOpened = !sidebarOpened">toggle</button>
+        <button @click="sidebarLeftOpened = !sidebarLeftOpened">toggle</button>
+      </template>
+
+      <template slot="right">
+        <button @click="sidebarRightOpened = !sidebarRightOpened">toggle</button>
       </template>
     </ui-header>
 
@@ -10,10 +14,16 @@
 
     </div>
 
-    <ui-sidebar class="page-sidebar-left" :opened="sidebarOpened">
-      <template slot="content">
-        <h2>Hello</h2>
-      </template>
+    <ui-sidebar class="page-sidebar-left" :opened="sidebarLeftOpened">
+      <h2>Hello 1</h2>
+
+      <h2>Hello 2</h2>
+    </ui-sidebar>
+
+    <ui-sidebar class="page-sidebar-right" :opened="sidebarRightOpened">
+      <h2>Hello 3</h2>
+
+      <h2>Hello 4</h2>
     </ui-sidebar>
   </div>
 </template>
@@ -30,7 +40,8 @@ export default {
   },
   data() {
     return {
-      sidebarOpened: false,
+      sidebarLeftOpened: false,
+      sidebarRightOpened: false,
     };
   },
 };
@@ -69,11 +80,18 @@ body {
     flex: 1;
   }
 
-  .page-sidebar-left {
+  .page-sidebar-left, .page-sidebar-right {
     position: fixed;
-    left: 0;
     top: 70px;
     bottom: 0;
+  }
+
+  .page-sidebar-left {
+    left: 0;
+  }
+
+  .page-sidebar-right {
+    right: 0;
   }
 }
 </style>

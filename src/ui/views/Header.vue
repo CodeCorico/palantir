@@ -26,7 +26,7 @@ export default {
 
 .ui-header {
   position: relative;
-  background: $colorPanelBg;
+  background: $colorPanelLighter;
 
   .left {
     position: absolute;
