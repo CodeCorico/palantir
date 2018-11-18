@@ -21,6 +21,9 @@ export default {
       openSbTimeout: null,
     };
   },
+  created () {
+    this.$on('naviguate', () => this.$emit('close'));
+  },
   methods: {
     toggleStoryboard(open) {
       clearTimeout(this.openSbTimeout);

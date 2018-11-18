@@ -9,6 +9,7 @@ export default {
   name: 'ui-accordion',
   created () {
     this.$on('accordion-item-open', item => this.$emit('accordion-close', item));
+    this.$on('naviguate', () => this.$parent.$emit('naviguate'));
   },
 };
 </script>

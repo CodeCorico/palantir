@@ -11,17 +11,21 @@
     </ui-header>
 
     <div class="page-content">
-
+      <router-view></router-view>
     </div>
 
-    <ui-sidebar class="page-sidebar-left" :opened="sidebarLeftOpened">
+    <ui-sidebar
+      class="page-sidebar-left"
+      :opened.sync="sidebarLeftOpened"
+      @close="sidebarLeftOpened = false"
+    >
       <ui-accordion>
         <h1>Palantir</h1>
 
         <ui-accordion-item
           title="Dashboards"
           :list="[{
-            url: '/',
+            url: '/d/',
             icon: 'fas fa-home',
             text: 'Home',
           }, {
@@ -84,7 +88,8 @@
             icon: 'fas fa-code-branch',
             text: 'CI',
           }, {
-            url: 'https://aramisauto.slack.com/messages/CE0NXSDMZ',
+            url: '//aramisauto.slack.com/messages/CE0NXSDMZ',
+            external: true,
             icon: 'fab fa-slack',
             text: 'Support',
           }]"
@@ -220,7 +225,11 @@
       </ui-accordion>
     </ui-sidebar>
 
-    <ui-sidebar class="page-sidebar-right" :opened="sidebarRightOpened">
+    <ui-sidebar
+      class="page-sidebar-right"
+      :opened.sync="sidebarRightOpened"
+      @close="sidebarRightOpened = false"
+    >
       <ui-task
         name="Repository health checker"
         description="Check every 5min for new content"
@@ -257,7 +266,7 @@ import UiAccordion from '@/ui/views/Accordion.vue';
 import UiAccordionItem from '@/ui/views/AccordionItem.vue';
 
 export default {
-  name: 'app',
+  name: 'page',
   components: {
     UiHeader,
     UiSidebar,

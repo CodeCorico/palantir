@@ -10,8 +10,8 @@
       <i class="fas fa-angle-down ticker"></i>
     </h2>
     <div class="content" ref="content">
-      <div class="selector">
-        <select v-if="selectors" v-model="selected">
+      <div v-if="selectors" class="selector">
+        <select v-model="selected">
           <option v-for="selector in selectors" :key="selector" :value="selector">
             {{ selector }}
           </option>
@@ -19,10 +19,14 @@
       </div>
       <ul>
         <li v-for="(listItem, listItemIndex) in listFilter(list)" :key="listItemIndex">
-          <a :href="listItem.url">
+          <router-link
+            :to="listItem.url"
+            :target="listItem.external ? '_blank' : ''"
+            @click.native="$parent.$emit('naviguate')"
+          >
             <i v-if="listItem.icon" class="list-item-icon" :class="[listItem.icon]"></i>
             {{ listItem.text }}
-          </a>
+          </router-link>
         </li>
       </ul>
     </div>
@@ -154,6 +158,10 @@ export default {
         width: 100%;
         background: $colorPanelLighter;
         color: $colorText;
+
+        &:focus, &:active {
+          outline: none;
+        }
       }
     }
 
