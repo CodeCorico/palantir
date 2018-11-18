@@ -76,6 +76,7 @@ export default {
   margin-bottom: 10px;
   border-width: 1px;
   border-style: solid;
+  border-radius: 4px;
 
   &.state-idle {
     border-color: rgba(12, 181, 249, 0.8);

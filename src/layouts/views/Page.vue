@@ -15,9 +15,197 @@
     </div>
 
     <ui-sidebar class="page-sidebar-left" :opened="sidebarLeftOpened">
-      <h2>Hello 1</h2>
+      <ui-accordion>
+        <h1>Palantir</h1>
 
-      <h2>Hello 2</h2>
+        <ui-accordion-item
+          title="Dashboards"
+          :list="[{
+            url: '/',
+            icon: 'fas fa-home',
+            text: 'Home',
+          }, {
+            url: '/',
+            icon: 'fas fa-code-branch',
+            text: 'Pull requests',
+          }, {
+            url: '/',
+            icon: 'fas fa-bug',
+            text: 'Issues',
+          }]"
+        ></ui-accordion-item>
+
+        <h1>Websites</h1>
+
+        <ui-accordion-item
+          title="Aramisauto"
+          :list="[{
+            url: '/s/aramisauto-site/docs/latest/readme',
+            icon: 'fas fa-book',
+            text: 'Documentation',
+          }, {
+            url: '/s/aramisauto-site/diagrams/latest',
+            icon: 'fas fa-project-diagram',
+            text: 'Diagrams',
+          }, {
+            url: '/s/aramisauto-site/stories/latest',
+            icon: 'fas fa-columns',
+            text: 'Stories',
+          }, {
+            url: '/s/aramisauto-site/changelog/latest',
+            icon: 'fas fa-stream',
+            text: 'Changelog',
+          }, {
+            url: '/s/aramisauto-site/sources/latest',
+            icon: 'fab fa-github',
+            text: 'Sources',
+          }, {
+            url: '/s/aramisauto-site/coverage/latest',
+            icon: 'fas fa-file-contract',
+            text: 'Coverage',
+          }, {
+            url: '/s/aramisauto-site/reports/latest',
+            icon: 'fas fa-chart-pie',
+            text: 'Reports',
+          }, {
+            url: '/s/aramisauto-site/ci/latest',
+            icon: 'fas fa-code-branch',
+            text: 'CI',
+          }, {
+            url: 'https://aramisauto.slack.com/messages/CE0NXSDMZ',
+            icon: 'fab fa-slack',
+            text: 'Support',
+          }]"
+        ></ui-accordion-item>
+
+        <ui-accordion-item
+          title="Cardoen"
+          :list="[{
+            url: '/s/aramisauto-site/docs/latest/readme',
+            icon: 'fas fa-book',
+            text: 'Documentation',
+          }, {
+            url: '/s/aramisauto-site/diagrams/latest',
+            icon: 'fas fa-project-diagram',
+            text: 'Diagrams',
+          }, {
+            url: '/s/aramisauto-site/stories/latest',
+            icon: 'fas fa-columns',
+            text: 'Stories',
+          }, {
+            url: '/s/aramisauto-site/changelog/latest',
+            icon: 'fas fa-stream',
+            text: 'Changelog',
+          }, {
+            url: '/s/aramisauto-site/sources/latest',
+            icon: 'fab fa-github',
+            text: 'Sources',
+          }, {
+            url: '/s/aramisauto-site/coverage/latest',
+            icon: 'fas fa-file-contract',
+            text: 'Coverage',
+          }, {
+            url: '/s/aramisauto-site/reports/latest',
+            icon: 'fas fa-chart-pie',
+            text: 'Reports',
+          }, {
+            url: '/s/aramisauto-site/ci/latest',
+            icon: 'fas fa-code-branch',
+            text: 'CI',
+          }, {
+            url: 'https://aramisauto.slack.com/messages/CE0NXSDMZ',
+            icon: 'fab fa-slack',
+            text: 'Support',
+          }]"
+        ></ui-accordion-item>
+
+        <h1>Services</h1>
+
+        <ui-accordion-item
+          title="Ecommerce"
+          :list="[{
+            url: '/s/aramisauto-site/docs/latest/readme',
+            icon: 'fas fa-book',
+            text: 'Documentation',
+          }, {
+            url: '/s/aramisauto-site/diagrams/latest',
+            icon: 'fas fa-project-diagram',
+            text: 'Diagrams',
+          }, {
+            url: '/s/aramisauto-site/stories/latest',
+            icon: 'fas fa-columns',
+            text: 'Stories',
+          }, {
+            url: '/s/aramisauto-site/changelog/latest',
+            icon: 'fas fa-stream',
+            text: 'Changelog',
+          }, {
+            url: '/s/aramisauto-site/sources/latest',
+            icon: 'fab fa-github',
+            text: 'Sources',
+          }, {
+            url: '/s/aramisauto-site/coverage/latest',
+            icon: 'fas fa-file-contract',
+            text: 'Coverage',
+          }, {
+            url: '/s/aramisauto-site/reports/latest',
+            icon: 'fas fa-chart-pie',
+            text: 'Reports',
+          }, {
+            url: '/s/aramisauto-site/ci/latest',
+            icon: 'fas fa-code-branch',
+            text: 'CI',
+          }, {
+            url: 'https://aramisauto.slack.com/messages/CE0NXSDMZ',
+            icon: 'fab fa-slack',
+            text: 'Support',
+          }]"
+        ></ui-accordion-item>
+
+        <h1>Libraries</h1>
+
+        <ui-accordion-item
+          title="Core SPA"
+          :list="[{
+            url: '/s/aramisauto-site/docs/latest/readme',
+            icon: 'fas fa-book',
+            text: 'Documentation',
+          }, {
+            url: '/s/aramisauto-site/diagrams/latest',
+            icon: 'fas fa-project-diagram',
+            text: 'Diagrams',
+          }, {
+            url: '/s/aramisauto-site/stories/latest',
+            icon: 'fas fa-columns',
+            text: 'Stories',
+          }, {
+            url: '/s/aramisauto-site/changelog/latest',
+            icon: 'fas fa-stream',
+            text: 'Changelog',
+          }, {
+            url: '/s/aramisauto-site/sources/latest',
+            icon: 'fab fa-github',
+            text: 'Sources',
+          }, {
+            url: '/s/aramisauto-site/coverage/latest',
+            icon: 'fas fa-file-contract',
+            text: 'Coverage',
+          }, {
+            url: '/s/aramisauto-site/reports/latest',
+            icon: 'fas fa-chart-pie',
+            text: 'Reports',
+          }, {
+            url: '/s/aramisauto-site/ci/latest',
+            icon: 'fas fa-code-branch',
+            text: 'CI',
+          }, {
+            url: 'https://aramisauto.slack.com/messages/CE0NXSDMZ',
+            icon: 'fab fa-slack',
+            text: 'Support',
+          }]"
+        ></ui-accordion-item>
+
+      </ui-accordion>
     </ui-sidebar>
 
     <ui-sidebar class="page-sidebar-right" :opened="sidebarRightOpened">
@@ -53,6 +241,8 @@
 import UiHeader from '@/ui/views/Header.vue';
 import UiSidebar from '@/ui/views/Sidebar.vue';
 import UiTask from '@/ui/views/Task.vue';
+import UiAccordion from '@/ui/views/Accordion.vue';
+import UiAccordionItem from '@/ui/views/AccordionItem.vue';
 
 export default {
   name: 'app',
@@ -60,6 +250,8 @@ export default {
     UiHeader,
     UiSidebar,
     UiTask,
+    UiAccordion,
+    UiAccordionItem,
   },
   data() {
     return {
