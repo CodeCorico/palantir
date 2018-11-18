@@ -39,29 +39,41 @@
 
         <ui-accordion-item
           title="Aramisauto"
+          :selectors="['v1.0.4 (latest)', 'v1.0.3', 'v1.0.2', 'v1.0.1']"
           :list="[{
             url: '/s/aramisauto-site/docs/latest/readme',
             icon: 'fas fa-book',
+            selectors: ['v1.0.4 (latest)'],
+            text: 'Documentation',
+          }, {
+            url: '/s/aramisauto-site/docs/v1.0.3/readme',
+            icon: 'fas fa-book',
+            selectors: ['v1.0.3'],
             text: 'Documentation',
           }, {
             url: '/s/aramisauto-site/diagrams/latest',
             icon: 'fas fa-project-diagram',
+            selectors: ['v1.0.2'],
             text: 'Diagrams',
           }, {
             url: '/s/aramisauto-site/stories/latest',
             icon: 'fas fa-columns',
+            selectors: ['v1.0.2'],
             text: 'Stories',
           }, {
             url: '/s/aramisauto-site/changelog/latest',
             icon: 'fas fa-stream',
+            selectors: ['v1.0.2'],
             text: 'Changelog',
           }, {
             url: '/s/aramisauto-site/sources/latest',
             icon: 'fab fa-github',
+            selectors: ['v1.0.2'],
             text: 'Sources',
           }, {
             url: '/s/aramisauto-site/coverage/latest',
             icon: 'fas fa-file-contract',
+            selectors: ['v1.0.2'],
             text: 'Coverage',
           }, {
             url: '/s/aramisauto-site/reports/latest',

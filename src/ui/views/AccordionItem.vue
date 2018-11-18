@@ -3,21 +3,29 @@
     class="ui-accordion-item"
     :class="{ opened }"
     :style="{ height: `${height}px` }"
-    @click="toggleOpen()"
   >
-    <h2 ref="title">
+    <h2 ref="title" @click="toggleOpen()">
       <i v-if="icon" class="icon" :class="[icon]"></i>
       {{ title }}
       <i class="fas fa-angle-down ticker"></i>
     </h2>
-    <ul class="content" ref="content">
-      <li v-for="listItem in list" :key="listItem.text">
-        <a :href="listItem.url">
-          <i v-if="listItem.icon" class="list-item-icon" :class="[listItem.icon]"></i>
-          {{ listItem.text }}
-        </a>
-      </li>
-    </ul>
+    <div class="content" ref="content">
+      <div class="selector">
+        <select v-if="selectors" v-model="selected">
+          <option v-for="selector in selectors" :key="selector" :value="selector">
+            {{ selector }}
+          </option>
+        </select>
+      </div>
+      <ul>
+        <li v-for="(listItem, listItemIndex) in listFilter(list)" :key="listItemIndex">
+          <a :href="listItem.url">
+            <i v-if="listItem.icon" class="list-item-icon" :class="[listItem.icon]"></i>
+            {{ listItem.text }}
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -28,12 +36,14 @@ export default {
     title: String,
     icon: String,
     list: Array,
+    selectors: Array,
   },
   data() {
     return {
       contentHeight: null,
       opened: false,
       height: 46,
+      selected: this.selectors ? this.selectors[0] : null,
     };
   },
   created () {
@@ -46,18 +56,33 @@ export default {
     });
   },
   methods: {
-    toggleOpen(force) {
-      const open = typeof force === 'boolean' ? force : !this.opened;
-
-      if (open) {
+    refreshLayout() {
+      if (this.opened) {
         this.$set(this, 'height', this.$refs.title.clientHeight + this.$refs.content.clientHeight);
       } else {
         this.$set(this, 'height', this.$refs.title.clientHeight);
       }
+    },
+    toggleOpen(force) {
+      const open = typeof force === 'boolean' ? force : !this.opened;
 
       this.$set(this, 'opened', open);
+
+      this.refreshLayout();
+
       this.$emit(open ? 'open' : 'close');
       this.$parent.$emit(open ? 'accordion-item-open' : 'accordion-item-close', this);
+    },
+    listFilter(list) {
+      if (!this.selected) {
+        return list;
+      }
+
+      this.$nextTick(() => this.refreshLayout());
+
+      return list.filter(item => !item.selectors
+        ? true
+        : item.selectors.indexOf(this.selected) > -1);
     },
   },
 };
@@ -75,7 +100,7 @@ export default {
   &.opened {
     > h2 {
       color: rgba(255, 255, 255, 0.9);
-      background: rgba($colorPanelLighter, 0.5);
+      background: $colorPanelLighter;
 
       .ticker {
         transform: rotate(180deg);
@@ -118,30 +143,46 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 10px 20px;
-    margin: 0;
 
-    li {
-      list-style: none;
+    > .selector {
+      padding: 10px 20px 0;
+
+      select {
+        border: none;
+        padding: 6px;
+        border-radius: 5px;
+        width: 100%;
+        background: $colorPanelLighter;
+        color: $colorText;
+      }
+    }
+
+    > ul {
+      padding: 10px 20px;
       margin: 0;
 
-      a, a:hover, a:focus, a:visited {
-        color: rgba($colorText, 0.7);
-        text-decoration: none;
-      }
+      li {
+        list-style: none;
+        margin: 0;
 
-      a {
-        display: block;
-        font-size: 13px;
-        padding: 4px 0;
-
-        &:hover {
-          color: $colorText;
+        a, a:hover, a:focus, a:visited {
+          color: rgba($colorText, 0.7);
+          text-decoration: none;
         }
 
-        .list-item-icon {
-          margin-right: 10px;
-          width: 18px;
+        a {
+          display: block;
+          font-size: 13px;
+          padding: 4px 0;
+
+          &:hover {
+            color: $colorText;
+          }
+
+          .list-item-icon {
+            margin-right: 10px;
+            width: 18px;
+          }
         }
       }
     }
