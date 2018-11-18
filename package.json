@@ -11,7 +11,8 @@
   "dependencies": {
     "@storybook/addon-knobs": "^4.0.7",
     "babel-preset-vue": "^2.0.2",
-    "vue": "^2.5.17"
+    "vue": "^2.5.17",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "@storybook/vue": "^4.0.7",
