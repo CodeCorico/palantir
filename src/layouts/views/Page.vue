@@ -25,15 +25,15 @@
         <ui-accordion-item
           title="Dashboards"
           :list="[{
-            url: '/d/',
+            url: '/',
             icon: 'fas fa-home',
             text: 'Home',
           }, {
-            url: '/',
+            url: '/d/pull-requests',
             icon: 'fas fa-code-branch',
             text: 'Pull requests',
           }, {
-            url: '/',
+            url: '/d/issues',
             icon: 'fas fa-bug',
             text: 'Issues',
           }]"

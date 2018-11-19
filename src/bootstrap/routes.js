@@ -1,5 +1,5 @@
 export default [{
-  path: '/d',
-  name: 'TestPage',
-  component: () => import('@/layouts/views/Dashboard'),
+  path: '/d/:url',
+  name: 'dashboard',
+  component: () => import('@/layouts/views/DashboardPage'),
 }];
