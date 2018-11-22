@@ -2,11 +2,37 @@
   <div id="page">
     <ui-header>
       <template slot="left">
-        <button @click="sidebarLeftOpened = !sidebarLeftOpened">toggle</button>
+        <button
+          @click="sidebarLeftOpened = !sidebarLeftOpened"
+          style="
+            outline: none;
+            cursor: pointer;
+            background: #192b32;
+            border: 0;
+            width: 40px;
+            height: 40px;
+            transform: rotate(45deg);
+            margin-top: 9px;
+            border: 3px solid black;
+          "
+        ></button>
       </template>
 
       <template slot="right">
-        <button @click="sidebarRightOpened = !sidebarRightOpened">toggle</button>
+        <button
+          @click="sidebarRightOpened = !sidebarRightOpened"
+          style="
+            outline: none;
+            cursor: pointer;
+            background: #192b32;
+            border: 0;
+            width: 40px;
+            height: 40px;
+            transform: rotate(45deg);
+            margin-top: 9px;
+            border: 3px solid black;
+          "
+        ></button>
       </template>
     </ui-header>
 
@@ -15,7 +41,7 @@
     </div>
 
     <ui-sidebar
-      class="page-sidebar-left"
+      position="left"
       :opened.sync="sidebarLeftOpened"
       @close="sidebarLeftOpened = false"
     >
@@ -226,30 +252,35 @@
     </ui-sidebar>
 
     <ui-sidebar
-      class="page-sidebar-right"
+      position="right"
       :opened.sync="sidebarRightOpened"
       @close="sidebarRightOpened = false"
     >
       <ui-task
+        id="01"
         name="Repository health checker"
-        description="Check every 5min for new content"
+        description="Check for new content in %s"
         :remaining-time="2000"
       ></ui-task>
       <ui-task
+        id="02"
         name="Repository fetcher"
         description="Download the repository content"
       ></ui-task>
       <ui-task
+        id="03"
         name="Repository builder"
         state="running"
         description="Build the repository"
         ></ui-task>
       <ui-task
+        id="04"
         name="Success task"
         description="A task in success"
         state="success"
       ></ui-task>
       <ui-task
+        id="05"
         name="Error task"
         description="A task in error"
         state="error"
@@ -297,37 +328,12 @@ body {
   margin: 0;
   padding: 0;
   color: $colorText;
-  background: $colorBg;
 }
 </style>
 
 <style lang="scss" scoped>
 #page {
-  display: flex;
-  flex-direction: column;
   height: 100%;
   overflow: hidden;
-
-  .ui-header {
-    height: 70px;
-  }
-
-  .page-content {
-    flex: 1;
-  }
-
-  .page-sidebar-left, .page-sidebar-right {
-    position: fixed;
-    top: 70px;
-    bottom: 0;
-  }
-
-  .page-sidebar-left {
-    left: 0;
-  }
-
-  .page-sidebar-right {
-    right: 0;
-  }
 }
 </style>

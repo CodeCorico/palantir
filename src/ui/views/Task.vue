@@ -1,10 +1,8 @@
 <template>
   <section class="ui-task" :class="[`state-${state}`]">
-    <span v-if="remainingTimeActual" class="remaining-time">
-      {{ formatTime(remainingTimeActual) }}
-    </span>
+    <span v-if="id" class="task-id" :class="{ fade: state === 'running' }">{{ id }}</span>
     <h1>{{ name }}</h1>
-    <p>{{ description }}</p>
+    <p>{{ desc }}</p>
     <i v-if="state === 'running'" class="fas fa-cog"></i>
   </section>
 </template>
@@ -13,6 +11,7 @@
 export default {
   name: 'ui-task',
   props: {
+    id: String,
     remainingTime: Number,
     state: {
       type: String,
@@ -21,6 +20,11 @@ export default {
     },
     name: String,
     description: String,
+  },
+  computed: {
+    desc() {
+      return this.description.replace(/%s/g, this.formatTime(this.remainingTimeActual));
+    }
   },
   methods: {
     formatTime(time) {
@@ -72,55 +76,62 @@ export default {
 .ui-task {
   user-select: none;
   position: relative;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 4px;
+  padding: 20px 20px 23px;
+  margin: 0 -10px;
+  border-bottom: 3px solid;
 
   &.state-idle {
     border-color: rgba(12, 181, 249, 0.8);
-    background: rgba(12, 181, 249, 0.4);
+    // background: rgba(12, 181, 249, 0.4);
   }
 
   &.state-running {
     border-color: rgba(249, 182, 95, 0.8);
-    background: rgba(249, 182, 95, 0.4);
+    // background: rgba(249, 182, 95, 0.4);
   }
 
   &.state-success {
     border-color: rgba(88, 216, 163, 0.8);
-    background: rgba(88, 216, 163, 0.4);
+    // background: rgba(88, 216, 163, 0.4);
   }
 
   &.state-error {
     border-color: rgba(244, 118, 123, 0.8);
-    background: rgba(244, 118, 123, 0.4);
+    // background: rgba(244, 118, 123, 0.4);
   }
 
   h1 {
     margin: 0;
     font-weight: 400;
     font-size: 14px;
+    padding-left: 54px;
   }
 
   p {
     margin: 5px 0 0;
     font-size: 13px;
     opacity: 0.7;
+    padding-left: 54px;
   }
 
-  .remaining-time {
-    float: right;
-    font-size: 12px;
-    opacity: 0.7;
+  .task-id {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    font-weight: 300;
+    font-size: 30px;
+    color: rgba(255, 255, 255, 0.7);
+
+    &.fade {
+      opacity: 0.1;
+    }
   }
 
   .fa-cog {
     position: absolute;
     top: 50%;
-    right: 15px;
-    font-size: 17px;
+    left: 22px;
+    font-size: 29px;
     animation: task-running 2s infinite linear;
   }
 }

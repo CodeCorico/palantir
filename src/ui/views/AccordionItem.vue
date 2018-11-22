@@ -125,7 +125,6 @@ export default {
     white-space: nowrap;
     color: rgba(255, 255, 255, 0.6);
     background: $colorPanelDarker;
-    border-radius: 5px;
 
     &:hover {
       color: rgba(255, 255, 255, 0.9);
@@ -154,7 +153,6 @@ export default {
       select {
         border: none;
         padding: 6px;
-        border-radius: 5px;
         width: 100%;
         background: $colorPanelLighter;
         color: $colorText;

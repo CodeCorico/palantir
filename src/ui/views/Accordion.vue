@@ -28,6 +28,10 @@ export default {
     letter-spacing: .5px;
     margin-bottom: 12px;
     margin-top: 20px;
+
+    &:first-child {
+      margin-top: 5px;
+    }
   }
 }
 </style>

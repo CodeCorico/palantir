@@ -1,5 +1,5 @@
 <template>
-  <section class="ui-sidebar" :class="[`open-sb-${openSb}`]">
+  <section class="ui-sidebar" :class="[`position-${position}`, `open-sb-${openSb}`]">
     <div class="container">
       <slot></slot>
     </div>
@@ -10,6 +10,11 @@
 export default {
   name: 'ui-sidebar',
   props: {
+    position: {
+      type: String,
+      required: true,
+      validator: value => ['left', 'right'].indexOf(value) > -1,
+    },
     opened: {
       type: Boolean,
       default: false,
@@ -59,6 +64,9 @@ export default {
 @import '@/ui/assets/variables.scss';
 
 .ui-sidebar {
+  position: fixed;
+  top: 80px;
+  bottom: 20px;
   width: 0;
   overflow: hidden;
 
@@ -69,8 +77,17 @@ export default {
     bottom: 0;
     left: 50%;
     width: 0;
-    background: $colorPanelDarker;
+    // background: $colorPanelDarker;
+    background: rgba($colorPanelDarker, 0.7);
     transition: all 0.25s $easeOutQuart;
+  }
+
+  &.position-left {
+    left: 20px;
+  }
+
+  &.position-right {
+    right: 20px;
   }
 
   .container {
@@ -82,7 +99,7 @@ export default {
   }
 
   &.open-sb-1, &.open-sb-2, &.open-sb-3, &.open-sb-4 {
-    width: 300px;
+    width: 350px;
   }
 
   &.open-sb-1, &.open-sb-2, &.open-sb-3 {
