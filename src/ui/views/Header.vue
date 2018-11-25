@@ -38,6 +38,8 @@
         <i :class="buttonRight.icon"></i>
       </button>
     </div>
+
+    <div class="date-time">{{ dateTime }}</div>
   </header>
 </template>
 
@@ -49,6 +51,8 @@ export default {
   },
   data() {
     return  {
+      dateTimeTimeout: null,
+      dateTime: null,
       localButtons: this.buttons,
       appearSb: -1,
       buttonsArgs: {
@@ -93,8 +97,24 @@ export default {
         this.appear(steps, ++step);
       }, steps[step]);
     },
+    dateTimeClock() {
+      clearTimeout(this.dateTimeTimeout);
+
+      const date = new Date();
+
+      const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
+      const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+      const months = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+      const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+
+      this.$set(this, 'dateTime', `${hours}:${minutes} ${months}/${day}`);
+
+      this.dateTimeTimeout = setTimeout(() => this.dateTimeClock(), 1000 * 60);
+    },
   },
   mounted() {
+    this.dateTimeClock();
+
     this.appear([0, 150, 200]);
   }
 };
@@ -152,7 +172,14 @@ export default {
   }
 
   .right {
-    right: 10px;
+    right: 130px;
+  }
+
+  .date-time {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    color: rgba(255, 255, 255, 0.5);
   }
 
   h1 {
