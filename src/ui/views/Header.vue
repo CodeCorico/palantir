@@ -1,7 +1,15 @@
 <template>
   <header class="ui-header" :class="[`appear-sb-${appearSb}`]">
     <div class="left">
-      <slot name="left"></slot>
+      <button
+        v-for="buttonLeft in mapButtons('left')"
+        :key="buttonLeft.title"
+        class="header-button"
+        :class="{ active: buttonLeft.active }"
+        @click="toggleButton('left', buttonLeft)"
+      >
+        <i :class="buttonLeft.icon"></i>
+      </button>
     </div>
 
     <h1>
@@ -20,7 +28,15 @@
     </h1>
 
     <div class="right">
-      <slot name="right"></slot>
+      <button
+        v-for="buttonRight in mapButtons('right')"
+        :key="buttonRight.title"
+        class="header-button"
+        :class="{ active: buttonRight.active }"
+        @click="toggleButton('right', buttonRight)"
+      >
+        <i :class="buttonRight.icon"></i>
+      </button>
     </div>
   </header>
 </template>
@@ -28,26 +44,58 @@
 <script>
 export default {
   name: 'ui-header',
+  props: {
+    buttons: Array,
+  },
   data() {
     return  {
-      appearSb: 0,
+      localButtons: this.buttons,
+      appearSb: -1,
+      buttonsArgs: {
+        left: {},
+        right: {},
+      },
     };
   },
   methods: {
-    appear(step, max, duration) {
-      if (step > max) {
+    toggleButton(location, button) {
+      const active = !button.active;
+      const buttonsArgs = Object.assign({}, this.buttonsArgs);
+
+      Object.keys(buttonsArgs[location]).forEach(key => {
+        const but = buttonsArgs[location][key];
+
+        buttonsArgs[location][key].active = but === button ? active : false;
+      });
+
+      this.$emit(`button${active ? 'Open' : 'Close'}`, button);
+
+      this.$set(this, 'buttonsArgs', buttonsArgs);
+    },
+    mapButtons(location) {
+      const buttonsArgs = this.buttonsArgs[location];
+
+      return (this.localButtons || [])
+        .filter(button => button.location === location)
+        .map((button) => {
+          buttonsArgs[button.title] = buttonsArgs[button.title] || {};
+          return Object.assign(buttonsArgs[button.title], button);
+        });
+    },
+    appear(steps, step = 0) {
+      if (step >= steps.length) {
         return;
       }
 
       setTimeout(() => {
         this.$set(this, 'appearSb', step);
 
-        this.appear(++step, max, 250);
-      }, duration);
+        this.appear(steps, ++step);
+      }, steps[step]);
     },
   },
   mounted() {
-    this.appear(1, 3, 0);
+    this.appear([0, 150, 200]);
   }
 };
 </script>
@@ -58,17 +106,17 @@ export default {
 .ui-header {
   z-index: 1000;
   position: fixed;
+  box-sizing: border-box;
   top: 0;
   left: 0;
   right: 0;
   height: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   // background: $colorPanelLighter;
   background: rgba($colorPanelDarker, 0.7);
-  transition: height 0.25s $easeOutQuart;
+  transition: height 0.35s $easeOutQuart;
 
-  &.appear-sb-1, &.appear-sb-2, &.appear-sb-3 {
-    height: 60px;
-
+  &.appear-sb-0, &.appear-sb-1, &.appear-sb-2 {
     h1 {
       .logo {
         opacity: 1;
@@ -77,7 +125,11 @@ export default {
     }
   }
 
-  &.appear-sb-2, &.appear-sb-3 {
+  &.appear-sb-1, &.appear-sb-2 {
+    height: 60px;
+  }
+
+  &.appear-sb-2 {
     h1 {
       .logo {
         transform: translateY(0) translateX(0);
@@ -90,19 +142,16 @@ export default {
     }
   }
 
-  &.appear-sb-3 {
-    height: 60px;
+  .left, .right {
+    position: absolute;
+    bottom: 0;
   }
 
   .left {
-    position: absolute;
-    top: 0;
     left: 10px;
   }
 
   .right {
-    position: absolute;
-    top: 0;
     right: 10px;
   }
 
@@ -119,7 +168,7 @@ export default {
     font-size: 23px;
 
     .logo, .title {
-      transition: all 0.25s $easeOutQuart;
+      transition: all 0.35s $easeOutQuart;
     }
 
     .logo {
@@ -174,6 +223,22 @@ export default {
       float: left;
       transform: translateX(-47px);
       opacity: 0;
+    }
+  }
+
+  .header-button {
+    cursor: pointer;
+    outline: none;
+    padding: 20px;
+    border: 0;
+    background: none;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.5);
+    box-sizing: border-box;
+    height: 60px;
+
+    &.active {
+      color: #fff;
     }
   }
 }

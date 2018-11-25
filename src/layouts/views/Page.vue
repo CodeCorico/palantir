@@ -1,40 +1,22 @@
 <template>
   <div id="page">
-    <ui-header>
-      <template slot="left">
-        <button
-          @click="sidebarLeftOpened = !sidebarLeftOpened"
-          style="
-            outline: none;
-            cursor: pointer;
-            background: #192b32;
-            border: 0;
-            width: 40px;
-            height: 40px;
-            transform: rotate(45deg);
-            margin-top: 9px;
-            border: 3px solid black;
-          "
-        ></button>
-      </template>
-
-      <template slot="right">
-        <button
-          @click="sidebarRightOpened = !sidebarRightOpened"
-          style="
-            outline: none;
-            cursor: pointer;
-            background: #192b32;
-            border: 0;
-            width: 40px;
-            height: 40px;
-            transform: rotate(45deg);
-            margin-top: 9px;
-            border: 3px solid black;
-          "
-        ></button>
-      </template>
-    </ui-header>
+    <ui-header
+      @buttonOpen="sidebarOpen"
+      @buttonClose="sidebarClose"
+      :buttons="[{
+        location: 'left',
+        title: 'Menu',
+        icon: 'fas fa-bars',
+      }, {
+        location: 'left',
+        title: 'Tasks',
+        icon: 'fas fa-cog',
+      }, {
+        location: 'right',
+        title: 'Documents',
+        icon: 'fas fa-th-large',
+      }]"
+    ></ui-header>
 
     <div class="page-content">
       <router-view></router-view>
@@ -310,6 +292,14 @@ export default {
       sidebarLeftOpened: false,
       sidebarRightOpened: false,
     };
+  },
+  methods: {
+    sidebarOpen(button) {
+      this.$set(this, `sidebar${button.location === 'left' ? 'Left' : 'Right'}Opened`, true);
+    },
+    sidebarClose(button) {
+      this.$set(this, `sidebar${button.location === 'left' ? 'Left' : 'Right'}Opened`, false);
+    },
   },
 };
 </script>
