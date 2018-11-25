@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@storybook/addon-knobs": "^4.0.7",
+    "axios": "^0.18.0",
     "babel-preset-vue": "^2.0.2",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1"
