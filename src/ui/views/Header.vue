@@ -1,18 +1,22 @@
 <template>
-  <header class="ui-header" :class="[`appear-sb-${appearSb}`]">
+  <header
+    class="ui-header"
+    :class="[`appear-sb-${appearSb}`, { bigger: biggerMode }]"
+    @click.self="$emit('click')"
+  >
     <div class="left">
       <button
         v-for="buttonLeft in mapButtons('left')"
         :key="buttonLeft.title"
         class="header-button"
-        :class="{ active: buttonLeft.active }"
+        :class="{ active: buttonLeft.active, hide: buttonLeft.hide }"
         @click="toggleButton('left', buttonLeft)"
       >
         <i :class="buttonLeft.icon"></i>
       </button>
     </div>
 
-    <h1>
+    <h1 @click="$emit('click')">
       <div class="logo">
         <div class="logo-container">
           <div class="logo-align">
@@ -32,7 +36,7 @@
         v-for="buttonRight in mapButtons('right')"
         :key="buttonRight.title"
         class="header-button"
-        :class="{ active: buttonRight.active }"
+        :class="{ active: buttonRight.active, hide: buttonRight.hide }"
         @click="toggleButton('right', buttonRight)"
       >
         <i :class="buttonRight.icon"></i>
@@ -55,6 +59,7 @@ export default {
       dateTime: null,
       localButtons: this.buttons,
       appearSb: -1,
+      biggerMode: false,
       buttonsArgs: {
         left: {},
         right: {},
@@ -62,19 +67,54 @@ export default {
     };
   },
   methods: {
-    toggleButton(location, button) {
-      const active = !button.active;
+    bigger(value = true) {
+      this.$set(this, 'biggerMode', value);
+    },
+    eachButton(eachFunc, update, location) {
       const buttonsArgs = Object.assign({}, this.buttonsArgs);
 
-      Object.keys(buttonsArgs[location]).forEach(key => {
-        const but = buttonsArgs[location][key];
-
-        buttonsArgs[location][key].active = but === button ? active : false;
+      (location ? [location] : Object.keys(buttonsArgs)).forEach(location => {
+        Object.keys(buttonsArgs[location]).forEach(key => {
+          eachFunc(buttonsArgs[location][key]);
+        });
       });
 
-      this.$emit(`button${active ? 'Open' : 'Close'}`, button);
+      if (update) {
+        this.$set(this, 'buttonsArgs', buttonsArgs);
+      }
 
-      this.$set(this, 'buttonsArgs', buttonsArgs);
+      return buttonsArgs;
+    },
+    closeAllButtons(except) {
+       this.eachButton((button) => {
+        if (except && (button.name || '') === except) {
+          return;
+        }
+
+        button.active = false;
+      }, true);
+    },
+    hideButtons(except) {
+      this.eachButton((button) => {
+        if (except && (button.name || '') === except) {
+          return;
+        }
+
+        button.hide = true;
+      }, true);
+    },
+    showButtons() {
+      this.eachButton((button) => {
+        button.hide = false;
+      }, true);
+    },
+    toggleButton(location, targetButton) {
+      const active = !targetButton.active;
+      this.eachButton((button) => {
+        button.active = button === targetButton ? active : false;
+      }, true, location);
+
+      this.$emit(`button${active ? 'Open' : 'Close'}`, targetButton);
     },
     mapButtons(location) {
       const buttonsArgs = this.buttonsArgs[location];
@@ -175,10 +215,18 @@ export default {
     right: 130px;
   }
 
+  &.bigger {
+    .date-time {
+      font-size: 22px;
+      bottom: 16px;
+    }
+  }
+
   .date-time {
     position: absolute;
     bottom: 20px;
     right: 30px;
+    font-size: 16px;
     color: rgba(255, 255, 255, 0.5);
   }
 
@@ -263,6 +311,10 @@ export default {
     color: rgba(255, 255, 255, 0.5);
     box-sizing: border-box;
     height: 60px;
+
+    &.hide {
+      display: none;
+    }
 
     &.active {
       color: #fff;

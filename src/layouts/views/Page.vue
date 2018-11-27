@@ -1,8 +1,10 @@
 <template>
   <div id="page">
     <ui-header
+      ref="header"
       @buttonOpen="sidebarOpen"
       @buttonClose="sidebarClose"
+      @click="headerClick"
       :buttons="[{
         location: 'left',
         title: 'Menu',
@@ -15,6 +17,16 @@
         location: 'right',
         title: 'Documents',
         icon: 'fas fa-th-large',
+      }, {
+        location: 'right',
+        name: 'lock',
+        title: 'Lock',
+        icon: 'fas fa-lock',
+      }, {
+        location: 'right',
+        name: 'expand',
+        title: 'Expand',
+        icon: 'fas fa-expand',
       }]"
     ></ui-header>
 
@@ -291,14 +303,53 @@ export default {
     return {
       sidebarLeftOpened: false,
       sidebarRightOpened: false,
+      locked: false,
     };
   },
   methods: {
+    headerClick() {
+      this.unlock();
+    },
     sidebarOpen(button) {
+      if ((button.name || '') === 'lock') {
+        this.closeSidebars();
+        this.lock();
+
+        return;
+      }
+      if ((button.name || '') === 'expand') {
+        this.closeSidebars(button.name);
+
+        return;
+      }
+
       this.$set(this, `sidebar${button.location === 'left' ? 'Left' : 'Right'}Opened`, true);
     },
     sidebarClose(button) {
       this.$set(this, `sidebar${button.location === 'left' ? 'Left' : 'Right'}Opened`, false);
+    },
+    closeSidebars(buttonName) {
+      this.$refs.header.closeAllButtons(buttonName);
+      this.$set(this, 'sidebarLeftOpened', false);
+      this.$set(this, 'sidebarRightOpened', false);
+    },
+    lock() {
+      if (this.locked) {
+        return;
+      }
+
+      this.$refs.header.hideButtons();
+      this.$refs.header.bigger(true);
+      this.$set(this, 'locked', true);
+    },
+    unlock() {
+      if (!this.locked) {
+        return;
+      }
+
+      this.$refs.header.showButtons();
+      this.$refs.header.bigger(false);
+      this.$set(this, 'locked', false);
     },
   },
 };
