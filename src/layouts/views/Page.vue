@@ -325,5 +325,12 @@ body {
 #page {
   height: 100%;
   overflow: hidden;
+
+  .page-content {
+    box-sizing: border-box;
+    height: 100%;
+    padding-top: 60px;
+    overflow: hidden;
+  }
 }
 </style>
