@@ -1,23 +1,22 @@
 <template>
   <div class="dashboard-page">
 
-    <!-- <div class="dashboard-background" :style="{ 'background-image': `url(${todayPicture})` }">
-
-          v-if="pr.reviewersActive > reviewerIndex"
-    </div> -->
+    <!-- <div class="dashboard-background" :style="{ 'background-image': `url(${todayPicture})` }"></div> -->
 
     <div
-      v-for="(group, froupIndex) in groups"
-      :key="froupIndex"
+      v-for="group in groups"
+      :key="group.id"
       class="pr-group"
     >
       <div class="pr-group-title">
         <h2>{{ group.title }}</h2>
       </div>
 
-      <div
+      <a
         v-for="pr in group.prs"
         :key="pr.id"
+        :href="pr.url"
+        target="_blank"
         class="pr"
         :class="[pr.type]"
         :style="{
@@ -25,9 +24,11 @@
           'animation-duration': `${Math.floor(Math.random() * (5001 - 2000)) + 2000}ms`,
         }"
       >
-        <div
-          v-for="(reviewer, reviewerIndex) in pr.reviewers"
-          :key="reviewerIndex"
+        <a
+          v-for="reviewer in pr.reviewers"
+          :key="reviewer.id"
+          :href="reviewer.url"
+          target="_blank"
           class="pr-reviewer"
           :class="[`r-${reviewer.spaceIndex}`]"
         >
@@ -38,7 +39,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </a>
 
         <h3><span>{{ pr.scope }}</span></h3>
         <div class="pr-content">
@@ -46,7 +47,7 @@
           <ui-pr-chart :values="pr.lines"></ui-pr-chart>
           <div class="pr-id">#{{ pr.id }}</div>
         </div>
-      </div>
+      </a>
 
       <div class="prs-clear"></div>
     </div>
@@ -55,6 +56,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import store from '@/services/store';
 import UiPrChart from '@/ui/views/PrChart.vue';
 
 // import axios from 'axios';
@@ -76,111 +79,139 @@ import UiPrChart from '@/ui/views/PrChart.vue';
 
 export default {
   name: 'dashboard-page',
+  store,
   components: {
     UiPrChart,
   },
+  computed: {
+    ...mapState('Prs', ['groups']),
+  },
+  mounted() {
+    this.loadGroups();
+  },
+  methods: {
+    loadGroups() {
+      this.$store.dispatch('Prs/loadGroups');
+
+      setTimeout(() => {
+        this.loadGroups();
+      }, 4 * 60 * 1000); // 4min
+    },
+  },
   data() {
     return {
-      groups: [{
-        title: 'Feat/288870 Hello World',
-        prs: [{
-          id: 56,
-          scope: 'ecommerce-spa',
-          type: 'warning',
-          authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-          lines: [6540, 3250],
-        }, {
-          id: 57,
-          scope: 'core-standalonebla bla',
-          authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-          lines: [10, 200],
-          reviewers: [{
-            spaceIndex: 3,
-            name: 'Xavier Boubert',
-            img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
-          }, {
-            spaceIndex: 7,
-            name: 'Xavier Boubert',
-            img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
-          }],
-        }, {
-          id: 692,
-          scope: 'core-spa',
-          type: 'alert',
-          authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-          lines: [50, 150],
-          reviewers: [{
-            spaceIndex: 1,
-            name: 'Xavier Boubert',
-            img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
-          }],
-        }],
-      }, {
-        title: 'Feat/288870 Hello World',
-        prs: [{
-          id: 56,
-          scope: 'core-spa',
-          authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-          lines: [6540, 3250],
-        }],
-      }, {
-        title: 'Feat/288870 Hello World',
-        prs: [{
-          id: 56,
-          scope: 'core-spa',
-          authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-          lines: [6540, 3250],
-        }, {
-          id: 57,
-          scope: 'core-spa',
-          authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-          lines: [10, 200],
-          reviewers: [{
-            spaceIndex: 3,
-            name: 'Xavier Boubert',
-            img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
-          }, {
-            spaceIndex: 7,
-            name: 'Xavier Boubert',
-            img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
-          }],
-        }, {
-          id: 692,
-          scope: 'core-spa',
-          type: 'alert',
-          authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-          lines: [50, 150],
-          reviewers: [{
-            spaceIndex: 1,
-            name: 'Xavier Boubert',
-            img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
-          }],
-        }],
-      }, {
-        title: 'Feat/288870 Hello World',
-        prs: [{
-          id: 56,
-          scope: 'core-spa',
-          authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-          lines: [6540, 3250],
-        }],
-      }, {
-        title: 'Feat/288870 Hello World',
-        prs: [{
-          id: 56,
-          scope: 'core-spa',
-          authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-          lines: [6540, 3250],
-        }],
-      }, {
-        title: 'Feat/288870 Hello World',
-        prs: [{
-          id: 56,
-          scope: 'core-spa',
-          authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-          lines: [6540, 3250],
-        }],
-      }],
+      // groups: [{
+      //   id: 1,
+      //   title: 'Feat/288870 Hello World',
+      //   prs: [{
+      //     id: 56,
+      //     scope: 'ecommerce-spa',
+      //     type: 'warning',
+      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
+      //     lines: [6540, 3250],
+      //   }, {
+      //     id: 57,
+      //     scope: 'core-standalonebla bla',
+      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
+      //     lines: [10, 200, 700],
+      //     reviewers: [{
+      //       id: 1,
+      //       spaceIndex: 3,
+      //       name: 'Xavier Boubert',
+      //       img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
+      //     }, {
+      //       id: 2,
+      //       spaceIndex: 7,
+      //       name: 'Xavier Boubert',
+      //       img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
+      //     }],
+      //   }, {
+      //     id: 692,
+      //     scope: 'core-spa',
+      //     type: 'alert',
+      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
+      //     lines: [50, 150, 800],
+      //     reviewers: [{
+      //       id: 1,
+      //       spaceIndex: 9,
+      //       name: 'Xavier Boubert',
+      //       img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
+      //     }],
+      //   }],
+      // }, {
+      //   id: 2,
+      //   title: 'Feat/288870 Hello World',
+      //   prs: [{
+      //     id: 56,
+      //     scope: 'core-spa',
+      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
+      //     lines: [6540, 3250],
+      //   }],
+      // }, {
+      //   id: 3,
+      //   title: 'Feat/288870 Good',
+      //   prs: [{
+      //     id: 56,
+      //     scope: 'core-spa',
+      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
+      //     lines: [6540, 3250],
+      //   }, {
+      //     id: 57,
+      //     scope: 'core-spa',
+      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
+      //     lines: [250, 250, 500],
+      //     reviewers: [{
+      //       id: 1,
+      //       spaceIndex: 0,
+      //       name: 'Xavier Boubert',
+      //       img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
+      //     }, {
+      //       id: 2,
+      //       spaceIndex: 10,
+      //       name: 'Xavier Boubert',
+      //       img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
+      //     }],
+      //   }, {
+      //     id: 692,
+      //     scope: 'core-spa',
+      //     type: 'alert',
+      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
+      //     lines: [600, 150, 250],
+      //     reviewers: [{
+      //       id: 1,
+      //       spaceIndex: 4,
+      //       name: 'Xavier Boubert',
+      //       img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
+      //     }],
+      //   }],
+      // }, {
+      //   id: 4,
+      //   title: 'Feat/288870 Hello World',
+      //   prs: [{
+      //     id: 56,
+      //     scope: 'core-spa',
+      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
+      //     lines: [6540, 3250],
+      //   }],
+      // }, {
+      //   id: 5,
+      //   title: 'Feat/288870 Hello World',
+      //   prs: [{
+      //     id: 56,
+      //     scope: 'core-spa',
+      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
+      //     lines: [6540, 3250],
+      //   }],
+      // }, {
+      //   id: 6,
+      //   title: 'Feat/288870 Hello World',
+      //   prs: [{
+      //     id: 56,
+      //     scope: 'core-spa',
+      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
+      //     lines: [6540, 3250],
+      //   }],
+      // }],
     };
   },
 };
@@ -264,8 +295,14 @@ $prReviewerAnimationCount: 10;
     }
   }
 
+  .pr, .pr:hover, .pr:visited, .pr:focus {
+    color: white;
+    text-decoration: none;
+  }
+
   .pr {
     position: relative;
+    display: block;
     float: left;
     width: 150px;
     height: 180px;
@@ -342,9 +379,15 @@ $prReviewerAnimationCount: 10;
       }
     }
 
+    .pr-reviewer, .pr-reviewer:hover, .pr-reviewer:visited, .pr-reviewer:focus {
+      color: white;
+      text-decoration: none;
+    }
+
     .pr-reviewer {
       z-index: 1;
       user-select: none;
+      display: block;
       position: absolute;
       top: -36px;
       left: -36px;
@@ -353,11 +396,13 @@ $prReviewerAnimationCount: 10;
       transform-origin: 78px 125px;
 
       @for $i from 0 through $prReviewerAnimationCount {
+        $sec: (10s + $i);
+
         &.r-#{$i} {
-          animation: dashboard-pr-reviewer-#{$i} 15s linear infinite;
+          animation: dashboard-pr-reviewer-#{$i} $sec linear infinite;
 
           .pr-reviewer-container {
-            animation: dashboard-pr-reviewer-stable-#{$i} 15s linear infinite;
+            animation: dashboard-pr-reviewer-stable-#{$i} $sec linear infinite;
           }
         }
       }

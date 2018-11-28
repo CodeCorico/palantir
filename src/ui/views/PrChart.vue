@@ -10,9 +10,9 @@ export default {
       labels: ['Lines added', 'Lines removed'],
       datasets: [{
         data: this.values,
-        backgroundColor: ['rgba(88, 216, 163, 0.4)', 'rgba(244, 118, 123, 0.4)'],
-        borderColor: ['rgba(88, 216, 163, 0.8)', 'rgba(244, 118, 123, 0.8)'],
-        borderWidth: [1, 1],
+        backgroundColor: ['rgba(88, 216, 163, 0.4)', 'rgba(244, 118, 123, 0.4)', 'transparent'],
+        borderColor: ['rgba(88, 216, 163, 0.8)', 'rgba(244, 118, 123, 0.8)', 'transparent'],
+        borderWidth: [1, 1, 0],
       }],
     }, {
       layout: {
