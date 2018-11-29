@@ -44,7 +44,12 @@ const store = {
           prs: [],
         };
 
-        const prDateDiff = new Date().getTime() - new Date(prRaw.created_at).getTime();
+        const createdAt = new Date(prRaw.created_at).getTime();
+        groups[title].createdAt = groups[title].createdAt
+          ? Math.min(groups[title].createdAt, createdAt)
+          : createdAt;
+
+        const prDateDiff = new Date().getTime() - createdAt;
         const warningDays = 4 * (3600 * 24) * 1000; // 4d
         const alertDays = 7 * (3600 * 24) * 1000; // 7d
 
@@ -58,19 +63,31 @@ const store = {
           scope: prRaw.palantirScope,
           authorImg: prRaw.user.avatar_url,
           type,
-          lines: [prRaw.additions, prRaw.deletions, Math.max(0, 500 - (prRaw.additions + prRaw.deletions))],
+          lines: [
+            prRaw.additions,
+            prRaw.deletions,
+            Math.max(0, 500 - (prRaw.additions + prRaw.deletions)),
+          ],
           commits: prRaw.commits,
           reviewers: (prRaw.assignees || []).map(assignee => ({
             id: assignee.id,
             url: assignee.html_url,
-            spaceIndex: 3,
+            spaceIndex: Math.floor(Math.random() * (10 + 1)),
             name: assignee.login,
             img: assignee.avatar_url,
           })),
         });
       });
 
-      state.groups = groups;
+      state.groups = Object.keys(groups)
+        .map(title => groups[title])
+        .sort((a, b) => {
+          return a.createdAt < b.createdAt
+            ? -1
+            : a.createdAt > b.createdAt
+            ? 1
+            : 0;
+        });
     },
     mutatePullsError: (state, { err }) => {
       state.groups = [];
@@ -81,6 +98,9 @@ const store = {
   },
   actions: {
     async loadGroups({ commit }) {
+      // eslint-disable-next-line no-console
+      console.log('reload');
+
       const pullsSubArrays = await Promise.all(
         Object.keys(REPOS).map(key => fetchRepo(key, REPOS[key]))
       );
