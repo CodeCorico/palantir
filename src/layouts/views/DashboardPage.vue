@@ -89,17 +89,21 @@ export default {
   mounted() {
     this.loadGroups();
   },
+  destroyed() {
+    clearTimeout(this.loadGroupsTimeout);
+  },
   methods: {
     loadGroups() {
+      clearTimeout(this.loadGroupsTimeout);
+
       this.$store.dispatch('Prs/loadGroups');
 
-      setTimeout(() => {
-        this.loadGroups();
-      }, 4 * 60 * 1000); // 4min
+      this.loadGroupsTimeout = setTimeout(() => this.loadGroups(), 4 * 60 * 1000); // 4min
     },
   },
   data() {
     return {
+      loadGroupsTimeout: null,
       // groups: [{
       //   id: 1,
       //   title: 'Feat/288870 Hello World',
@@ -281,9 +285,9 @@ $prReviewerAnimationCount: 10;
       right: 0;
       height: 37px;
       margin: 0;
-      color: rgba(255, 255, 255, 0.1);
-      font-size: 28px;
-      font-weight: bold;
+      color: rgba(73, 181, 224, 0.3);
+      font-size: 13px;
+      font-weight: 600;
       text-overflow: ellipsis;
       overflow: hidden;
       word-break: break-all;
@@ -328,7 +332,7 @@ $prReviewerAnimationCount: 10;
       box-sizing: border-box;
       height: 30px;
       margin: 0;
-      padding: 4px 0 0;
+      padding: 6px 0 0;
       color: white;
       text-align: center;
       text-transform: uppercase;

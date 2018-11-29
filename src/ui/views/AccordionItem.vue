@@ -136,6 +136,8 @@ export default {
     }
 
     .ticker {
+      position: relative;
+      top: 2px;
       float: right;
       transition: all .35s $easeOutCirc;
     }

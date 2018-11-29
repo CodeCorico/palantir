@@ -53,6 +53,9 @@ export default {
   props: {
     buttons: Array,
   },
+  destroyed() {
+    clearTimeout(this.dateTimeTimeout);
+  },
   data() {
     return  {
       dateTimeTimeout: null,
@@ -163,6 +166,16 @@ export default {
 <style lang="scss" scoped>
 @import '@/ui/assets/variables.scss';
 
+@keyframes header-button-show {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes header-button-hide {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(0); opacity: 0; }
+}
+
 .ui-header {
   z-index: 1000;
   position: fixed;
@@ -228,6 +241,7 @@ export default {
     right: 30px;
     font-size: 16px;
     color: rgba(255, 255, 255, 0.5);
+    transition: font-size 0.25s $easeOutQuart, bottom 0.25s $easeOutQuart;
   }
 
   h1 {
@@ -241,6 +255,7 @@ export default {
     padding: 0;
     font-family: 'Montserrat', sans-serif;
     font-size: 23px;
+    font-weight: 500;
 
     .logo, .title {
       transition: all 0.35s $easeOutQuart;
@@ -311,9 +326,12 @@ export default {
     color: rgba(255, 255, 255, 0.5);
     box-sizing: border-box;
     height: 60px;
+    transform: scale(0);
+    opacity: 0;
+    animation: header-button-show 0.35s $easeOutQuart forwards;
 
     &.hide {
-      display: none;
+      animation: header-button-hide 0.35s $easeOutQuart forwards;
     }
 
     &.active {
