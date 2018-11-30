@@ -226,7 +226,7 @@ $prReviewerAnimationCount: 10;
 
 @keyframes dashboard-pr-alert {
   from { transform: scale(1); }
-  50% { transform: scale(1.5); }
+  50% { transform: scale(2); }
   to { transform: scale(1); }
 }
 
@@ -254,6 +254,7 @@ $prReviewerAnimationCount: 10;
   box-sizing: border-box;
   padding: 30px 50px;
   height: 100%;
+  overflow: auto;
 
   .dashboard-background {
     position: absolute;
@@ -272,7 +273,7 @@ $prReviewerAnimationCount: 10;
   .pr-group {
     position: relative;
     float: left;
-    margin: 0 50px 50px 0;
+    margin: 0 40px 40px 0;
 
     .pr-group-title {
       height: 37px;
@@ -285,8 +286,8 @@ $prReviewerAnimationCount: 10;
       right: 0;
       height: 37px;
       margin: 0;
-      color: rgba(73, 181, 224, 0.3);
-      font-size: 13px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 15px;
       font-weight: 600;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -310,18 +311,17 @@ $prReviewerAnimationCount: 10;
     float: left;
     width: 150px;
     height: 180px;
-    margin: 0 30px 0 0;
+    margin: 0 25px 0 0;
     box-shadow: 0 31px 81px rgba(0, 0, 0, 0.4);
     border-radius: 5px;
     animation: pr-updown 4s linear alternate infinite;
-    // overflow: hidden;
 
     &.warning h3 {
       background: linear-gradient(45deg, rgba(252,155,0,1) 0%,rgba(255,178,0,1) 100%);
     }
 
     &.alert h3 {
-      background: linear-gradient(45deg, rgba(255,107,153,1) 0%,rgba(255,131,112,1) 100%);
+      background: linear-gradient(45deg, #c93534 0%, #a71918 100%);
 
       span {
         animation: dashboard-pr-alert 1.5s linear infinite;
@@ -369,7 +369,7 @@ $prReviewerAnimationCount: 10;
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
-        opacity: 0.3;
+        opacity: 0.5;
       }
 
       .pr-id {
@@ -378,8 +378,9 @@ $prReviewerAnimationCount: 10;
         left: 50%;
         transform: translateY(-50%) translateX(-50%);
         color: white;
-        font-weight: 300;
+        font-weight: 400;
         font-size: 24px;
+        text-shadow: 2px 4px 5px rgba(0, 0, 0, 0.8);
       }
     }
 
