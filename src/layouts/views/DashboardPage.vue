@@ -44,6 +44,16 @@
         <h3><span>{{ pr.scope }}</span></h3>
         <div class="pr-content">
           <div class="pr-background" :style="{ 'background-image': `url(${pr.authorImg})` }"></div>
+
+          <div
+            v-if="pr.state === 'dirty' || pr.state === 'unstable'"
+            class="pr-state"
+            :class="[`state-${pr.state}`]"
+          >
+            <i v-if="pr.state === 'dirty'" class="fas fa-times"></i>
+            <i v-if="pr.state === 'unstable'" class="fas fa-skull-crossbones"></i>
+          </div>
+
           <ui-pr-chart :values="pr.lines"></ui-pr-chart>
 
           <div class="pr-number">#{{ pr.number }}</div>
@@ -122,6 +132,12 @@ $prReviewerAnimationCount: 10;
 @keyframes pr-updown {
   from { transform: translateY(0); }
   to { transform: translateY(10px); }
+}
+
+@keyframes pr-state-animation {
+  from { opacity: 0.9; }
+  50% { opacity: 0.4; }
+  to { opacity: 0.9; }
 }
 
 @for $i from 0 through $prReviewerAnimationCount {
@@ -214,6 +230,26 @@ $prReviewerAnimationCount: 10;
 
       span {
         animation: dashboard-pr-alert 1.5s linear infinite;
+      }
+    }
+
+    .pr-state {
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 30px;
+
+      i {
+        animation: pr-state-animation 1.75s linear infinite;
+      }
+
+      &.state-dirty {
+        color: #f7ba3d;
+      }
+
+      &.state-unstable {
+        color: #f73f3d;
       }
     }
 

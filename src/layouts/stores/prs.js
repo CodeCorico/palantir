@@ -79,6 +79,7 @@ const store = {
             Math.max(0, 500 - (prRaw.additions + prRaw.deletions)), // 500 lines is big
           ],
           commits: prRaw.commits,
+          state: prRaw.review_comments ? 'dirty' : prRaw.mergeable_state,
           animationDelay: cachePr.animationDelay,
           animationDuration: cachePr.animationDuration,
           reviewers: (prRaw.assignees || []).map((assignee) => {
