@@ -20,8 +20,8 @@
         class="pr"
         :class="[pr.type]"
         :style="{
-          'animation-delay': `${Math.round(Math.random() * 2000)}ms`,
-          'animation-duration': `${Math.floor(Math.random() * (5001 - 2000)) + 2000}ms`,
+          'animation-delay': `${pr.animationDelay}ms`,
+          'animation-duration': `${pr.animationDuration}ms`,
         }"
       >
         <a
@@ -45,7 +45,8 @@
         <div class="pr-content">
           <div class="pr-background" :style="{ 'background-image': `url(${pr.authorImg})` }"></div>
           <ui-pr-chart :values="pr.lines"></ui-pr-chart>
-          <div class="pr-id">#{{ pr.id }}</div>
+
+          <div class="pr-number">#{{ pr.number }}</div>
         </div>
       </a>
 
@@ -104,118 +105,6 @@ export default {
   data() {
     return {
       loadGroupsTimeout: null,
-      // groups: [{
-      //   id: 1,
-      //   title: 'Feat/288870 Hello World',
-      //   prs: [{
-      //     id: 56,
-      //     scope: 'ecommerce-spa',
-      //     type: 'warning',
-      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-      //     lines: [6540, 3250],
-      //   }, {
-      //     id: 57,
-      //     scope: 'core-standalonebla bla',
-      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-      //     lines: [10, 200, 700],
-      //     reviewers: [{
-      //       id: 1,
-      //       spaceIndex: 3,
-      //       name: 'Xavier Boubert',
-      //       img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
-      //     }, {
-      //       id: 2,
-      //       spaceIndex: 7,
-      //       name: 'Xavier Boubert',
-      //       img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
-      //     }],
-      //   }, {
-      //     id: 692,
-      //     scope: 'core-spa',
-      //     type: 'alert',
-      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-      //     lines: [50, 150, 800],
-      //     reviewers: [{
-      //       id: 1,
-      //       spaceIndex: 9,
-      //       name: 'Xavier Boubert',
-      //       img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
-      //     }],
-      //   }],
-      // }, {
-      //   id: 2,
-      //   title: 'Feat/288870 Hello World',
-      //   prs: [{
-      //     id: 56,
-      //     scope: 'core-spa',
-      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-      //     lines: [6540, 3250],
-      //   }],
-      // }, {
-      //   id: 3,
-      //   title: 'Feat/288870 Good',
-      //   prs: [{
-      //     id: 56,
-      //     scope: 'core-spa',
-      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-      //     lines: [6540, 3250],
-      //   }, {
-      //     id: 57,
-      //     scope: 'core-spa',
-      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-      //     lines: [250, 250, 500],
-      //     reviewers: [{
-      //       id: 1,
-      //       spaceIndex: 0,
-      //       name: 'Xavier Boubert',
-      //       img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
-      //     }, {
-      //       id: 2,
-      //       spaceIndex: 10,
-      //       name: 'Xavier Boubert',
-      //       img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
-      //     }],
-      //   }, {
-      //     id: 692,
-      //     scope: 'core-spa',
-      //     type: 'alert',
-      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-      //     lines: [600, 150, 250],
-      //     reviewers: [{
-      //       id: 1,
-      //       spaceIndex: 4,
-      //       name: 'Xavier Boubert',
-      //       img: 'https://fr.gravatar.com/userimage/3980406/e12053307af826cf95856d2a82fb992b.jpeg',
-      //     }],
-      //   }],
-      // }, {
-      //   id: 4,
-      //   title: 'Feat/288870 Hello World',
-      //   prs: [{
-      //     id: 56,
-      //     scope: 'core-spa',
-      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-      //     lines: [6540, 3250],
-      //   }],
-      // }, {
-      //   id: 5,
-      //   title: 'Feat/288870 Hello World',
-      //   prs: [{
-      //     id: 56,
-      //     scope: 'core-spa',
-      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-      //     lines: [6540, 3250],
-      //   }],
-      // }, {
-      //   id: 6,
-      //   title: 'Feat/288870 Hello World',
-      //   prs: [{
-      //     id: 56,
-      //     scope: 'core-spa',
-      //     authorImg: 'https://secure.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=150',
-      //     lines: [6540, 3250],
-      //   }],
-      // }],
     };
   },
 };
@@ -317,7 +206,7 @@ $prReviewerAnimationCount: 10;
     animation: pr-updown 4s linear alternate infinite;
 
     &.warning h3 {
-      background: linear-gradient(45deg, rgba(252,155,0,1) 0%,rgba(255,178,0,1) 100%);
+      background: linear-gradient(45deg, #fc9b00 0%,#ffb200 100%);
     }
 
     &.alert h3 {
@@ -372,7 +261,7 @@ $prReviewerAnimationCount: 10;
         opacity: 0.5;
       }
 
-      .pr-id {
+      .pr-number {
         position: absolute;
         top: 50%;
         left: 50%;

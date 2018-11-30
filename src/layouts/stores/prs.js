@@ -30,6 +30,7 @@ const store = {
   namespaced: true,
   state: {
     groups: [],
+    cachePrs: {},
   },
   mutations: {
     mutatePulls: (state, { pulls }) => {
@@ -57,8 +58,17 @@ const store = {
           ? 'alert'
           : (prDateDiff >= warningDays ? 'warning' : '');
 
+        state.cachePrs[prRaw.id] = state.cachePrs[prRaw.id] || {
+          animationDelay: Math.round(Math.random() * 2000),
+          animationDuration: Math.floor(Math.random() * (5001 - 2000)) + 2000,
+          reviewers: {},
+        };
+
+        const cachePr = state.cachePrs[prRaw.id];
+
         groups[title].prs.push({
-          id: prRaw.number,
+          id: prRaw.id,
+          number: prRaw.number,
           url: prRaw.html_url,
           scope: prRaw.palantirScope,
           authorImg: prRaw.user.avatar_url,
@@ -66,16 +76,26 @@ const store = {
           lines: [
             prRaw.additions,
             prRaw.deletions,
-            Math.max(0, 500 - (prRaw.additions + prRaw.deletions)),
+            Math.max(0, 500 - (prRaw.additions + prRaw.deletions)), // 500 lines is big
           ],
           commits: prRaw.commits,
-          reviewers: (prRaw.assignees || []).map(assignee => ({
-            id: assignee.id,
-            url: assignee.html_url,
-            spaceIndex: Math.floor(Math.random() * (10 + 1)),
-            name: assignee.login,
-            img: assignee.avatar_url,
-          })),
+          animationDelay: cachePr.animationDelay,
+          animationDuration: cachePr.animationDuration,
+          reviewers: (prRaw.assignees || []).map((assignee) => {
+            cachePr.reviewers[assignee.id] = cachePr.reviewers[assignee.id] || {
+              spaceIndex:Math.floor(Math.random() * (10 + 1))
+            };
+
+            const cacheReviwer = cachePr.reviewers[assignee.id];
+
+            return {
+              id: assignee.id,
+              url: assignee.html_url,
+              spaceIndex: cacheReviwer.spaceIndex,
+              name: assignee.login,
+              img: assignee.avatar_url,
+            };
+          }),
         });
       });
 
