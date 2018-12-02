@@ -1,0 +1,44 @@
+{
+  "variables": {
+    "github-token": "<your token here>"
+  },
+  "apps": [{
+    "id": "pulls",
+    "type": "github-pulls",
+    "config": {
+      "token": "#{github-token}",
+      "repositories": {
+        "palantir": "Codecorico/palantir"
+      }
+    }
+  }],
+  "tasks": [{
+    "type": "interval",
+    "title": "Refresh pull-requests",
+    "description": "Check for new content in s%",
+    "config": {
+      "immediate": true,
+      "every": 240,
+      "trigger": {
+        "app": "pulls",
+        "event": "reload"
+      }
+    }
+  }],
+  "categories": [{
+    "title": "Palantir",
+    "sections": [{
+      "title": "Dashboards",
+      "links": [{
+        "title": "Home",
+        "root": true,
+        "icon": "fas fa-home",
+        "app": "pulls"
+      }, {
+        "title": "Pull-requests",
+        "icon": "fas fa-code-branch",
+        "app": "xa"
+      }]
+    }]
+  }]
+}

@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'ui-pr-chart',
+  name: 'ui-pull-chart',
   extends: window.VueChartJs.Doughnut,
   props: {
     values: Array,

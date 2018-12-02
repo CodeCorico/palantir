@@ -20,12 +20,16 @@
       <ul>
         <li v-for="(listItem, listItemIndex) in listFilter(list)" :key="listItemIndex">
           <router-link
-            :to="listItem.url"
+            :to="listItem.url || '/'"
             :target="listItem.external ? '_blank' : ''"
             @click.native="$parent.$emit('naviguate')"
           >
-            <i v-if="listItem.icon" class="list-item-icon" :class="[listItem.icon]"></i>
-            {{ listItem.text }}
+            <i
+              v-if="listItem.icon"
+              class="list-item-icon"
+              :class="[listItem.icon]"
+            ></i>
+            {{ listItem.title }}
           </router-link>
         </li>
       </ul>
@@ -61,11 +65,11 @@ export default {
   },
   methods: {
     refreshLayout() {
-      if (this.opened) {
-        this.$set(this, 'height', this.$refs.title.clientHeight + this.$refs.content.clientHeight);
-      } else {
-        this.$set(this, 'height', this.$refs.title.clientHeight);
-      }
+      this.$set(
+        this,
+        'height',
+        this.$refs.title.clientHeight + (this.opened ? this.$refs.content.clientHeight : 0),
+      );
     },
     toggleOpen(force) {
       const open = typeof force === 'boolean' ? force : !this.opened;

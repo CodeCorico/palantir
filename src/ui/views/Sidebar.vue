@@ -68,7 +68,7 @@ export default {
   top: 80px;
   bottom: 20px;
   width: 0;
-  overflow: hidden;
+  overflow: auto;
 
   &::before {
     content: '';
@@ -77,7 +77,6 @@ export default {
     bottom: 0;
     left: 50%;
     width: 0;
-    // background: $colorPanelDarker;
     background: rgba($colorPanelDarker, 0.7);
     transition: all 0.25s $easeOutQuart;
   }

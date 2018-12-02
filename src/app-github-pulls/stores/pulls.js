@@ -1,14 +1,6 @@
-import github from '@/services/github';
+import github from '../github';
 
-const name = 'Prs';
-
-const REPOS = {};
-
-Object.keys(process.env).forEach((key) => {
-  if (key.match(/^VUE_APP_REPO_/)) {
-    REPOS[key.replace('VUE_APP_REPO_', '')] = process.env[key];
-  }
-});
+const name = 'GithubPulls';
 
 const fetchRepo = async (key, repo) => {
   const { data } = await github.get(`repos/${repo}/pulls`);
@@ -30,64 +22,64 @@ const store = {
   namespaced: true,
   state: {
     groups: [],
-    cachePrs: {},
+    cachePulls: {},
   },
   mutations: {
     mutatePulls: (state, { pulls }) => {
       const groups = {};
 
-      pulls.forEach(prRaw => {
-        const { title } = prRaw;
+      pulls.forEach(pullRaw => {
+        const { title } = pullRaw;
 
         groups[title] = groups[title] || {
           id: title,
           title,
-          prs: [],
+          pulls: [],
         };
 
-        const createdAt = new Date(prRaw.created_at).getTime();
+        const createdAt = new Date(pullRaw.created_at).getTime();
         groups[title].createdAt = groups[title].createdAt
           ? Math.min(groups[title].createdAt, createdAt)
           : createdAt;
 
-        const prDateDiff = new Date().getTime() - createdAt;
+        const pullDateDiff = new Date().getTime() - createdAt;
         const warningDays = 4 * (3600 * 24) * 1000; // 4d
         const alertDays = 7 * (3600 * 24) * 1000; // 7d
 
-        const type = prDateDiff >= alertDays
+        const type = pullDateDiff >= alertDays
           ? 'alert'
-          : (prDateDiff >= warningDays ? 'warning' : '');
+          : (pullDateDiff >= warningDays ? 'warning' : '');
 
-        state.cachePrs[prRaw.id] = state.cachePrs[prRaw.id] || {
+        state.cachePulls[pullRaw.id] = state.cachePulls[pullRaw.id] || {
           animationDelay: Math.round(Math.random() * 2000),
           animationDuration: Math.floor(Math.random() * (5001 - 2000)) + 2000,
           reviewers: {},
         };
 
-        const cachePr = state.cachePrs[prRaw.id];
+        const cachePull = state.cachePulls[pullRaw.id];
 
-        groups[title].prs.push({
-          id: prRaw.id,
-          number: prRaw.number,
-          url: prRaw.html_url,
-          scope: prRaw.palantirScope,
-          authorImg: prRaw.user.avatar_url,
+        groups[title].pulls.push({
+          id: pullRaw.id,
+          number: pullRaw.number,
+          url: pullRaw.html_url,
+          scope: pullRaw.palantirScope,
+          authorImg: pullRaw.user.avatar_url,
           type,
           lines: [
-            prRaw.additions,
-            prRaw.deletions,
-            Math.max(0, 500 - (prRaw.additions + prRaw.deletions)), // 500 lines is big
+            pullRaw.additions,
+            pullRaw.deletions,
+            Math.max(0, 500 - (pullRaw.additions + pullRaw.deletions)), // 500 lines is big
           ],
-          commits: prRaw.commits,
-          state: prRaw.review_comments ? 'dirty' : prRaw.mergeable_state,
-          animationDelay: cachePr.animationDelay,
-          animationDuration: cachePr.animationDuration,
-          reviewers: (prRaw.assignees || []).map((assignee) => {
-            cachePr.reviewers[assignee.id] = cachePr.reviewers[assignee.id] || {
+          commits: pullRaw.commits,
+          state: pullRaw.review_comments ? 'dirty' : pullRaw.mergeable_state,
+          animationDelay: cachePull.animationDelay,
+          animationDuration: cachePull.animationDuration,
+          reviewers: (pullRaw.assignees || []).map((assignee) => {
+            cachePull.reviewers[assignee.id] = cachePull.reviewers[assignee.id] || {
               spaceIndex:Math.floor(Math.random() * (10 + 1))
             };
 
-            const cacheReviwer = cachePr.reviewers[assignee.id];
+            const cacheReviwer = cachePull.reviewers[assignee.id];
 
             return {
               id: assignee.id,
@@ -110,20 +102,13 @@ const store = {
             : 0;
         });
     },
-    mutatePullsError: (state, { err }) => {
-      state.groups = [];
-
-      // eslint-disable-next-line no-console
-      console.warn(err);
-    },
   },
   actions: {
-    async loadGroups({ commit }) {
-      // eslint-disable-next-line no-console
-      console.log('reload');
+    async loadGroups({ commit }, { token = '', repositories = [] }) {
+      github.defaults.headers.common.Authorization = `token ${token}`;
 
       const pullsSubArrays = await Promise.all(
-        Object.keys(REPOS).map(key => fetchRepo(key, REPOS[key]))
+        Object.keys(repositories).map(key => fetchRepo(key, repositories[key]))
       );
 
       const pullsSummary = [];

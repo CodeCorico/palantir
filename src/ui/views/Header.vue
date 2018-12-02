@@ -26,9 +26,8 @@
           </div>
         </div>
       </div>
-      <div class="title">
-        Palantir
-      </div>
+
+      <div class="title">Palantir</div>
     </h1>
 
     <div class="right">

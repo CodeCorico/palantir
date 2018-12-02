@@ -20,7 +20,7 @@ export default {
 .ui-accordion {
   position: relative;
 
-  > h1 {
+  h1 {
     font-size: 12px;
     color: rgba(255, 255, 255, 0.30);
     font-weight: 600;

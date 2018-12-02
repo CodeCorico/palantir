@@ -1,7 +1,5 @@
 <template>
-  <div class="dashboard-page">
-
-    <!-- <div class="dashboard-background" :style="{ 'background-image': `url(${todayPicture})` }"></div> -->
+  <div class="app-github-pulls">
 
     <div
       v-for="group in groups"
@@ -54,7 +52,7 @@
             <i v-if="pull.state === 'unstable'" class="fas fa-skull-crossbones"></i>
           </div>
 
-          <ui-pull-chart :values="pull.lines"></ui-pull-chart>
+          <github-pull-chart :values="pull.lines"></github-pull-chart>
 
           <div class="pull-number">#{{ pull.number }}</div>
         </div>
@@ -69,33 +67,19 @@
 <script>
 import { mapState } from 'vuex';
 import store from '@/services/store';
-import UiPullChart from '@/ui/views/PullChart.vue';
-
-// import axios from 'axios';
-
-// const BING_URL = 'https://bing.com';
-// const BING_SERVICE = 'https://cors.io?https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=en-US';
-
-// mounted() {
-//   try {
-//     const bingData = await axios.get(BING_SERVICE);
-//     this.$set(this, 'todayPicture', `${BING_URL}${bingData.data.images[0].url}`);
-//   } catch (err) { }
-// },
-// data() {
-//   return {
-//     todayPicture: '',
-//   };
-// },
+import GithubPullChart from './GithubPullChart.vue';
 
 export default {
-  name: 'dashboard-page',
+  name: 'app-github-pulls',
   store,
   components: {
-    UiPullChart,
+    GithubPullChart,
+  },
+  props: {
+    config: Object,
   },
   computed: {
-    ...mapState('Pulls', ['groups']),
+    ...mapState('GithubPulls', ['groups']),
   },
   mounted() {
     this.loadGroups();
@@ -103,11 +87,16 @@ export default {
   destroyed() {
     clearTimeout(this.loadGroupsTimeout);
   },
+  watch: {
+    config() {
+      this.loadGroups();
+    }
+  },
   methods: {
     loadGroups() {
       clearTimeout(this.loadGroupsTimeout);
 
-      this.$store.dispatch('Pulls/loadGroups');
+      this.$store.dispatch('GithubPulls/loadGroups', this.config);
 
       this.loadGroupsTimeout = setTimeout(() => this.loadGroups(), 4 * 60 * 1000); // 4min
     },
@@ -123,7 +112,7 @@ export default {
 <style lang="scss" scoped>
 $pullReviewerAnimationCount: 10;
 
-@keyframes dashboard-pull-alert {
+@keyframes github-pull-alert {
   from { transform: scale(1); }
   50% { transform: scale(2); }
   to { transform: scale(1); }
@@ -143,37 +132,23 @@ $pullReviewerAnimationCount: 10;
 @for $i from 0 through $pullReviewerAnimationCount {
   $rotate: round($i * 360 / $pullReviewerAnimationCount);
 
-  @keyframes dashboard-pull-reviewer-#{$i} {
+  @keyframes github-pull-reviewer-#{$i} {
     from { transform: rotate(0deg + $rotate); }
     to { transform: rotate(360deg + $rotate); }
   }
 
-  @keyframes dashboard-pull-reviewer-stable-#{$i} {
+  @keyframes github-pull-reviewer-stable-#{$i} {
     from { transform: rotate(315deg - $rotate); }
     to { transform: rotate(-45deg - $rotate); }
   }
 }
 
-.dashboard-page {
+.app-github-pulls {
   position: relative;
   box-sizing: border-box;
   padding: 30px 50px;
   height: 100%;
   overflow: auto;
-
-  .dashboard-background {
-    position: absolute;
-    top: 120px;
-    left: 30px;
-    right: 300px;
-    height: 400px;
-    background: black;
-    border-radius: 10px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    box-shadow: 0 31px 81px rgba(0, 0, 0, 0.4);
-  }
 
   .pull-group {
     position: relative;
@@ -229,7 +204,7 @@ $pullReviewerAnimationCount: 10;
       background: linear-gradient(45deg, #c93534 0%, #a71918 100%);
 
       span {
-        animation: dashboard-pull-alert 1.5s linear infinite;
+        animation: github-pull-alert 1.5s linear infinite;
       }
     }
 
@@ -329,10 +304,10 @@ $pullReviewerAnimationCount: 10;
         $sec: (10s + $i);
 
         &.r-#{$i} {
-          animation: dashboard-pull-reviewer-#{$i} $sec linear infinite;
+          animation: github-pull-reviewer-#{$i} $sec linear infinite;
 
           .pull-reviewer-container {
-            animation: dashboard-pull-reviewer-stable-#{$i} $sec linear infinite;
+            animation: github-pull-reviewer-stable-#{$i} $sec linear infinite;
           }
         }
       }
