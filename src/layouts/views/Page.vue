@@ -10,28 +10,35 @@
         title: 'Menu',
         icon: 'fas fa-bars',
       }, {
+        name: 'test',
         location: 'left',
+        title: 'test',
+        icon: 'fas fa-chalkboard-teacher',
+      }, {
+        location: 'right',
         title: 'Tasks',
         icon: 'fas fa-cog',
       }, {
-        location: 'right',
-        title: 'Documents',
-        icon: 'fas fa-th-large',
-      }, {
-        location: 'right',
         name: 'lock',
+        location: 'right',
         title: 'Lock',
         icon: 'fas fa-lock',
-      }, {
-        location: 'right',
-        name: 'expand',
-        title: 'Expand',
-        icon: 'fas fa-expand',
       }]"
     ></ui-header>
 
+      <!-- location: 'right',
+        title: 'Documents',
+        icon: 'fas fa-th-large',
+      }, {
+        name: 'expand',
+        location: 'right',
+        title: 'Expand',
+        icon: 'fas fa-expand', -->
+
     <div class="page-content">
       <router-view></router-view>
+
+      <app-images-randomizer ref="randomizer"></app-images-randomizer>
     </div>
 
     <categories-sidebar
@@ -83,6 +90,7 @@ import UiHeader from '@/ui/views/Header.vue';
 import UiSidebar from '@/ui/views/Sidebar.vue';
 import UiTask from '@/ui/views/Task.vue';
 import CategoriesSidebar from '@/categories/views/CategoriesSidebar.vue';
+import AppImagesRandomizer from '@/app-images-randomizer/views/AppImagesRandomizer.vue';
 
 export default {
   name: 'page',
@@ -91,6 +99,7 @@ export default {
     UiSidebar,
     UiTask,
     CategoriesSidebar,
+    AppImagesRandomizer,
   },
   data() {
     return {
@@ -104,6 +113,11 @@ export default {
       this.unlock();
     },
     sidebarOpen(button) {
+      if ((button.name || '') === 'test') {
+        this.$refs.randomizer.start();
+
+        return;
+      }
       if ((button.name || '') === 'lock') {
         this.closeSidebars();
         this.lock();
@@ -119,6 +133,10 @@ export default {
       this.$set(this, `sidebar${button.location === 'left' ? 'Left' : 'Right'}Opened`, true);
     },
     sidebarClose(button) {
+      if ((button.name || '') === 'test') {
+        this.$refs.randomizer.stop();
+      }
+
       this.$set(this, `sidebar${button.location === 'left' ? 'Left' : 'Right'}Opened`, false);
     },
     closeSidebars(buttonName) {
@@ -171,6 +189,7 @@ body {
   overflow: hidden;
 
   .page-content {
+    position: relative;
     box-sizing: border-box;
     height: 100%;
     padding-top: 60px;

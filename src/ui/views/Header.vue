@@ -151,14 +151,14 @@ export default {
 
       this.$set(this, 'dateTime', `${hours}:${minutes} ${months}/${day}`);
 
-      this.dateTimeTimeout = setTimeout(() => this.dateTimeClock(), 1000 * 60);
+      this.dateTimeTimeout = setTimeout(() => this.dateTimeClock(), 60 * 1000); // 1min
     },
   },
   mounted() {
     this.dateTimeClock();
 
     this.appear([0, 150, 200]);
-  }
+  },
 };
 </script>
 
@@ -252,7 +252,6 @@ export default {
     transform: translateX(-50%);
     margin: 0;
     padding: 0;
-    font-family: 'Montserrat', sans-serif;
     font-size: 23px;
     font-weight: 500;
 
