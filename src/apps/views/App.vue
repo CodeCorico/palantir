@@ -6,15 +6,17 @@
 import { mapState } from 'vuex';
 import store from '@/services/store';
 import AppGithubPulls from '@/app-github-pulls/views/AppGithubPulls';
+import AppTimeline from '@/app-timeline/views/AppTimeline';
 
 export default {
-  name: 'temp',
+  name: 'app',
   store,
   components: {
     AppGithubPulls,
+    AppTimeline,
   },
   computed: {
-    ...mapState('Config', ['apps', 'appRoot']),
+    ...mapState('Apps', ['apps', 'appRoot']),
     comp() {
       const app = this.app();
 
@@ -27,13 +29,10 @@ export default {
     }
   },
   methods: {
-    load() {
-      this.$store.dispatch('Config/load');
-    },
     app() {
       const appId = this.$route.params.appId || this.appRoot;
 
-      if (!this.apps[appId]) {
+      if (!this.apps || !this.apps[appId]) {
         throw new Error(`No app with the id "${appId}"`);
       }
 

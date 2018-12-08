@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign, import/no-extraneous-dependencies */
 import Vue from 'vue';
 import Vuex from 'vuex';
 // eslint-disable-next-line import/no-unresolved, import/extensions

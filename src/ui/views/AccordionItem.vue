@@ -22,7 +22,7 @@
           <router-link
             :to="listItem.url || '/'"
             :target="listItem.external ? '_blank' : ''"
-            @click.native="$parent.$emit('naviguate')"
+            @click.native="$parent.$emit('navigate')"
           >
             <i
               v-if="listItem.icon"

@@ -41,65 +41,38 @@
       <app-images-randomizer ref="randomizer"></app-images-randomizer>
     </div>
 
-    <categories-sidebar
+    <menu-sidebar
       position="left"
       :opened.sync="sidebarLeftOpened"
       @close="sidebarLeftOpened = false"
-    ></categories-sidebar>
+    ></menu-sidebar>
 
-    <ui-sidebar
-      position="left"
+    <tasks-sidebar
+      position="right"
       :opened.sync="sidebarRightOpened"
       @close="sidebarRightOpened = false"
-    >
-      <ui-task
-        id="01"
-        name="Repository health checker"
-        description="Check for new content in %s"
-        :remaining-time="2000"
-      ></ui-task>
-      <ui-task
-        id="02"
-        name="Repository fetcher"
-        description="Download the repository content"
-      ></ui-task>
-      <ui-task
-        id="03"
-        name="Repository builder"
-        state="running"
-        description="Build the repository"
-        ></ui-task>
-      <ui-task
-        id="04"
-        name="Success task"
-        description="A task in success"
-        state="success"
-      ></ui-task>
-      <ui-task
-        id="05"
-        name="Error task"
-        description="A task in error"
-        state="error"
-      ></ui-task>
-    </ui-sidebar>
+    ></tasks-sidebar>
   </div>
 </template>
 
 <script>
+import store from '@/services/store';
 import UiHeader from '@/ui/views/Header.vue';
-import UiSidebar from '@/ui/views/Sidebar.vue';
-import UiTask from '@/ui/views/Task.vue';
-import CategoriesSidebar from '@/categories/views/CategoriesSidebar.vue';
+import MenuSidebar from '@/menu/views/MenuSidebar.vue';
+import TasksSidebar from '@/tasks/views/TasksSidebar.vue';
 import AppImagesRandomizer from '@/app-images-randomizer/views/AppImagesRandomizer.vue';
 
 export default {
   name: 'page',
+  store,
   components: {
     UiHeader,
-    UiSidebar,
-    UiTask,
-    CategoriesSidebar,
+    MenuSidebar,
+    TasksSidebar,
     AppImagesRandomizer,
+  },
+  mounted() {
+    this.load();
   },
   data() {
     return {
@@ -109,6 +82,9 @@ export default {
     };
   },
   methods: {
+    load() {
+      this.$store.dispatch('Config/load');
+    },
     headerClick() {
       this.unlock();
     },

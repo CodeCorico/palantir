@@ -8,72 +8,15 @@ let loaded = false;
 const store = {
   namespaced: true,
   state: {
-    apps: {},
-    appRoot: null,
-    tasks: [],
-    categories: [],
+    config: {},
   },
   mutations: {
-    mutateConfig: (state, data) => {
-      const { variables = {} } = data;
-
-      const { apps = [], tasks = [], categories = []} = JSON.parse(JSON
-        .stringify(data)
-        .replace(/#{(.*?)}/g, (match, key) => variables[key] || ''));
-
-
-      const appsObj = [];
-
-      apps.forEach((app) => {
-        app.url = `/app/${app.id}`;
-
-        appsObj[app.id] = app;
-      });
-
-      state.appRoot = null;
-      state.apps = appsObj;
-      state.tasks = tasks;
-      state.categories = categories.map((category) => {
-        (category.sections || []).forEach((section) => {
-          (section.links || []).forEach((link) => {
-            if (link.url && !link.app && !link.root) {
-              link.external = true;
-            }
-
-            if (link.root) {
-              link.url = '/';
-
-              if (link.app) {
-                state.appRoot = link.app;
-              }
-            } else if (link.app) {
-              link.url = appsObj[link.app].url;
-            }
-          });
-        });
-
-        return category;
-      });
-
-      // .map((category) => {
-      //   (category.sections || []).forEach((section) => {
-      //     (section.apps || []).forEach((app) => {
-      //       (app.selectors || []).forEach((selector) => {
-      //         section.selectors = section.selectors || [];
-
-      //         if (section.selectors.indexOf(selector) < 0) {
-      //           section.selectors.push(selector);
-      //         }
-      //       });
-      //     });
-      //   });
-
-      //   return category;
-      // });
+    config: (state, payload) => {
+      state.config = payload;
     },
   },
   actions: {
-    async load({ commit }) {
+    async load({ commit, dispatch, rootState }) {
       if (loaded) {
         return;
       }
@@ -81,8 +24,27 @@ const store = {
       loaded = true;
 
       const { data } = await axios.get('/palantir.json');
+      const { variables = {} } = data;
 
-      commit('mutateConfig', data);
+      const config = JSON.parse(JSON
+        .stringify(data)
+        .replace(/#{(.*?)}/g, (match, key) => variables[key] || ''));
+
+      const { apps = [] } = config;
+
+      Object.keys(apps).forEach((key) => {
+        apps[key].url = `/app/${key}`;
+      });
+
+      commit('config', config);
+
+      Object.keys(rootState).forEach((namespace) => {
+        if (!rootState[namespace].needConfig) {
+          return;
+        }
+
+        dispatch(`${namespace}/config`, config, { root: true });
+      });
     },
   },
 };

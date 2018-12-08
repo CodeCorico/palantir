@@ -1,7 +1,9 @@
 <template>
   <section class="ui-task" :class="[`state-${state}`]">
-    <span v-if="id" class="task-id" :class="{ fade: state === 'running' }">{{ id }}</span>
-    <h1>{{ name }}</h1>
+    <span v-if="id" class="task-id" :class="{ fade: state === 'running' }">
+      {{ id < 10 ? `0${id}` : id }}
+    </span>
+    <h1>{{ title }}</h1>
     <p>{{ desc }}</p>
     <i v-if="state === 'running'" class="fas fa-cog"></i>
   </section>
@@ -11,14 +13,14 @@
 export default {
   name: 'ui-task',
   props: {
-    id: String,
+    id: Number,
     remainingTime: Number,
     state: {
       type: String,
       default: 'idle',
       validator: value => ['idle', 'running', 'success', 'error'].indexOf(value) > -1,
     },
-    name: String,
+    title: String,
     description: String,
   },
   computed: {

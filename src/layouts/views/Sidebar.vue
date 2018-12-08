@@ -1,5 +1,5 @@
 <template>
-  <section class="ui-sidebar" :class="[`position-${position}`, `open-sb-${openSb}`]">
+  <section class="sidebar" :class="[`position-${position}`, `open-sb-${openSb}`]">
     <div class="container">
       <slot></slot>
     </div>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'ui-sidebar',
+  name: 'sidebar',
   props: {
     position: {
       type: String,
@@ -27,7 +27,7 @@ export default {
     };
   },
   created () {
-    this.$on('naviguate', () => this.$emit('close'));
+    this.$on('navigate', () => this.$emit('close'));
   },
   methods: {
     toggleStoryboard(open) {
@@ -63,7 +63,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/ui/assets/variables.scss';
 
-.ui-sidebar {
+.sidebar {
   position: fixed;
   top: 80px;
   bottom: 20px;

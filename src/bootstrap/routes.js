@@ -1,9 +1,9 @@
 export default [{
   path: '/',
   name: 'root',
-  component: () => import('@/layouts/views/App'),
+  component: () => import('@/apps/views/App'),
 }, {
   path: '/app/:appId',
   name: 'app',
-  component: () => import('@/layouts/views/App'),
+  component: () => import('@/apps/views/App'),
 }];
