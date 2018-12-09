@@ -4,7 +4,7 @@
       {{ id }}
     </span>
     <h1>{{ title }}</h1>
-    <p>{{ desc }}</p>
+    <p>{{ description }}</p>
     <i v-if="status === 'running'" class="fas fa-cog"></i>
   </section>
 </template>
@@ -14,7 +14,6 @@ export default {
   name: 'ui-task',
   props: {
     id: String,
-    remainingTime: Number,
     status: {
       type: String,
       default: 'idle',
@@ -24,11 +23,6 @@ export default {
     description: String,
     dispatch: String,
     config: Object,
-  },
-  computed: {
-    desc() {
-      return this.description.replace(/%s/g, this.formatTime(this.remainingTimeActual));
-    }
   },
   methods: {
     start() {
@@ -41,40 +35,6 @@ export default {
         config: this.config,
       });
     },
-    formatTime(time) {
-      let hours = Math.floor(time / 3600);
-      let minutes = Math.floor((time - (hours * 3600)) / 60);
-      let seconds = time - (hours * 3600) - (minutes * 60);
-
-      hours = hours < 10 ? `0${hours}` : hours;
-      minutes = minutes < 10 ? `0${minutes}` : minutes;
-      seconds = seconds < 10 ? `0${seconds}` : seconds;
-
-      return `${hours}:${minutes}:${seconds}`;
-    },
-    remainingTimeClock() {
-      clearTimeout(this.remainingTimeTimeout);
-
-      this.remainingTimeTimeout = setTimeout(() => {
-        const newTime = this.remainingTimeActual - 1;
-
-        this.$set(this, 'remainingTimeActual', newTime);
-
-        if (newTime > 0) {
-          this.remainingTimeClock();
-        }
-      }, 1000);
-    },
-  },
-  data() {
-    if (this.remainingTime) {
-      this.remainingTimeClock();
-    }
-
-    return {
-      remainingTimeTimeout: null,
-      remainingTimeActual: this.remainingTime ? parseInt(this.remainingTime, 10) : null,
-    };
   },
 };
 </script>
@@ -96,6 +56,7 @@ export default {
   border-bottom: 3px solid;
 
   &.status-disabled {
+    cursor: not-allowed;
     color: rgba(146, 146, 146, 0.8);
     border-color: rgba(97, 97, 97, 0.8);
 

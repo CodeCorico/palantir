@@ -1,27 +1,10 @@
-// [{
-//   "title": "Refresh pull-requests",
-//   "description": "Check for new content in %s",
-//   "type": "interval",
-//   "every": 4,
-//   "immediate": true,
-//   "trigger": "reload"
-// }, {
-//   "title": "Daily Virage",
-//   "description": "Start the daily randomizer each day at 10h",
-//   "type": "daily",
-//   "time": "10:00",
-//   "trigger": "start"
-// }]
-
-// setTimeout(() => {
-//   store.dispatch(task.dispatch, task);
-// }, 2000);
-
 import store from '@/services/store';
 
 const tasks = {};
 
 const prepareAndStart = (task) => {
+  clearTaskLoop(task);
+
   if (task.disabled) {
     return;
   }
@@ -29,10 +12,55 @@ const prepareAndStart = (task) => {
   if (task.immediate) {
     trigger(task);
   }
+
+  if (task.type === 'manual') {
+    return;
+  }
+
+  if (task.type === 'interval') {
+    intervalLoop(task);
+  } else if (task.type === 'daily') {
+    dailyLoop(task);
+  }
 };
 
 const trigger = (task) => {
   store.dispatch(task.dispatch, task);
+};
+
+const clearTaskLoop = task => clearInterval(task.timeout);
+
+const intervalLoop = (task) => {
+  task.timeout = setTimeout(() => {
+    clearTaskLoop(task);
+    trigger(task);
+
+    intervalLoop(task);
+  }, task.every * 1000);
+};
+
+const dailyLoop = (task) => {
+  const date = new Date();
+  const nextDate = new Date();
+
+  const [hours, minutes] = task.time.split(':');
+
+  if (hours < date.getHours() || (hours == date.getHours() && minutes <= date.getMinutes())) {
+    nextDate.setDate(date.getDate() + 1);
+  }
+
+  nextDate.setHours(parseInt(hours, 10));
+  nextDate.setMinutes(parseInt(minutes));
+  nextDate.setSeconds(0);
+
+  const timeLeft = nextDate.getTime() - date.getTime();
+
+  task.timeout = setTimeout(() => {
+    clearTaskLoop(task);
+    trigger(task);
+
+    dailyLoop(task);
+  }, timeLeft);
 };
 
 class Cron {
@@ -43,6 +71,8 @@ class Cron {
   }
 
   unregister(id) {
+    clearTaskLoop(tasks[id]);
+
     delete tasks[id];
   }
 
