@@ -10,11 +10,6 @@
         title: 'Menu',
         icon: 'fas fa-bars',
       }, {
-        name: 'test',
-        location: 'left',
-        title: 'test',
-        icon: 'fas fa-chalkboard-teacher',
-      }, {
         location: 'right',
         title: 'Tasks',
         icon: 'fas fa-cog',
@@ -26,19 +21,10 @@
       }]"
     ></ui-header>
 
-      <!-- location: 'right',
-        title: 'Documents',
-        icon: 'fas fa-th-large',
-      }, {
-        name: 'expand',
-        location: 'right',
-        title: 'Expand',
-        icon: 'fas fa-expand', -->
-
     <div class="page-content">
       <router-view></router-view>
 
-      <app-images-randomizer ref="randomizer"></app-images-randomizer>
+      <app-images-randomizer></app-images-randomizer>
     </div>
 
     <menu-sidebar
@@ -89,11 +75,6 @@ export default {
       this.unlock();
     },
     sidebarOpen(button) {
-      if ((button.name || '') === 'test') {
-        this.$refs.randomizer.start();
-
-        return;
-      }
       if ((button.name || '') === 'lock') {
         this.closeSidebars();
         this.lock();

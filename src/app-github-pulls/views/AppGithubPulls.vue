@@ -81,31 +81,6 @@ export default {
   computed: {
     ...mapState('GithubPulls', ['groups']),
   },
-  mounted() {
-    this.loadGroups();
-  },
-  destroyed() {
-    clearTimeout(this.loadGroupsTimeout);
-  },
-  watch: {
-    config() {
-      this.loadGroups();
-    }
-  },
-  methods: {
-    loadGroups() {
-      clearTimeout(this.loadGroupsTimeout);
-
-      this.$store.dispatch('GithubPulls/loadGroups', this.config);
-
-      this.loadGroupsTimeout = setTimeout(() => this.loadGroups(), 4 * 60 * 1000); // 4min
-    },
-  },
-  data() {
-    return {
-      loadGroupsTimeout: null,
-    };
-  },
 };
 </script>
 

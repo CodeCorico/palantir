@@ -3,7 +3,7 @@ const name = 'Menu';
 const store = {
   namespaced: true,
   state: {
-    needConfig: true,
+    hasConfig: true,
     menu: {},
   },
   mutations: {

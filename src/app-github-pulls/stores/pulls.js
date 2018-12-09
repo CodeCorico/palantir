@@ -104,7 +104,9 @@ const store = {
     },
   },
   actions: {
-    async loadGroups({ commit }, { token = '', repositories = [] }) {
+    async reload({ commit }, task) {
+      const { token = '', repositories = [] } = task.config;
+
       github.defaults.headers.common.Authorization = `token ${token}`;
 
       const pullsSubArrays = await Promise.all(

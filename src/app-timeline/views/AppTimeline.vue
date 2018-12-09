@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import store from '@/services/store';
 
 export default {
@@ -18,7 +17,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .app-timeine {
 
 }

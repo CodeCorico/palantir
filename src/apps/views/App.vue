@@ -1,5 +1,9 @@
 <template>
-  <component :is="comp" :config="config"></component>
+  <component
+    v-if="activeApp"
+    :is="`app-${activeApp.type}`"
+    :config="activeApp.config || {}"
+  ></component>
 </template>
 
 <script>
@@ -15,29 +19,21 @@ export default {
     AppGithubPulls,
     AppTimeline,
   },
+  mounted() {
+    this.routeUpdated();
+  },
   computed: {
-    ...mapState('Apps', ['apps', 'appRoot']),
-    comp() {
-      const app = this.app();
-
-      return `app-${app.type}`;
+    ...mapState('Apps', ['apps', 'appRoot', 'activeApp']),
+  },
+  watch:{
+    $route() {
+      this.routeUpdated();
     },
-    config() {
-      const app = this.app();
-
-      return app.config || {};
-    }
   },
   methods: {
-    app() {
-      const appId = this.$route.params.appId || this.appRoot;
-
-      if (!this.apps || !this.apps[appId]) {
-        throw new Error(`No app with the id "${appId}"`);
-      }
-
-      return this.apps[appId];
-    }
+    routeUpdated() {
+      this.$store.dispatch('Apps/activeApp', this.$route.params.appId);
+    },
   },
 };
 </script>

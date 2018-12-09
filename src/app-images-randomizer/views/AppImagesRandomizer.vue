@@ -25,25 +25,33 @@ import store from '@/services/store';
 export default {
   name: 'app-images-randomizer',
   store,
-  mounted() {
-    this.dateTimeClock();
-  },
   destroyed() {
     this.clearAnim();
     this.clearRandomizeImages();
   },
+  computed: {
+    ...mapState('ImagesRandomizer', [
+      'started', 'icon', 'title', 'selectedText', 'images', 'fixedTime'
+    ]),
+  },
+  data() {
+    return {
+      appearSb: -1,
+      fixedSb: -1,
+      image: null,
+      legend: '',
+      dateTimeTimeout: null,
+      animTimeout: null,
+      randomizeImagesTimeout: null,
+      endTimeout: null,
+    };
+  },
+  watch: {
+    started(value) {
+      this[value ? 'start' : 'stop']();
+    }
+  },
   methods: {
-    dateTimeClock() {
-      clearTimeout(this.dateTimeTimeout);
-
-      const date = new Date();
-
-      if (date.getHours() === 10 && date.getMinutes() === 0) {
-        this.start();
-      }
-
-      this.dateTimeTimeout = setTimeout(() => this.dateTimeClock(), 60 * 1000); // 1min
-    },
     anim(sb, steps, step, done) {
       this.clearAnim();
 
@@ -72,6 +80,8 @@ export default {
       this.$set(this, 'fixedSb', -1);
       this.$set(this, 'image', null);
       this.$set(this, 'legend', '');
+
+      this.$store.dispatch('ImagesRandomizer/stop');
     },
     startRandomizeImages() {
       const minLoops = this.images.length * 4;
@@ -113,7 +123,7 @@ export default {
     goFixed() {
       this.clearRandomizeImages();
 
-      this.anim('fixedSb', [0, 350], 0, () => this.end(15 * 60 * 1000)); // 15min
+      this.anim('fixedSb', [0, 350], 0, () => this.end((this.fixedTime || 60) * 1000));
     },
     end(time) {
       this.clearAnim();
@@ -133,43 +143,6 @@ export default {
     clearEnd() {
       clearTimeout(this.endTimeout);
     },
-  },
-  data() {
-    return {
-      appearSb: -1,
-      fixedSb: -1,
-      image: null,
-      legend: '',
-      dateTimeTimeout: null,
-      animTimeout: null,
-      randomizeImagesTimeout: null,
-      endTimeout: null,
-
-      icon: 'fas fa-chalkboard-teacher',
-      title: 'Daily Virage',
-      selectedText: [
-        '%s c\'est ton tour !',
-        '%s tu es désigné(e) !',
-        '%s en piste !',
-        'Au tableau %s !',
-      ],
-      images: [{
-        src: 'https://www.gravatar.com/avatar/9e38451efa23937301594f273033c5f1?s=200',
-        legend: 'Xa',
-      }, {
-        src: 'https://avatars0.githubusercontent.com/u/4305208?s=200',
-        legend: 'Nico L.',
-      }, {
-        src: 'https://avatars2.githubusercontent.com/u/6427804?s=200',
-        legend: 'Stéphane',
-      }, {
-        src: 'https://avatars2.githubusercontent.com/u/32329416?s=200',
-        legend: 'Val',
-      }, {
-        src: 'https://avatars3.githubusercontent.com/u/439054?s=200',
-        legend: 'Nico P.',
-      }],
-    };
   },
 };
 </script>

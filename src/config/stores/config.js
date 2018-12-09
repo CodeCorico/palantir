@@ -39,7 +39,7 @@ const store = {
       commit('config', config);
 
       Object.keys(rootState).forEach((namespace) => {
-        if (!rootState[namespace].needConfig) {
+        if (!rootState[namespace].hasConfig) {
           return;
         }
 

@@ -6,41 +6,15 @@
     @close="$emit('close')"
   >
     <task
-      v-for="(task, taskIndex) in tasks"
-      :key="taskIndex"
-      :id="taskIndex + 1"
+      v-for="task in tasks"
+      :key="task.id"
+      :id="task.id"
       :title="task.title"
       :description="task.description"
       :remaining-time="2000"
-    ></task>
-    <task
-      :id="1"
-      title="Repository health checker"
-      description="Check for new content in %s"
-      :remaining-time="2000"
-    ></task>
-    <task
-      :id="2"
-      title="Repository fetcher"
-      description="Download the repository content"
-    ></task>
-    <task
-      :id="3"
-      title="Repository builder"
-      state="running"
-      description="Build the repository"
-      ></task>
-    <task
-      :id="4"
-      title="Success task"
-      description="A task in success"
-      state="success"
-    ></task>
-    <task
-      :id="5"
-      title="Error task"
-      description="A task in error"
-      state="error"
+      :status="task.status"
+      :dispatch="task.dispatch"
+      :config="task.config"
     ></task>
   </sidebar>
 </template>
@@ -69,7 +43,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('Tasks', ['tasks']),
+    ...mapState('Apps', ['tasks']),
   },
 };
 </script>
