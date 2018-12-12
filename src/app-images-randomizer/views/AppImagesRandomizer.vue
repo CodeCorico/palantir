@@ -169,6 +169,7 @@ export default {
 }
 
 .app-images-randomizer {
+  z-index: 10000;
   user-select: none;
   display: none;
   position: absolute;
