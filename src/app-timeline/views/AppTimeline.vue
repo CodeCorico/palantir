@@ -11,41 +11,31 @@
       @scroll="mapScrolling"
     >
       <div class="map" :style="`height: ${mapHeight}px`">
-        <div class="map-column">
-          <div class="event idle">5</div>
-          <div class="event success">5</div>
-          <div class="event warning">add type to importComponent &amp; remove bad async</div>
-          <div class="event success-warning"><span>5</span><span>7</span></div>
-          <div class="event idle-warning"><span>2</span><span>7</span></div>
-          <div class="event idle-success"><span>2</span><span>7</span></div>
-          <div class="event idle-success-warning"><span>2</span><span>3</span><span>7</span></div>
+        <div
+          v-for="datesEvent in datesEvents"
+          :key="datesEvent.title"
+          class="map-column"
+        >
+          <template v-for="event in datesEvent.events">
+            <div
+              :key="event.domain"
+              class="event"
+              :class="event.type"
+              :style="eventStyle(datesEvent.events, event)"
+              :title="event.isSingle ? event.texts[0] : ''"
+            >
+              <span v-for="(text, textIndex) in event.texts" :key="textIndex">{{ text }}</span>
+            </div>
 
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+            <div
+              :key="`${event.domain}-link`"
+              v-if="event.lastWarning > -1"
+              class="event-link"
+              :class="`warning-${event.warningOnly ? 'warning' : 'success'}`"
+              :style="eventLinkStyle(event.dateIndex, event.lastWarning)"
+            ></div>
+          </template>
         </div>
-        <div class="map-column">
-          <div class="event idle">5</div>
-          <div class="event warning">add type to importComponent &amp; remove bad async</div>
-          <div class="event success">5</div>
-          <div class="event-link" style="width: 40px; margin-left: -35px;"></div>
-          <div class="event success-warning"><span>5</span><span>7</span></div>
-          <div class="event idle-success" :style="`margin-top: ${16+2+2+5+5+5 +5}px;`"><span>2</span><span>7</span></div>
-          <div class="event idle-warning"><span>2</span><span>7</span></div>
-          <div class="event idle-success-warning"><span>2</span><span>3</span><span>7</span></div>
-        </div>
-        <div class="map-column">
-          <div class="event idle">5</div>
-          <div class="event warning">add type to importComponent &amp; remove bad async</div>
-          <div class="event success">5</div>
-          <div class="event-link" style="width: 40px; margin-left: -35px;"></div>
-          <div class="event success-warning"><span>5</span><span>7</span></div>
-          <div class="event idle-success"><span>2</span><span>7</span></div>
-          <div class="event-link" :style="`width: ${40+40+92}px; margin-left: -${40+40+92-5}px;`"></div>
-          <div class="event idle-warning"><span>2</span><span>7</span></div>
-          <div class="event idle-success-warning"><span>2</span><span>3</span><span>7</span></div>
-        </div>
-        <div class="map-column" style="min-width: 2000px">Hello</div>
       </div>
     </ui-scrolls>
 
@@ -61,13 +51,11 @@
       </div>
 
       <div class="domains-content" :style="`top: ${-mapScrollTop}px`">
-        <div class="domain">router</div>
-        <div class="domain">
-          dom
-          <div class="domain">current-script-polyfill</div>
-        </div>
-        <div class="domain">imports</div>
-        <div class="domain">env</div>
+        <div
+          v-for="domain in domains"
+          :key="domain"
+          class="domain"
+        >{{ domain }}</div>
       </div>
     </div>
 
@@ -79,16 +67,14 @@
       @mouseleave="inScrolls = false"
     >
       <div class="dates" :style="`left: ${-mapScrollLeft}px`">
-        <div class="map-column">
+        <div
+          v-for="date in datesColumns"
+          :key="date.title"
+          class="map-column"
+        >
           <div class="date-title">
-            1.1.1
-            <span>2018-12-12</span>
-          </div>
-        </div>
-        <div class="map-column">
-          <div class="date-title">
-            1.1.0
-            <span>2018-12-06</span>
+            {{ date.title }}
+            <span v-if="date.subtitle">{{ date.subtitle }}</span>
           </div>
         </div>
       </div>
@@ -115,6 +101,8 @@ export default {
     window.addEventListener('resize', this.onWindowResize);
 
     this.onWindowResize();
+
+    this.parseEvents();
   },
   destroyed() {
     window.removeEventListener('resize', this.onWindowResize);
@@ -127,8 +115,115 @@ export default {
       inScrolls: false,
 
       capitalizeDomains: true,
-      datesTitle: 'Versions',
+      datesTitle: 'Versions...',
       filterText: 'Filter...',
+      lastWarnings: {},
+      domains: [],
+      datesColumns: [],
+      datesEvents: [],
+
+      dates: [{
+        title: '0.1.11',
+        subtitle: '2018-11-27',
+      }, {
+        title: '0.1.10',
+        subtitle: '2018-11-27',
+      }, {
+        title: '0.1.8',
+        subtitle: '2018-11-26',
+        events: {
+          build: {
+            warning: ['the "build:report" script start the analyser'],
+          },
+          vue: {
+            warning: ['return an empty object when the $route is null'],
+          },
+        }
+      }, {
+        title: '0.1.7',
+        subtitle: '2018-11-16',
+        events: {
+          router: {
+            warning: ['add support for direct pages of subroutes'],
+            success: ['add debug.router.routes displaying routes loaded'],
+          },
+        }
+      }, {
+        title: '0.1.6',
+        subtitle: '2018-11-14',
+        events: {
+          '*': {
+            warning: ['rename the global dist "core" to "coreSpa"'],
+          },
+          imports: {
+            success: ['attach debug import components loaded'],
+          },
+        }
+      }, {
+        title: '0.1.5',
+        subtitle: '2018-11-11',
+      }, {
+        title: '0.1.4',
+        subtitle: '2018-11-11',
+      }, {
+        title: '0.1.3',
+        subtitle: '2018-11-10',
+        events: {
+          env: {
+            warning: ['use new system based on the window.ENV variable'],
+          },
+        },
+      }, {
+        title: '0.1.2',
+        subtitle: '2018-11-08',
+        events: {
+          '*': {
+            warning: ['some tests'],
+          },
+          bootstrap: {
+            warning: ['publish core.version'],
+          },
+        },
+      }, {
+        title: '0.1.1',
+        subtitle: '2018-11-08',
+        events: {
+          cypress: {
+            warning: ['remove cypress & standalone website serving'],
+          },
+          env: {
+            warning: ['replace the debug info reducer by a map'],
+            success: ['create the env feature'],
+          },
+          imports: {
+            warning: [
+              'add type to importComponent & remove bad async',
+              'call nextTick with arguments',
+              'keep the module name from the file in extractNamespace()',
+              'use main module with its dependencies',
+              'use the debug feature for minified umd',
+            ],
+            success: [
+              'add the UMD_MINIFIED config flag',
+              'create the imports UMD feature',
+              'resolve chunked components in importComponent',
+              'support IE with current-script-polyfill',
+            ],
+          },
+          build: {
+            success: ['add better building stages'],
+          },
+          config: {
+            success: ['add a config registration feature'],
+          },
+          debug: {
+            success: ['create the debug feature'],
+          },
+          'dom current-script-polyfill': {
+            success: ['create the polyfill feature'],
+          },
+        },
+      }],
     };
   },
   methods: {
@@ -150,6 +245,127 @@ export default {
     },
     propagateWheel(event) {
       this.$refs.scrolls.propagateWheel(event);
+    },
+    eventStyle(events, event) {
+      const index = events.indexOf(event);
+      const prevIndex = index - 1;
+      const domainsIndex = this.domains.indexOf(event.domain);
+      const domainsPrevIndex = prevIndex < 0 ? -1 : this.domains.indexOf(events[prevIndex].domain);
+      let spaceEvents = domainsIndex - domainsPrevIndex - 1;
+
+      if (spaceEvents < 1) {
+        return {};
+      }
+
+      const eventSize = 16 + 2 + 2 + 5 + 5 + 5;
+
+      return {
+        marginTop: `${eventSize * (spaceEvents)}px`,
+      };
+    },
+    eventLinkStyle(dateIndex, lastWarning) {
+      const width = ((dateIndex - lastWarning - 1) * (40 + 92)) + 40;
+
+      return {
+        width: `${width}px`,
+        marginLeft: `-${width - 5}px`,
+        // width: 40px; margin-left: -35px;
+        // width: ${40+40+92}px; margin-left: -${40+40+92-5}px;`
+      };
+    },
+    parseEvents() {
+      const lastWarnings = {};
+      const domains = [];
+      const datesColumns = [];
+      const datesEvents = [];
+
+      let dateIndex = -1;
+
+      this.dates.forEach((date) => {
+        if (!date.title) {
+          return;
+        }
+
+        dateIndex++;
+
+        datesColumns.push({
+          title: date.title,
+          subtitle: date.subtitle || null,
+        });
+
+        const events = [];
+
+        if (!date.events) {
+          datesEvents.push(events);
+
+          return;
+        }
+
+        Object.keys(date.events).forEach((key) => {
+          const domain = key.trim().toLowerCase();
+          const event = date.events[key];
+
+          if (domains.indexOf(domain) < 0) {
+            domains.push(domain);
+          }
+
+          const eventKeys = Object.keys(event);
+          const type = [];
+          const texts = [];
+          let isSingle = false;
+
+          if (eventKeys.length === 1 && event[eventKeys[0]].length === 1) {
+            isSingle = true;
+            type.push(eventKeys[0]);
+            texts.push(event[eventKeys[0]][0]);
+          }
+          else {
+            ['idle', 'success', 'warning'].forEach((state) => {
+              if (event[state]) {
+                type.push(state);
+                texts.push(event[state].length);
+              }
+            });
+          }
+
+          let lastWarning = -1;
+
+          if (typeof lastWarnings[domain] !== 'undefined') {
+            lastWarning = lastWarnings[domain];
+
+            delete lastWarnings[domain];
+          }
+
+          events.push({
+            dateIndex,
+            domain,
+            type: type.join('-'),
+            texts,
+            isSingle,
+            lastWarning,
+            warningOnly: type.indexOf('warning') > -1 && type.length === 1,
+          });
+
+          if (type.indexOf('warning') > -1) {
+            lastWarnings[domain] = dateIndex;
+          }
+        });
+
+        events.sort((a, b) => {
+          return a.domain > b.domain
+            ? 1
+            : a.domain < b.domain ? -1 : 0;
+        });
+
+        datesEvents.push({ title: date.title, events });
+      });
+
+      domains.sort();
+
+      this.$set(this, 'lastWarnings', lastWarnings);
+      this.$set(this, 'domains', domains);
+      this.$set(this, 'datesColumns', datesColumns);
+      this.$set(this, 'datesEvents', datesEvents);
     }
   },
 };
@@ -210,13 +426,6 @@ export default {
         padding: 5px;
         outline: none;
         color: #fff;
-      }
-
-      .input-versions {
-        background: rgba(0, 0, 0, 0.2);
-      }
-
-      .input-filter {
         background: rgba(0, 0, 0, 0.5);
       }
     }
@@ -327,7 +536,7 @@ export default {
     cursor: pointer;
     height: 16px;
     width: 72px;
-    margin-bottom: 5px;
+    margin-top: 5px;
     padding: 2px 10px;
     font-size: 11px;
     font-weight: 600;
@@ -408,10 +617,18 @@ export default {
 
   .event-link {
     height: 3px;
-    margin-top: -21px;
-    margin-bottom: 18px;
-    background: linear-gradient(to right, transparent 50%, #223049 50%), linear-gradient(to right, #f39d4c, #4cbaab);
-    background-size: 5px 3px, 100% 3px;
+    margin-top: -17px;
+    margin-bottom: 19px;
+
+    &.warning-success {
+      background: linear-gradient(to right, transparent 50%, #223049 50%), linear-gradient(to right, #f39d4c, #4cbaab);
+      background-size: 5px 3px, 100% 3px;
+    }
+
+    &.warning-warning {
+      background: linear-gradient(to right, transparent 50%, #223049 50%), linear-gradient(to right, #f39d4c, #e48a41);
+      background-size: 5px 3px, 100% 3px;
+    }
   }
 }
 </style>
