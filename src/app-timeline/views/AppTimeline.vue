@@ -1,6 +1,14 @@
 <template>
   <div class="app-timeline">
-    <div class="minimap"></div>
+    <timeline-minimap
+      class="minimap"
+      :datesEvents="datesEvents"
+      :domains="domains"
+      :visible-area-width="visibleAreaWidth"
+      :visible-area-height="visibleAreaHeight"
+      :scroll-y="scrollY"
+      :scroll-x="scrollX"
+    ></timeline-minimap>
 
     <ui-scrolls
       ref="scrolls"
@@ -10,7 +18,7 @@
       :v-offset-top="160"
       @scroll="mapScrolling"
     >
-      <div class="map" :style="`height: ${mapHeight}px`">
+      <div ref="map" class="map" :style="`height: ${mapHeightFixed}px`">
         <div
           v-for="datesEvent in datesEvents"
           :key="datesEvent.title"
@@ -87,15 +95,21 @@
 <script>
 import store from '@/services/store';
 import UiScrolls from '@/ui/views/Scrolls.vue';
+import TimelineMinimap from './TimelineMinimap.vue';
 
 export default {
   name: 'app-timeline',
   store,
   components: {
     UiScrolls,
+    TimelineMinimap,
   },
   props: {
     config: Object,
+  },
+  created () {
+    this.$on('scrollToY', this.onScrollToY);
+    this.$on('scrollToX', this.onScrollToX);
   },
   mounted() {
     window.addEventListener('resize', this.onWindowResize);
@@ -111,8 +125,14 @@ export default {
     return {
       mapScrollTop: 0,
       mapScrollLeft: 0,
+      mapWidth: 0,
       mapHeight: 0,
+      mapHeightFixed: 0,
       inScrolls: false,
+      visibleAreaWidth: 0,
+      visibleAreaHeight: 0,
+      scrollY: 0,
+      scrollX: 0,
 
       capitalizeDomains: true,
       datesTitle: 'Versions...',
@@ -189,9 +209,11 @@ export default {
         subtitle: '2018-11-08',
         events: {
           cypress: {
+            idle: ['hello'],
             warning: ['remove cypress & standalone website serving'],
           },
           env: {
+            idle: ['hello'],
             warning: ['replace the debug info reducer by a map'],
             success: ['create the env feature'],
           },
@@ -227,21 +249,61 @@ export default {
     };
   },
   methods: {
+    onScrollToY(value) {
+      this.$refs.scrolls.scrollToY(value);
+    },
+    onScrollToX(value) {
+      this.$refs.scrolls.scrollToX(value);
+    },
     onWindowResize() {
       this.refresh();
     },
-    refresh() {
-      this.$set(
-        this,
-        'mapHeight',
-        this.$refs.scrolls.$el.clientHeight - this.$refs.dates.clientHeight,
-      );
+    containersSizes() {
+      const styleW = window.getComputedStyle(this.$refs.map, null).getPropertyValue('width');
+      const styleH = window.getComputedStyle(this.$refs.map, null).getPropertyValue('height');
+      const realWidth = Math.round(parseInt(styleW, 10));
+      const realHeight = Math.round(parseInt(styleH, 10));
+      const paddingWidth = this.$refs.map.clientWidth - realWidth;
+      const paddingHeight = this.$refs.map.clientHeight - realHeight;
 
-      this.$nextTick(() => this.$refs.scrolls.refresh());
+      return { realWidth, realHeight, paddingWidth, paddingHeight };
+    },
+    areaVisible() {
+      const { paddingWidth, paddingHeight }= this.containersSizes();
+
+      return {
+        areaVisibleWidth: this.$refs.scrolls.$el.clientWidth - paddingWidth,
+        areaVisibleHeight: this.$refs.scrolls.$el.clientHeight - paddingHeight,
+      };
+    },
+    refresh() {
+      const mapHeightFixed = this.$refs.scrolls.$el.clientHeight - this.$refs.dates.clientHeight;
+
+      this.$set(this, 'mapHeightFixed', mapHeightFixed);
+
+      this.$nextTick(() => {
+        const { realWidth, realHeight } = this.containersSizes();
+
+        this.$set(this, 'mapWidth', realWidth);
+        this.$set(this, 'mapHeight', realHeight);
+
+        this.$refs.scrolls.refresh();
+
+        const { areaVisibleWidth, areaVisibleHeight } = this.areaVisible();
+
+        this.$set(this, 'visibleAreaWidth', areaVisibleWidth * 100 / realWidth);
+        this.$set(this, 'visibleAreaHeight', areaVisibleHeight * 100 / realHeight);
+      });
     },
     mapScrolling(event, position) {
       this.$set(this, 'mapScrollTop', position.y);
       this.$set(this, 'mapScrollLeft', position.x);
+
+      const { realWidth, realHeight } = this.containersSizes();
+      const { areaVisibleWidth, areaVisibleHeight } = this.areaVisible();
+
+      this.$set(this, 'scrollX', Math.round(position.x * 100 / (realWidth - areaVisibleWidth)));
+      this.$set(this, 'scrollY', Math.round(position.y * 100 / (realHeight - areaVisibleHeight)));
     },
     propagateWheel(event) {
       this.$refs.scrolls.propagateWheel(event);
@@ -257,6 +319,7 @@ export default {
         return {};
       }
 
+      // height + padding-top + padding-bottom + border-top + border-bottom + margin-top
       const eventSize = 16 + 2 + 2 + 5 + 5 + 5;
 
       return {
@@ -269,8 +332,6 @@ export default {
       return {
         width: `${width}px`,
         marginLeft: `-${width - 5}px`,
-        // width: 40px; margin-left: -35px;
-        // width: ${40+40+92}px; margin-left: -${40+40+92-5}px;`
       };
     },
     parseEvents() {
@@ -310,19 +371,19 @@ export default {
           }
 
           const eventKeys = Object.keys(event);
-          const type = [];
+          const types = [];
           const texts = [];
           let isSingle = false;
 
           if (eventKeys.length === 1 && event[eventKeys[0]].length === 1) {
             isSingle = true;
-            type.push(eventKeys[0]);
+            types.push(eventKeys[0]);
             texts.push(event[eventKeys[0]][0]);
           }
           else {
             ['idle', 'success', 'warning'].forEach((state) => {
               if (event[state]) {
-                type.push(state);
+                types.push(state);
                 texts.push(event[state].length);
               }
             });
@@ -339,14 +400,15 @@ export default {
           events.push({
             dateIndex,
             domain,
-            type: type.join('-'),
+            types,
+            type: types.join('-'),
             texts,
             isSingle,
             lastWarning,
-            warningOnly: type.indexOf('warning') > -1 && type.length === 1,
+            warningOnly: types.indexOf('warning') > -1 && types.length === 1,
           });
 
-          if (type.indexOf('warning') > -1) {
+          if (types.indexOf('warning') > -1) {
             lastWarnings[domain] = dateIndex;
           }
         });
@@ -380,7 +442,6 @@ export default {
 
   .minimap {
     height: 100px;
-    background: rgba(0, 0, 0, 0.4);
   }
 
   .map-container {
@@ -617,8 +678,8 @@ export default {
 
   .event-link {
     height: 3px;
-    margin-top: -17px;
-    margin-bottom: 19px;
+    margin-top: -3px;
+    transform: translateY(-14px);
 
     &.warning-success {
       background: linear-gradient(to right, transparent 50%, #223049 50%), linear-gradient(to right, #f39d4c, #4cbaab);
