@@ -54,8 +54,8 @@
       @mouseleave="inScrolls = false"
     >
       <div class="domains-titles">
-        <input type="text" class="input-versions" :placeholder="datesTitle" />
-        <input type="text" class="input-filter" :placeholder="filterText" />
+        <input type="text" v-model="dateFilter" class="input-versions" :placeholder="datesTitle" />
+        <input type="text" v-model="domainFilter" class="input-filter" :placeholder="filterText" />
       </div>
 
       <div class="domains-content" :style="`top: ${-mapScrollTop}px`">
@@ -133,6 +133,9 @@ export default {
       visibleAreaHeight: 0,
       scrollY: 0,
       scrollX: 0,
+      dateFilter: '',
+      domainFilter: '',
+      filterTimeout: null,
 
       capitalizeDomains: true,
       datesTitle: 'Versions...',
@@ -248,6 +251,14 @@ export default {
       }],
     };
   },
+  watch: {
+    dateFilter() {
+      this.refreshFilters();
+    },
+    domainFilter() {
+      this.refreshFilters();
+    },
+  },
   methods: {
     onScrollToY(value) {
       this.$refs.scrolls.scrollToY(value);
@@ -334,6 +345,10 @@ export default {
         marginLeft: `-${width - 5}px`,
       };
     },
+    refreshFilters() {
+      clearTimeout(this.filterTimeout);
+      this.filterTimeout = setTimeout(this.parseEvents, 200);
+    },
     parseEvents() {
       const lastWarnings = {};
       const domains = [];
@@ -342,9 +357,38 @@ export default {
 
       let dateIndex = -1;
 
+      // FAKE DATA
+      // this.dates.forEach((date) => {
+      //   // if (date.events) {
+      //   //   Object.keys(date.events).forEach((key) => {
+      //   //     date.events[`${key}2`] = date.events[key];
+      //   //     date.events[`${key}3`] = date.events[key];
+      //   //     date.events[`${key}4`] = date.events[key];
+      //   //   })
+      //   // }
+
+      //   for (let i = 0; i < 10; i++) {
+      //     const newDate = Object.assign({}, date);
+      //     newDate.title = newDate.title.replace(/^0/, i + 1);
+      //     this.dates.push(newDate);
+      //   }
+      // });
+      // this.dates.sort((a, b) => {
+      //   return a.title > b.title ? -1 : a.title < b.title ? 1 : 0;
+      // });
+      // END FAKE DATA
+
       this.dates.forEach((date) => {
         if (!date.title) {
           return;
+        }
+
+        if (this.dateFilter) {
+          const reg = new RegExp(this.dateFilter.replace('.', '\\.').replace('*', '.*'), 'i');
+
+          if (!date.title.match(reg)) {
+            return;
+          }
         }
 
         dateIndex++;
@@ -365,6 +409,14 @@ export default {
         Object.keys(date.events).forEach((key) => {
           const domain = key.trim().toLowerCase();
           const event = date.events[key];
+
+          if (this.domainFilter) {
+            const reg = new RegExp(this.domainFilter.replace('.', '\\.').replace('*', '.*'), 'i');
+
+            if (!domain.match(reg)) {
+              return;
+            }
+          }
 
           if (domains.indexOf(domain) < 0) {
             domains.push(domain);
