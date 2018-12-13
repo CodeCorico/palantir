@@ -29,12 +29,14 @@
 
     <menu-sidebar
       position="left"
+      class="page-sidebar"
       :opened.sync="sidebarLeftOpened"
       @close="sidebarLeftOpened = false"
     ></menu-sidebar>
 
     <tasks-sidebar
       position="right"
+      class="page-sidebar"
       :opened.sync="sidebarRightOpened"
       @close="sidebarRightOpened = false"
     ></tasks-sidebar>
@@ -151,6 +153,10 @@ body {
     height: 100%;
     padding-top: 60px;
     overflow: hidden;
+  }
+
+  .page-sidebar {
+    z-index: 10000;
   }
 }
 </style>
