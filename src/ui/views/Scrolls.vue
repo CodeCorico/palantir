@@ -134,7 +134,7 @@ export default {
       }
 
       const { type, offset, cursorOffset } = this.dragging;
-      const eventOffset = event[type === 'v' ? 'pageY' : 'pageX']
+      const eventOffset = event[type === 'v' ? 'pageY' : 'pageX'];
       const area = this.$refs.container[type === 'v' ? 'scrollHeight' : 'scrollWidth'];
       const bar = this.$refs[type === 'v' ? 'barAreaV' : 'barAreaH'];
       const max = bar[type === 'v' ? 'clientHeight' : 'clientWidth'];
@@ -175,6 +175,19 @@ export default {
         Math.round(this.$refs.container.scrollLeft * 100 / this.$refs.container.scrollWidth),
       );
     },
+    scrollToY(value) {
+      this.scrollTo('y', value);
+    },
+    scrollToX(value) {
+      this.scrollTo('x', value);
+    },
+    scrollTo(type, value) {
+      const container = this.$refs.container[type === 'y' ? 'clientHeight' : 'clientWidth'];
+      const content = this.$refs.content[type === 'y' ? 'clientHeight' : 'clientWidth'];
+      const scrollTo = value * (content - container) / 100;
+
+      this.$refs.container[type === 'y' ? 'scrollTop' : 'scrollLeft'] = scrollTo;
+    }
   },
 };
 </script>
