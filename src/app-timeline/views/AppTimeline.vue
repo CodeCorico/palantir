@@ -23,6 +23,8 @@
           v-for="datesEvent in datesEvents"
           :key="datesEvent.title"
           class="map-column"
+          :class="{ selected: datesEvent.title === dateSelected }"
+          @click="selectColumn(datesEvent.title)"
         >
           <template v-for="event in datesEvent.events">
             <div
@@ -49,7 +51,8 @@
 
     <div
       class="domains"
-      :class="{ capitalize: capitalizeDomains }" @wheel="propagateWheel"
+      :class="{ capitalize: capitalizeDomains }"
+      @wheel="propagateWheel"
       @mouseenter="inScrolls = true"
       @mouseleave="inScrolls = false"
     >
@@ -79,6 +82,8 @@
           v-for="date in datesColumns"
           :key="date.title"
           class="map-column"
+          :class="{ selected: date.title === dateSelected }"
+          @click="selectColumn(date.title)"
         >
           <div class="date-title">
             {{ date.title }}
@@ -88,7 +93,14 @@
       </div>
     </div>
 
-    <div class="content"></div>
+    <transition name="content">
+      <div class="content" v-if="content">
+        <ui-scrolls class="content-scrolls">
+          <div class="content-html" v-html="content"></div>
+        </ui-scrolls>
+        <div class="content-cross" @click="unselectColumns"><i class="fas fa-times"></i></div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -136,6 +148,8 @@ export default {
       dateFilter: '',
       domainFilter: '',
       filterTimeout: null,
+      dateSelected: '',
+      content: '',
 
       capitalizeDomains: true,
       datesTitle: 'Versions...',
@@ -161,7 +175,24 @@ export default {
           vue: {
             warning: ['return an empty object when the $route is null'],
           },
-        }
+        },
+        content: `
+          <h1>
+            <a href="https://github.com/ARAMISAUTO/core-spa/compare/v0.1.10...v0.1.11">0.1.8</a>
+            (2018-11-26)
+          </h1>
+          <h3>Bug Fixes</h3>
+          <ul>
+            <li>
+              <strong>build:</strong> the "build:report" script start the analyser
+              <a href="https://github.com/ARAMISAUTO/core-spa/commit/e534f88">e534f88</a>
+            </li>
+            <li>
+              <strong>vue:</strong> return an empty object when the $route is null
+              <a href="https://github.com/ARAMISAUTO/core-spa/commit/5d73c7b">5d73c7b</a>
+            </li>
+          </ul>
+        `,
       }, {
         title: '0.1.7',
         subtitle: '2018-11-16',
@@ -170,7 +201,27 @@ export default {
             warning: ['add support for direct pages of subroutes'],
             success: ['add debug.router.routes displaying routes loaded'],
           },
-        }
+        },
+        content: `
+          <h1>
+            <a href="https://github.com/ARAMISAUTO/core-spa/compare/v0.1.6...v0.1.7">0.1.7</a>
+            (2018-11-16)
+          </h1>
+          <h3>Bug Fixes</h3>
+          <ul>
+            <li>
+              <strong>router:</strong> add support for direct pages of subroutes
+              <a href="https://github.com/ARAMISAUTO/core-spa/commit/52e4dff">52e4dff</a>
+            </li>
+          </ul>
+          <h3>Features</h3>
+          <ul>
+            <li>
+              <strong>router:</strong> add debug.router.routes displaying routes loaded
+              <a href="https://github.com/ARAMISAUTO/core-spa/commit/f796980">f796980</a>
+            </li>
+          </ul>
+        `,
       }, {
         title: '0.1.6',
         subtitle: '2018-11-14',
@@ -260,6 +311,21 @@ export default {
     },
   },
   methods: {
+    selectColumn(dateTitle) {
+      this.$set(this, 'dateSelected', dateTitle);
+
+      for (let i = 0; i < this.datesEvents.length; i++) {
+        if (this.datesEvents[i].title === dateTitle) {
+          this.$set(this, 'content', this.datesEvents[i].content || 'No content.');
+
+          break;
+        }
+      }
+    },
+    unselectColumns() {
+      this.$set(this, 'dateSelected', '');
+      this.$set(this, 'content', '');
+    },
     onScrollToY(value) {
       this.$refs.scrolls.scrollToY(value);
     },
@@ -401,7 +467,7 @@ export default {
         const events = [];
 
         if (!date.events) {
-          datesEvents.push(events);
+          datesEvents.push({ title: date.title, events, content: date.content });
 
           return;
         }
@@ -471,7 +537,7 @@ export default {
             : a.domain < b.domain ? -1 : 0;
         });
 
-        datesEvents.push({ title: date.title, events });
+        datesEvents.push({ title: date.title, events, content: date.content });
       });
 
       domains.sort();
@@ -585,6 +651,10 @@ export default {
         padding-top: 0;
         height: 80px;
 
+        &::before {
+          top: 53px;
+        }
+
         &::after {
           content: '';
           z-index: -1;
@@ -601,10 +671,11 @@ export default {
       }
 
       .date-title {
+        user-select: none;
+        cursor: pointer;
         padding: 10px 0 5px;
         text-align: center;
         font-weight: 600;
-        background: $colorBg;
 
         span {
           display: block;
@@ -622,6 +693,7 @@ export default {
   }
 
   .map-column {
+    cursor: pointer;
     position: relative;
     display: table-cell;
     box-sizing: border-box;
@@ -630,6 +702,10 @@ export default {
     width: 132px;
     vertical-align: top;
     padding: 10px 15px;
+
+    &.selected {
+      background: rgba(0, 0, 0, 0.3);
+    }
 
     &::before {
       content: '';
@@ -729,6 +805,7 @@ export default {
   }
 
   .event-link {
+    user-select: none;
     height: 3px;
     margin-top: -3px;
     transform: translateY(-14px);
@@ -741,6 +818,101 @@ export default {
     &.warning-warning {
       background: linear-gradient(to right, transparent 50%, #223049 50%), linear-gradient(to right, #f39d4c, #e48a41);
       background-size: 5px 3px, 100% 3px;
+    }
+  }
+
+  .content {
+    z-index: 1;
+    position: absolute;
+    top: 100px;
+    right: 40px;
+    bottom: 0;
+    width: 340px;
+    background: $colorBg;
+    opacity: 0.9;
+
+    &.content-enter-active, &.content-leave-active {
+      transition: all 0.25s $easeOutQuart;
+    }
+
+    &.content-enter {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+
+    &.content-enter-to {
+      opacity: 0.9;
+      transform: translateX(0);
+    }
+
+    &.content-leave {
+      opacity: 0.9;
+      transform: translateX(0);
+    }
+
+    &.content-leave-to {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .content-scrolls {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .content-cross {
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: #fff;
+      font-size: 20px;
+    }
+
+    .content-html {
+      padding: 20px;
+      color: #fff;
+      font-size: 14px;
+
+      /deep/ {
+        a, a:hover, a:focus {
+          color: #b0e0db;
+          text-decoration: none;
+        }
+
+        h1 {
+          font-size: 24px;
+          margin: 0 0 15px;
+        }
+
+        h2 {
+          font-size: 20px;
+          margin: 0 0 15px;
+        }
+
+        h3 {
+          font-size: 18px;
+          margin: 0 0 15px;
+        }
+
+        ul {
+          margin: 0 0 20px 12px;
+          padding: 0;
+        }
+      }
     }
   }
 }
