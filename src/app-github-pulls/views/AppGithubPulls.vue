@@ -1,72 +1,77 @@
 <template>
   <div class="app-github-pulls">
+    <ui-scrolls class="scrolls">
+      <div class="scrolls-content">
 
-    <div
-      v-for="group in groups"
-      :key="group.id"
-      class="pull-group"
-    >
-      <div class="pull-group-title">
-        <h2>{{ group.title }}</h2>
-      </div>
-
-      <a
-        v-for="pull in group.pulls"
-        :key="pull.id"
-        :href="pull.url"
-        target="_blank"
-        class="pull"
-        :class="[pull.type]"
-        :style="{
-          'animation-delay': `${pull.animationDelay}ms`,
-          'animation-duration': `${pull.animationDuration}ms`,
-        }"
-      >
-        <a
-          v-for="reviewer in pull.reviewers"
-          :key="reviewer.id"
-          :href="reviewer.url"
-          target="_blank"
-          class="pull-reviewer"
-          :class="[`r-${reviewer.spaceIndex}`]"
+        <div
+          v-for="group in groups"
+          :key="group.id"
+          class="pull-group"
         >
-          <div class="pull-reviewer-container">
-            <div class="pull-reviewer-align">
-              <div class="pull-reviewer-content">
-                <img class="pull-reviewer-img" :src="reviewer.img" />
-              </div>
-            </div>
+          <div class="pull-group-title">
+            <h2>{{ group.title }}</h2>
           </div>
-        </a>
 
-        <h3><span>{{ pull.scope }}</span></h3>
-        <div class="pull-content">
-          <div class="pull-background" :style="{ 'background-image': `url(${pull.authorImg})` }"></div>
-
-          <div
-            v-if="pull.state === 'dirty' || pull.state === 'unstable'"
-            class="pull-state"
-            :class="[`state-${pull.state}`]"
+          <a
+            v-for="pull in group.pulls"
+            :key="pull.id"
+            :href="pull.url"
+            target="_blank"
+            class="pull"
+            :class="[pull.type]"
+            :style="{
+              'animation-delay': `${pull.animationDelay}ms`,
+              'animation-duration': `${pull.animationDuration}ms`,
+            }"
           >
-            <i v-if="pull.state === 'dirty'" class="fas fa-times"></i>
-            <i v-if="pull.state === 'unstable'" class="fas fa-skull-crossbones"></i>
-          </div>
+            <a
+              v-for="reviewer in pull.reviewers"
+              :key="reviewer.id"
+              :href="reviewer.url"
+              target="_blank"
+              class="pull-reviewer"
+              :class="[`r-${reviewer.spaceIndex}`]"
+            >
+              <div class="pull-reviewer-container">
+                <div class="pull-reviewer-align">
+                  <div class="pull-reviewer-content">
+                    <img class="pull-reviewer-img" :src="reviewer.img" />
+                  </div>
+                </div>
+              </div>
+            </a>
 
-          <github-pull-chart :values="pull.lines"></github-pull-chart>
+            <h3><span>{{ pull.scope }}</span></h3>
+            <div class="pull-content">
+              <div class="pull-background" :style="{ 'background-image': `url(${pull.authorImg})` }"></div>
 
-          <div class="pull-number">#{{ pull.number }}</div>
+              <div
+                v-if="pull.state === 'dirty' || pull.state === 'unstable'"
+                class="pull-state"
+                :class="[`state-${pull.state}`]"
+              >
+                <i v-if="pull.state === 'dirty'" class="fas fa-times"></i>
+                <i v-if="pull.state === 'unstable'" class="fas fa-skull-crossbones"></i>
+              </div>
+
+              <github-pull-chart :values="pull.lines"></github-pull-chart>
+
+              <div class="pull-number">#{{ pull.number }}</div>
+            </div>
+          </a>
+
+          <div class="pulls-clear"></div>
         </div>
-      </a>
 
-      <div class="pulls-clear"></div>
-    </div>
-
+      </div>
+    </ui-scrolls>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import store from '@/services/store';
+import UiScrolls from '@/ui/views/Scrolls.vue';
 import GithubPullChart from './GithubPullChart.vue';
 
 export default {
@@ -74,6 +79,7 @@ export default {
   store,
   components: {
     GithubPullChart,
+    UiScrolls,
   },
   props: {
     config: Object,
@@ -121,9 +127,19 @@ $pullReviewerAnimationCount: 10;
 .app-github-pulls {
   position: relative;
   box-sizing: border-box;
-  padding: 30px 50px;
   height: 100%;
-  overflow: auto;
+
+  .scrolls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    .scrolls-content {
+      padding: 30px 50px;
+    }
+  }
 
   .pull-group {
     position: relative;
