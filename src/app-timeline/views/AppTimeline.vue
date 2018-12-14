@@ -82,7 +82,7 @@
           v-for="date in datesColumns"
           :key="date.title"
           class="map-column"
-          :class="{ selected: date.title === dateSelected }"
+          :class="{ selected: date.title === dateSelected, 'is-idle': date.isIdle }"
           @click="selectColumn(date.title)"
         >
           <div class="date-title">
@@ -173,7 +173,7 @@ export default {
             warning: ['the "build:report" script start the analyser'],
           },
           vue: {
-            warning: ['return an empty object when the $route is null'],
+            idle: ['return an empty object when the $route is null'],
           },
         },
         content: `
@@ -317,6 +317,7 @@ export default {
 
         return;
       }
+
       this.$set(this, 'dateSelected', dateTitle);
 
       for (let i = 0; i < this.datesEvents.length; i++) {
@@ -464,10 +465,12 @@ export default {
 
         dateIndex++;
 
-        datesColumns.push({
+        const datesColumn = {
           title: date.title,
           subtitle: date.subtitle || null,
-        });
+        };
+
+        datesColumns.push(datesColumn);
 
         const events = [];
 
@@ -510,6 +513,10 @@ export default {
                 texts.push(event[state].length);
               }
             });
+          }
+
+          if (types.indexOf('idle') > -1) {
+            datesColumn.isIdle = true;
           }
 
           let lastWarning = -1;
@@ -672,6 +679,11 @@ export default {
           background: #fff;
           border-radius: 50%;
           border: 5px solid $colorBg;
+        }
+
+        &.is-idle::after {
+          background: #6998fc;
+          border-color: #2b4466;
         }
       }
 
