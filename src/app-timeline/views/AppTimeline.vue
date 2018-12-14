@@ -312,6 +312,11 @@ export default {
   },
   methods: {
     selectColumn(dateTitle) {
+      if (this.dateSelected === dateTitle) {
+        this.unselectColumns();
+
+        return;
+      }
       this.$set(this, 'dateSelected', dateTitle);
 
       for (let i = 0; i < this.datesEvents.length; i++) {
