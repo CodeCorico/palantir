@@ -51,14 +51,24 @@
 
     <div
       class="domains"
-      :class="{ capitalize: capitalizeDomains }"
+      :class="{ capitalize: config.capitalizeDomains }"
       @wheel="propagateWheel"
       @mouseenter="inScrolls = true"
       @mouseleave="inScrolls = false"
     >
       <div class="domains-titles">
-        <input type="text" v-model="dateFilter" class="input-versions" :placeholder="datesTitle" />
-        <input type="text" v-model="domainFilter" class="input-filter" :placeholder="filterText" />
+        <input
+          type="text"
+          class="input-versions"
+          v-model="dateFilter"
+          :placeholder="config.datesTitle || 'Dates...'"
+        />
+        <input
+          type="text"
+          class="input-filter"
+          v-model="domainFilter"
+          :placeholder="config.filterText || 'Filter...'"
+        />
       </div>
 
       <div class="domains-content" :style="`top: ${-mapScrollTop}px`">
@@ -105,6 +115,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import store from '@/services/store';
 import UiScrolls from '@/ui/views/Scrolls.vue';
 import TimelineMinimap from './TimelineMinimap.vue';
@@ -128,9 +139,11 @@ export default {
 
     this.onWindowResize();
 
-    this.parseEvents();
+    this.$store.dispatch('Timeline/load', this.config.url);
   },
   destroyed() {
+    clearTimeout(this.filterDateTimeout);
+    clearTimeout(this.filterDomainTimeout);
     window.removeEventListener('resize', this.onWindowResize);
   },
   data() {
@@ -145,170 +158,43 @@ export default {
       visibleAreaHeight: 0,
       scrollY: 0,
       scrollX: 0,
-      dateFilter: '',
-      domainFilter: '',
-      filterTimeout: null,
+      filterDateTimeout: null,
+      filterDomainTimeout: null,
       dateSelected: '',
       content: '',
-
-      capitalizeDomains: true,
-      datesTitle: 'Versions...',
-      filterText: 'Filter...',
-      lastWarnings: {},
-      domains: [],
-      datesColumns: [],
-      datesEvents: [],
-
-      dates: [{
-        title: '0.1.11',
-        subtitle: '2018-11-27',
-      }, {
-        title: '0.1.10',
-        subtitle: '2018-11-27',
-      }, {
-        title: '0.1.8',
-        subtitle: '2018-11-26',
-        events: {
-          build: {
-            warning: ['the "build:report" script start the analyser'],
-          },
-          vue: {
-            idle: ['return an empty object when the $route is null'],
-          },
-        },
-        content: `
-          <h1>
-            <a href="https://github.com/ARAMISAUTO/core-spa/compare/v0.1.10...v0.1.11">0.1.8</a>
-            (2018-11-26)
-          </h1>
-          <h3>Bug Fixes</h3>
-          <ul>
-            <li>
-              <strong>build:</strong> the "build:report" script start the analyser
-              <a href="https://github.com/ARAMISAUTO/core-spa/commit/e534f88">e534f88</a>
-            </li>
-            <li>
-              <strong>vue:</strong> return an empty object when the $route is null
-              <a href="https://github.com/ARAMISAUTO/core-spa/commit/5d73c7b">5d73c7b</a>
-            </li>
-          </ul>
-        `,
-      }, {
-        title: '0.1.7',
-        subtitle: '2018-11-16',
-        events: {
-          router: {
-            warning: ['add support for direct pages of subroutes'],
-            success: ['add debug.router.routes displaying routes loaded'],
-          },
-        },
-        content: `
-          <h1>
-            <a href="https://github.com/ARAMISAUTO/core-spa/compare/v0.1.6...v0.1.7">0.1.7</a>
-            (2018-11-16)
-          </h1>
-          <h3>Bug Fixes</h3>
-          <ul>
-            <li>
-              <strong>router:</strong> add support for direct pages of subroutes
-              <a href="https://github.com/ARAMISAUTO/core-spa/commit/52e4dff">52e4dff</a>
-            </li>
-          </ul>
-          <h3>Features</h3>
-          <ul>
-            <li>
-              <strong>router:</strong> add debug.router.routes displaying routes loaded
-              <a href="https://github.com/ARAMISAUTO/core-spa/commit/f796980">f796980</a>
-            </li>
-          </ul>
-        `,
-      }, {
-        title: '0.1.6',
-        subtitle: '2018-11-14',
-        events: {
-          '*': {
-            warning: ['rename the global dist "core" to "coreSpa"'],
-          },
-          imports: {
-            success: ['attach debug import components loaded'],
-          },
-        }
-      }, {
-        title: '0.1.5',
-        subtitle: '2018-11-11',
-      }, {
-        title: '0.1.4',
-        subtitle: '2018-11-11',
-      }, {
-        title: '0.1.3',
-        subtitle: '2018-11-10',
-        events: {
-          env: {
-            warning: ['use new system based on the window.ENV variable'],
-          },
-        },
-      }, {
-        title: '0.1.2',
-        subtitle: '2018-11-08',
-        events: {
-          '*': {
-            warning: ['some tests'],
-          },
-          bootstrap: {
-            warning: ['publish core.version'],
-          },
-        },
-      }, {
-        title: '0.1.1',
-        subtitle: '2018-11-08',
-        events: {
-          cypress: {
-            idle: ['hello'],
-            warning: ['remove cypress & standalone website serving'],
-          },
-          env: {
-            idle: ['hello'],
-            warning: ['replace the debug info reducer by a map'],
-            success: ['create the env feature'],
-          },
-          imports: {
-            warning: [
-              'add type to importComponent & remove bad async',
-              'call nextTick with arguments',
-              'keep the module name from the file in extractNamespace()',
-              'use main module with its dependencies',
-              'use the debug feature for minified umd',
-            ],
-            success: [
-              'add the UMD_MINIFIED config flag',
-              'create the imports UMD feature',
-              'resolve chunked components in importComponent',
-              'support IE with current-script-polyfill',
-            ],
-          },
-          build: {
-            success: ['add better building stages'],
-          },
-          config: {
-            success: ['add a config registration feature'],
-          },
-          debug: {
-            success: ['create the debug feature'],
-          },
-          'dom current-script-polyfill': {
-            success: ['create the polyfill feature'],
-          },
-        },
-      }],
     };
   },
-  watch: {
-    dateFilter() {
-      this.refreshFilters();
+  computed: {
+    ...mapState('Timeline', [
+      'lastWarnings',
+      'domains',
+      'datesColumns',
+      'datesEvents',
+    ]),
+    dateFilter: {
+      get() {
+        return this.$store.state.Timeline.dateFilter;
+      },
+      set(value) {
+        clearTimeout(this.filterDateTimeout);
+
+        this.filterDateTimeout = setTimeout(() => {
+          this.$store.dispatch('Timeline/filter', 'date', value);
+        }, 250);
+      }
     },
-    domainFilter() {
-      this.refreshFilters();
-    },
+    domainFilter: {
+      get() {
+        return this.$store.state.Timeline.domainFilter;
+      },
+      set(value) {
+        clearTimeout(this.filterDomainTimeout);
+
+        this.filterDomainTimeout = setTimeout(() => {
+          this.$store.dispatch('Timeline/filter', 'domain', value);
+        }, 250);
+      }
+    }
   },
   methods: {
     selectColumn(dateTitle) {
@@ -417,148 +303,6 @@ export default {
         marginLeft: `-${width - 5}px`,
       };
     },
-    refreshFilters() {
-      clearTimeout(this.filterTimeout);
-      this.filterTimeout = setTimeout(this.parseEvents, 200);
-    },
-    parseEvents() {
-      const lastWarnings = {};
-      const domains = [];
-      const datesColumns = [];
-      const datesEvents = [];
-
-      let dateIndex = -1;
-
-      // FAKE DATA
-      // this.dates.forEach((date) => {
-      //   // if (date.events) {
-      //   //   Object.keys(date.events).forEach((key) => {
-      //   //     date.events[`${key}2`] = date.events[key];
-      //   //     date.events[`${key}3`] = date.events[key];
-      //   //     date.events[`${key}4`] = date.events[key];
-      //   //   })
-      //   // }
-
-      //   for (let i = 0; i < 10; i++) {
-      //     const newDate = Object.assign({}, date);
-      //     newDate.title = newDate.title.replace(/^0/, i + 1);
-      //     this.dates.push(newDate);
-      //   }
-      // });
-      // this.dates.sort((a, b) => {
-      //   return a.title > b.title ? -1 : a.title < b.title ? 1 : 0;
-      // });
-      // END FAKE DATA
-
-      this.dates.forEach((date) => {
-        if (!date.title) {
-          return;
-        }
-
-        if (this.dateFilter) {
-          const reg = new RegExp(this.dateFilter.replace('.', '\\.').replace('*', '.*'), 'i');
-
-          if (!date.title.match(reg)) {
-            return;
-          }
-        }
-
-        dateIndex++;
-
-        const datesColumn = {
-          title: date.title,
-          subtitle: date.subtitle || null,
-        };
-
-        datesColumns.push(datesColumn);
-
-        const events = [];
-
-        if (!date.events) {
-          datesEvents.push({ title: date.title, events, content: date.content });
-
-          return;
-        }
-
-        Object.keys(date.events).forEach((key) => {
-          const domain = key.trim().toLowerCase();
-          const event = date.events[key];
-
-          if (this.domainFilter) {
-            const reg = new RegExp(this.domainFilter.replace('.', '\\.').replace('*', '.*'), 'i');
-
-            if (!domain.match(reg)) {
-              return;
-            }
-          }
-
-          if (domains.indexOf(domain) < 0) {
-            domains.push(domain);
-          }
-
-          const eventKeys = Object.keys(event);
-          const types = [];
-          const texts = [];
-          let isSingle = false;
-
-          if (eventKeys.length === 1 && event[eventKeys[0]].length === 1) {
-            isSingle = true;
-            types.push(eventKeys[0]);
-            texts.push(event[eventKeys[0]][0]);
-          }
-          else {
-            ['idle', 'success', 'warning'].forEach((state) => {
-              if (event[state]) {
-                types.push(state);
-                texts.push(event[state].length);
-              }
-            });
-          }
-
-          if (types.indexOf('idle') > -1) {
-            datesColumn.isIdle = true;
-          }
-
-          let lastWarning = -1;
-
-          if (typeof lastWarnings[domain] !== 'undefined') {
-            lastWarning = lastWarnings[domain];
-
-            delete lastWarnings[domain];
-          }
-
-          events.push({
-            dateIndex,
-            domain,
-            types,
-            type: types.join('-'),
-            texts,
-            isSingle,
-            lastWarning,
-            warningOnly: types.indexOf('warning') > -1 && types.length === 1,
-          });
-
-          if (types.indexOf('warning') > -1) {
-            lastWarnings[domain] = dateIndex;
-          }
-        });
-
-        events.sort((a, b) => {
-          return a.domain > b.domain
-            ? 1
-            : a.domain < b.domain ? -1 : 0;
-        });
-
-        datesEvents.push({ title: date.title, events, content: date.content });
-      });
-
-      domains.sort();
-
-      this.$set(this, 'lastWarnings', lastWarnings);
-      this.$set(this, 'domains', domains);
-      this.$set(this, 'datesColumns', datesColumns);
-      this.$set(this, 'datesEvents', datesEvents);
-    }
   },
 };
 </script>

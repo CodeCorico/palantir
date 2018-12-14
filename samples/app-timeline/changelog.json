@@ -1,0 +1,108 @@
+{
+  "dates": [{
+    "title": "0.1.11",
+    "subtitle": "2018-11-27"
+  }, {
+    "title": "0.1.10",
+    "subtitle": "2018-11-27"
+  }, {
+    "title": "0.1.8",
+    "subtitle": "2018-11-26",
+    "events": {
+      "build": {
+        "warning": ["the \"build:report\" script start the analyser"]
+      },
+      "vue": {
+        "idle": ["return an empty object when the $route is null"]
+      }
+    },
+    "content": "<h1><a href=\"/\">0.1.8</a> (2018-11-26)</h1><h3>Bug Fixes</h3><ul><li><strong>build:</strong> the \"build:report\" script start the analyser <a href=\"/\">e534f88</a></li><li><strong>vue:</strong> return an empty object when the $route is null <a href=\"/\">5d73c7b</a></li></ul>"
+  }, {
+    "title": "0.1.7",
+    "subtitle": "2018-11-16",
+    "events": {
+      "router": {
+        "warning": ["add support for direct pages of subroutes"],
+        "success": ["add debug.router.routes displaying routes loaded"]
+      }
+    },
+    "content": "<h1><a href=\"/\">0.1.7</a> (2018-11-16)</h1><h3>Bug Fixes</h3><ul><li><strong>router:</strong> add support for direct pages of subroutes <a href=\"h/\">52e4dff</a></li></ul><h3>Features</h3><ul><li><strong>router:</strong> add debug.router.routes displaying routes loaded <a href=\"/\">f796980</a></li></ul>"
+  }, {
+    "title": "0.1.6",
+    "subtitle": "2018-11-14",
+    "events": {
+      "*": {
+        "warning": ["rename the global dist \"core\" to \"coreSpa\""]
+      },
+      "imports": {
+        "success": ["attach debug import components loaded"]
+      }
+    }
+  }, {
+    "title": "0.1.5",
+    "subtitle": "2018-11-11"
+  }, {
+    "title": "0.1.4",
+    "subtitle": "2018-11-11"
+  }, {
+    "title": "0.1.3",
+    "subtitle": "2018-11-10",
+    "events": {
+      "env": {
+        "warning": ["use new system based on the window.ENV variable"]
+      }
+    }
+  }, {
+    "title": "0.1.2",
+    "subtitle": "2018-11-08",
+    "events": {
+      "*": {
+        "warning": ["some tests"]
+      },
+      "bootstrap": {
+        "warning": ["publish core.version"]
+      }
+    }
+  }, {
+    "title": "0.1.1",
+    "subtitle": "2018-11-08",
+    "events": {
+      "cypress": {
+        "idle": ["hello"],
+        "warning": ["remove cypress & standalone website serving"]
+      },
+      "env": {
+        "idle": ["hello"],
+        "warning": ["replace the debug info reducer by a map"],
+        "success": ["create the env feature"]
+      },
+      "imports": {
+        "warning": [
+          "add type to importComponent & remove bad async",
+          "call nextTick with arguments",
+          "keep the module name from the file in extractNamespace()",
+          "use main module with its dependencies",
+          "use the debug feature for minified umd"
+        ],
+        "success": [
+          "add the UMD_MINIFIED config flag",
+          "create the imports UMD feature",
+          "resolve chunked components in importComponent",
+          "support IE with current-script-polyfill"
+        ]
+      },
+      "build": {
+        "success": ["add better building stages"]
+      },
+      "config": {
+        "success": ["add a config registration feature"]
+      },
+      "debug": {
+        "success": ["create the debug feature"]
+      },
+      "dom current-script-polyfill": {
+        "success": ["create the polyfill feature"]
+      }
+    }
+  }]
+}

@@ -4,7 +4,13 @@
   },
   "apps": {
     "changelogs": {
-      "type": "timeline"
+      "type": "timeline",
+      "config": {
+        "url": "/changelog.json",
+        "capitalizeDomains": true,
+        "datesTitle": "Versions...",
+        "filterText": "Filter..."
+      }
     },
     "pulls": {
       "type": "github-pulls",
