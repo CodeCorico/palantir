@@ -24,3 +24,9 @@ npm run test
 ```
 npm run lint
 ```
+
+### Changelog to Timeline
+
+```
+npm run changelog-to-timeline -- -s "/source.md" -d "/destination.json"
+```

@@ -654,24 +654,26 @@ export default {
           text-decoration: none;
         }
 
-        h1 {
-          font-size: 24px;
-          margin: 0 0 15px;
-        }
-
         h2 {
-          font-size: 20px;
-          margin: 0 0 15px;
+          font-weight: 300;
+          font-size: 22px;
+          margin: 0 0 30px;
         }
 
         h3 {
+          font-weight: 300;
           font-size: 18px;
           margin: 0 0 15px;
         }
 
         ul {
-          margin: 0 0 20px 12px;
+          margin: 0 0 30px 12px;
           padding: 0;
+          font-weight: 300;
+
+          li {
+            margin-bottom: 10px;
+          }
         }
       }
     }
