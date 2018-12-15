@@ -15,6 +15,12 @@ ENV SERVER_PORT=80
 ENV SERVER_STATICS=/palantir
 
 RUN mkdir /palantir
+RUN mkdir /docker-entrypoint.d
+
+# Create the flexible docker entrypoints
+COPY ./docker/docker-entrypoint.sh /usr/local/bin/
+# Backwards compat
+RUN ln -s usr/local/bin/docker-entrypoint.sh /
 
 COPY . /app
 COPY --from=build /app/dist /app/dist
@@ -26,4 +32,5 @@ RUN npm i --production
 
 EXPOSE 80
 
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["npm", "start"]
