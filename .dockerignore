@@ -22,3 +22,10 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+# Docker
+.git
+.gitignore
+Dockerfile
+.env.dist
+docker-compose.yml
