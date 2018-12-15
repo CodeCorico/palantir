@@ -7,8 +7,6 @@ RUN mkdir -p /palantir
 
 COPY . /app
 
-RUN ls -al /app
-
 WORKDIR /app
 
 RUN cd /app && npm i && npm run build
