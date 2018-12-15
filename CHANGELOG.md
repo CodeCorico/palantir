@@ -1,3 +1,17 @@
+## [0.1.2](https://github.com/CodeCorico/palantir/compare/v0.1.1...v0.1.2) (2018-12-15)
+
+
+### Features
+
+* **docker:** add flexible docker-entrypoint hooks ([63ea45f](https://github.com/CodeCorico/palantir/commit/63ea45f))
+
+
+### Performance Improvements
+
+* **docker:** use multi-stages for the image size ([8c1357a](https://github.com/CodeCorico/palantir/commit/8c1357a))
+
+
+
 ## 0.1.1 (2018-12-15)
 
 
