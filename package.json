@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve ./src/bootstrap/index.js",
     "build": "vue-cli-service build ./src/bootstrap/index.js",
+    "build:watch": "vue-cli-service build --watch ./src/bootstrap/index.js",
     "lint": "vue-cli-service lint",
+    "start": "node ./src/bootstrap/server.js",
     "storybook": "start-storybook -p 9000 -c ./src/bootstrap/storybook",
     "changelog-to-timeline": "node ./scripts/changelog-to-timeline.js"
   },
@@ -13,6 +15,8 @@
     "@storybook/addon-knobs": "^4.0.7",
     "axios": "^0.18.0",
     "babel-preset-vue": "^2.0.2",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
     "marked": "^0.5.2",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
