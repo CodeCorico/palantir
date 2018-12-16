@@ -3,6 +3,8 @@
     v-if="activeApp"
     :is="`app-${activeApp.type}`"
     :config="activeApp.config || {}"
+    :app-route="activeApp.url"
+    :app-local-route="$route.params.appLocalRoute"
   ></component>
 </template>
 
@@ -11,6 +13,7 @@ import { mapState } from 'vuex';
 import store from '@/services/store';
 import AppGithubPulls from '@/app-github-pulls/views/AppGithubPulls';
 import AppTimeline from '@/app-timeline/views/AppTimeline';
+import AppPages from '@/app-pages/views/AppPages.vue';
 
 export default {
   name: 'app',
@@ -18,6 +21,7 @@ export default {
   components: {
     AppGithubPulls,
     AppTimeline,
+    AppPages,
   },
   mounted() {
     this.routeUpdated();
