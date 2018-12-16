@@ -30,6 +30,11 @@ export default {
         return;
       }
 
+      this.$store.dispatch('Page/toggleButton', {
+        location: 'right',
+        id: 'tasks-sidebar',
+      });
+
       this.$store.dispatch(this.dispatch, {
         id: this.id,
         config: this.config,

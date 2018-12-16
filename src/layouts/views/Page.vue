@@ -1,25 +1,6 @@
 <template>
   <div id="page">
-    <ui-header
-      ref="header"
-      @buttonOpen="sidebarOpen"
-      @buttonClose="sidebarClose"
-      @click="headerClick"
-      :buttons="[{
-        location: 'left',
-        title: 'Menu',
-        icon: 'fas fa-bars',
-      }, {
-        location: 'right',
-        title: 'Tasks',
-        icon: 'fas fa-cog',
-      }, {
-        name: 'lock',
-        location: 'right',
-        title: 'Lock',
-        icon: 'fas fa-lock',
-      }]"
-    ></ui-header>
+    <ui-header ref="header" @click="headerClick"></ui-header>
 
     <div class="page-content">
       <router-view></router-view>
@@ -27,23 +8,28 @@
       <app-images-randomizer></app-images-randomizer>
     </div>
 
-    <menu-sidebar
+    <component
+      v-for="sidebar in leftSidebars"
+      :key="sidebar.id"
       position="left"
       class="page-sidebar"
-      :opened.sync="sidebarLeftOpened"
-      @close="sidebarLeftOpened = false"
-    ></menu-sidebar>
+      :is="sidebar.component"
+      :opened="sidebar.opened"
+    ></component>
 
-    <tasks-sidebar
+    <component
+      v-for="sidebar in rightSidebars"
+      :key="sidebar.id"
       position="right"
       class="page-sidebar"
-      :opened.sync="sidebarRightOpened"
-      @close="sidebarRightOpened = false"
-    ></tasks-sidebar>
+      :is="sidebar.component"
+      :opened="sidebar.opened"
+    ></component>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import store from '@/services/store';
 import UiHeader from '@/ui/views/Header.vue';
 import MenuSidebar from '@/menu/views/MenuSidebar.vue';
@@ -60,66 +46,43 @@ export default {
     AppImagesRandomizer,
   },
   mounted() {
+    this.$store.dispatch('Page/addSidebar', {
+      location: 'left',
+      id: 'menu-sidebar',
+      title: 'Menu',
+      component: 'menu-sidebar',
+      icon: 'fas fa-bars',
+    });
+    this.$store.dispatch('Page/addSidebar', {
+      location: 'right',
+      id: 'tasks-sidebar',
+      title: 'Tasks',
+      component: 'tasks-sidebar',
+      icon: 'fas fa-cog',
+    });
+    this.$store.dispatch('Page/addSidebar', {
+      location: 'right',
+      id: 'lock-button',
+      title: 'Lock',
+      handler: this.lockHandler,
+      unSelectable: true,
+      icon: 'fas fa-lock',
+    });
+
     this.load();
   },
-  data() {
-    return {
-      sidebarLeftOpened: false,
-      sidebarRightOpened: false,
-      locked: false,
-    };
+  computed: {
+    ...mapState('Page', ['leftSidebars', 'rightSidebars']),
   },
   methods: {
     load() {
       this.$store.dispatch('Config/load');
     },
+    lockHandler() {
+      this.$refs.header.toggleLock();
+    },
     headerClick() {
-      this.unlock();
-    },
-    sidebarOpen(button) {
-      if ((button.name || '') === 'lock') {
-        this.closeSidebars();
-        this.lock();
-
-        return;
-      }
-      if ((button.name || '') === 'expand') {
-        this.closeSidebars(button.name);
-
-        return;
-      }
-
-      this.$set(this, `sidebar${button.location === 'left' ? 'Left' : 'Right'}Opened`, true);
-    },
-    sidebarClose(button) {
-      if ((button.name || '') === 'test') {
-        this.$refs.randomizer.stop();
-      }
-
-      this.$set(this, `sidebar${button.location === 'left' ? 'Left' : 'Right'}Opened`, false);
-    },
-    closeSidebars(buttonName) {
-      this.$refs.header.closeAllButtons(buttonName);
-      this.$set(this, 'sidebarLeftOpened', false);
-      this.$set(this, 'sidebarRightOpened', false);
-    },
-    lock() {
-      if (this.locked) {
-        return;
-      }
-
-      this.$refs.header.hideButtons();
-      this.$refs.header.bigger(true);
-      this.$set(this, 'locked', true);
-    },
-    unlock() {
-      if (!this.locked) {
-        return;
-      }
-
-      this.$refs.header.showButtons();
-      this.$refs.header.bigger(false);
-      this.$set(this, 'locked', false);
+      this.$refs.header.toggleLock(false);
     },
   },
 };

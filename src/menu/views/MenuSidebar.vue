@@ -46,6 +46,14 @@ export default {
       default: false,
     },
   },
+  mounted() {
+    this.$on('navigate', () => {
+      this.$store.dispatch('Page/toggleButton', {
+        location: 'left',
+        id: 'menu-sidebar',
+      });
+    });
+  },
   computed: {
     ...mapState('Menu', ['menu']),
   },

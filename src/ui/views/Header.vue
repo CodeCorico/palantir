@@ -1,18 +1,18 @@
 <template>
   <header
     class="ui-header"
-    :class="[`appear-sb-${appearSb}`, { bigger: biggerMode }]"
+    :class="[`appear-sb-${appearSb}`, { bigger: locked }]"
     @click.self="$emit('click')"
   >
     <div class="left">
       <button
-        v-for="buttonLeft in mapButtons('left')"
-        :key="buttonLeft.title"
+        v-for="button in leftButtons"
+        :key="button.id"
         class="header-button"
-        :class="{ active: buttonLeft.active, hide: buttonLeft.hide }"
-        @click="toggleButton('left', buttonLeft)"
+        :class="{ selected: button.selected, hidden: button.hidden }"
+        @click="toggleButton('left', button.id)"
       >
-        <i :class="buttonLeft.icon"></i>
+        <i :class="button.icon"></i>
       </button>
     </div>
 
@@ -32,13 +32,13 @@
 
     <div class="right">
       <button
-        v-for="buttonRight in mapButtons('right')"
-        :key="buttonRight.title"
+        v-for="button in rightButtons"
+        :key="button.id"
         class="header-button"
-        :class="{ active: buttonRight.active, hide: buttonRight.hide }"
-        @click="toggleButton('right', buttonRight)"
+        :class="{ selected: button.selected, hidden: button.hidden }"
+        @click="toggleButton('right', button.id)"
       >
-        <i :class="buttonRight.icon"></i>
+        <i :class="button.icon"></i>
       </button>
     </div>
 
@@ -47,86 +47,34 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import store from '@/services/store';
+
 export default {
   name: 'ui-header',
-  props: {
-    buttons: Array,
-  },
+  store,
   destroyed() {
     clearTimeout(this.dateTimeTimeout);
   },
   data() {
     return  {
+      locked: false,
       dateTimeTimeout: null,
       dateTime: null,
-      localButtons: this.buttons,
       appearSb: -1,
-      biggerMode: false,
-      buttonsArgs: {
-        left: {},
-        right: {},
-      },
     };
   },
+  computed: {
+    ...mapState('Page', ['leftButtons', 'rightButtons']),
+  },
   methods: {
-    bigger(value = true) {
-      this.$set(this, 'biggerMode', value);
+    toggleLock(force) {
+      this.$set(this, 'locked', typeof force === 'boolean' ? force : !this.locked);
+
+      this.$store.dispatch(`Page/${this.locked ? 'hide' : 'show'}Buttons`);
     },
-    eachButton(eachFunc, update, location) {
-      const buttonsArgs = Object.assign({}, this.buttonsArgs);
-
-      (location ? [location] : Object.keys(buttonsArgs)).forEach(location => {
-        Object.keys(buttonsArgs[location]).forEach(key => {
-          eachFunc(buttonsArgs[location][key]);
-        });
-      });
-
-      if (update) {
-        this.$set(this, 'buttonsArgs', buttonsArgs);
-      }
-
-      return buttonsArgs;
-    },
-    closeAllButtons(except) {
-       this.eachButton((button) => {
-        if (except && (button.name || '') === except) {
-          return;
-        }
-
-        button.active = false;
-      }, true);
-    },
-    hideButtons(except) {
-      this.eachButton((button) => {
-        if (except && (button.name || '') === except) {
-          return;
-        }
-
-        button.hide = true;
-      }, true);
-    },
-    showButtons() {
-      this.eachButton((button) => {
-        button.hide = false;
-      }, true);
-    },
-    toggleButton(location, targetButton) {
-      const active = !targetButton.active;
-      this.eachButton((button) => {
-        button.active = button === targetButton ? active : false;
-      }, true, location);
-
-      this.$emit(`button${active ? 'Open' : 'Close'}`, targetButton);
-    },
-    mapButtons(location) {
-      const buttonsArgs = this.buttonsArgs[location];
-
-      return (this.localButtons || [])
-        .filter(button => button.location === location)
-        .map((button) => {
-          buttonsArgs[button.title] = buttonsArgs[button.title] || {};
-          return Object.assign(buttonsArgs[button.title], button);
-        });
+    toggleButton(location, id) {
+      this.$store.dispatch('Page/toggleButton', { location, id });
     },
     appear(steps, step = 0) {
       if (step >= steps.length) {
@@ -328,11 +276,11 @@ export default {
     opacity: 0;
     animation: header-button-show 0.35s $easeOutQuart forwards;
 
-    &.hide {
+    &.hidden {
       animation: header-button-hide 0.35s $easeOutQuart forwards;
     }
 
-    &.active {
+    &.selected {
       color: #fff;
     }
   }

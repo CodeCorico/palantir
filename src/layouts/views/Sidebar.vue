@@ -27,7 +27,7 @@ export default {
     };
   },
   created () {
-    this.$on('navigate', () => this.$emit('close'));
+    this.$on('navigate', () => this.$parent.$emit('navigate'));
   },
   methods: {
     toggleStoryboard(open) {
