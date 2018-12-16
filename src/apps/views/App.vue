@@ -13,6 +13,7 @@ import { mapState } from 'vuex';
 import store from '@/services/store';
 import AppGithubPulls from '@/app-github-pulls/views/AppGithubPulls';
 import AppTimeline from '@/app-timeline/views/AppTimeline';
+import AppFrame from '@/app-frame/views/AppFrame.vue';
 import AppPages from '@/app-pages/views/AppPages.vue';
 
 export default {
@@ -21,6 +22,7 @@ export default {
   components: {
     AppGithubPulls,
     AppTimeline,
+    AppFrame,
     AppPages,
   },
   mounted() {
