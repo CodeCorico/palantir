@@ -114,11 +114,51 @@ export default {
     background: rgba(0, 0, 0, 0.3);
 
     /deep/ {
-      color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #fff;
+
+      > *:first-child {
+        margin-top: 0 !important;
+      }
 
       a, a:hover, a:visited, a:focus {
         color: #fe8033;
+      }
+
+      p {
+        margin: 0 0 16px;
+      }
+
+      h1 {
+        font-size: 32px;
+        line-height: 40px;
+        font-weight: 600;
+        margin-bottom: 26px;
+      }
+
+      h2 {
+        font-size: 24px;
+      }
+
+      h3 {
+        font-size: 20px;
+      }
+
+      h4 {
+        font-size: 16px;
+      }
+
+      p > code, li > code, h1 > code, h2 > code, h3 > code, h4 > code {
+        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+        padding: 2px 5px 3px;
+        font-variant-ligatures: none;
+        white-space: normal;
+        color: #f5aa93;
+        background-color: rgba(0, 0, 0, 0.8);
+        border: 1px solid #1c3642;
+        border-radius: 3px;
       }
     }
   }
