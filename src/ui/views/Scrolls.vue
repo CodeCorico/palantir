@@ -6,7 +6,7 @@
       :style="`right: ${-scrollSize}px; bottom: ${-scrollSize}px;`"
       @scroll="onScroll"
     >
-      <div ref="content" class="ui-scrolls-content">
+      <div ref="content" class="ui-scrolls-content" :style="`display: ${contentDisplay}`">
         <slot></slot>
       </div>
     </div>
@@ -36,6 +36,10 @@
 export default {
   name: 'ui-scrolls',
   props: {
+    contentDisplay: {
+      type: String,
+      default: 'table',
+    },
     fixed: {
       type: Boolean,
       default: false,
@@ -207,7 +211,6 @@ export default {
   }
 
   .ui-scrolls-content {
-    display: table;
     min-height: 100%;
   }
 
