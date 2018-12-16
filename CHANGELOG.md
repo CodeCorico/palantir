@@ -1,3 +1,15 @@
+## [0.1.3](https://github.com/CodeCorico/palantir/compare/v0.1.2...v0.1.3) (2018-12-16)
+
+
+### Features
+
+* **app pages:** create the app ([3164474](https://github.com/CodeCorico/palantir/commit/3164474))
+* **apps app:** add support for nested routes in apps ([00a79b1](https://github.com/CodeCorico/palantir/commit/00a79b1))
+* **scripts documentation:** create a documentation generator ([cc5bf7a](https://github.com/CodeCorico/palantir/commit/cc5bf7a))
+* **ui scrolls:** add the content display type prop ([c3501d6](https://github.com/CodeCorico/palantir/commit/c3501d6))
+
+
+
 ## [0.1.2](https://github.com/CodeCorico/palantir/compare/v0.1.1...v0.1.2) (2018-12-15)
 
 
