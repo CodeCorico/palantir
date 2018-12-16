@@ -30,3 +30,9 @@ npm run lint
 ```
 npm run changelog-to-timeline -- -s "/source.md" -d "/destination.json"
 ```
+
+### Documentation generator
+
+```
+npm run documentation -- -s "/my-repo/{*.md,\!(node_modules)/**/*.md}" -d "/destination"
+```
