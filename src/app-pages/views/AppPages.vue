@@ -4,12 +4,20 @@
       <div class="content" v-html="content"></div>
     </ui-scrolls>
 
-    <ui-scrolls ref="summaryScrolls" class="summary-scrolls">
+    <ui-scrolls ref="sideScrolls" class="side-scrolls">
+      <h2 class="title-summary">Summary</h2>
+
       <ul class="summary">
-        <li v-for="title in summary" :key="title.id" :class="`level-${title.level}`">
+        <li v-for="(title, index) in summary" :key="index" :class="`level-${title.level}`">
           <a :href="`#${title.id}`">{{ title.text }}</a>
         </li>
       </ul>
+
+      <h2 class="title-glossary">Glossary</h2>
+
+      <div class="glossary">
+        <ui-file-tree :tree="glossary" :base-url="appRoute"></ui-file-tree>
+      </div>
     </ui-scrolls>
   </div>
 </template>
@@ -17,6 +25,7 @@
 <script>
 import store from '@/services/store';
 import UiScrolls from '@/ui/views/Scrolls.vue';
+import UiFileTree from '@/ui/views/FileTree.vue';
 import Prism from 'prismjs';
 
 export default {
@@ -24,6 +33,7 @@ export default {
   store,
   components: {
     UiScrolls,
+    UiFileTree,
   },
   props: {
     config: Object,
@@ -35,6 +45,7 @@ export default {
     document.addEventListener(this.clickEvent, this.clickHandler, false);
 
     this.load();
+    this.loadGlossary();
   },
   destroyed() {
     document.removeEventListener(this.clickEvent, this.clickHandler, false);
@@ -55,14 +66,22 @@ export default {
       return this.$store.state.Pages.content;
     },
     summary() {
-      this.$nextTick(() => this.$refs.summaryScrolls.refresh());
+      this.$nextTick(() => this.$refs.sideScrolls.refresh());
 
       return this.$store.state.Pages.summary;
-    }
+    },
+    glossary() {
+      this.$nextTick(() => this.$refs.sideScrolls.refresh());
+
+      return this.$store.state.Pages.glossary;
+    },
   },
   watch: {
     appLocalRoute() {
       this.load();
+    },
+    appRoute() {
+      this.loadGlossary();
     },
   },
   methods: {
@@ -72,6 +91,10 @@ export default {
       this.$store.dispatch('Pages/changeAppRoute', this.appRoute);
       this.$store.dispatch('Pages/changeBase', this.config.directory);
       this.$store.dispatch('Pages/load', this.appLocalRoute || this.config.index);
+    },
+    loadGlossary() {
+      this.$store.dispatch('Pages/changeBase', this.config.directory);
+      this.$store.dispatch('Pages/loadGlossary');
     },
     clickHandler(e) {
       let el = null;
@@ -181,22 +204,38 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
     }
   }
 
-  .summary-scrolls {
+  .side-scrolls {
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     width: 240px;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .title-summary, .title-glossary {
+    position: relative;
+    margin: 0;
+    padding: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.3);
+    text-transform: uppercase;
+  }
+
+  .title-summary {
+    background: #0b161b;
   }
 
   .summary {
     box-sizing: border-box;
     margin: 0;
-    padding: 20px;
+    padding: 0 20px 20px;
     font-size: 16px;
     list-style: square inside;
     font-family: $readFont;
+    background: #0b161b;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
     li {
       user-select: none;
@@ -232,6 +271,10 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
     .level-4 {
       padding-left: 30px;
     }
+  }
+
+  .glossary {
+    padding: 0 20px 20px;
   }
 }
 </style>

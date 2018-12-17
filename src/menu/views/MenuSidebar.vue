@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import store from '@/services/store';
 import Sidebar from '@/layouts/views/Sidebar.vue';
 import UiAccordion from '@/ui/views/Accordion.vue';

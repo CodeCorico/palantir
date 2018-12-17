@@ -14,6 +14,20 @@ const unescapeHtml = (text) => {
   return text.replace(/&[#0-9a-z]+;/gi, m => map[m]);
 }
 
+const sortTree = (tree) => {
+  tree.sort((a, b) => {
+    return a.file && b.path ? 1 : a.path && b.file ? -1 : 0;
+  });
+
+  tree.forEach((obj) => {
+    if (obj.tree) {
+      sortTree(obj.tree);
+    }
+  });
+
+  return tree;
+};
+
 const store = {
   namespaced: true,
   state: {
@@ -21,6 +35,7 @@ const store = {
     base: '',
     content: '',
     summary: [],
+    glossary: [],
   },
   mutations: {
     updateAppRoute: (state, appRoute) => {
@@ -60,6 +75,9 @@ const store = {
         state.summary.push({ id, text, level });
       });
     },
+    updateGlossary: (state, glossary) => {
+      state.glossary = sortTree(glossary);
+    },
   },
   actions: {
     changeAppRoute({ commit }, appRoute) {
@@ -73,6 +91,21 @@ const store = {
 
       commit('updateContent', data);
     },
+    async loadGlossary({ commit, state }) {
+      try {
+        const payload = await axios.get(`${state.base}/glossary.json`);
+
+        if (!payload.headers['content-type'].match('application/json')) {
+          throw new Error('No Glossary');
+        }
+
+        const { data } = payload;
+
+        commit('updateGlossary', data);
+      } catch (err) {
+        commit('updateGlossary', []);
+      }
+    }
   },
 };
 
