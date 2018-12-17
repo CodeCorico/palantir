@@ -1,14 +1,21 @@
 <template>
   <section class="sidebar" :class="[`position-${position}`, `open-sb-${openSb}`]">
-    <div class="container">
-      <slot></slot>
-    </div>
+    <ui-scrolls ref="scrolls" class="scrolls">
+      <div class="container">
+        <slot></slot>
+      </div>
+    </ui-scrolls>
   </section>
 </template>
 
 <script>
+import UiScrolls from '@/ui/views/Scrolls.vue';
+
 export default {
   name: 'sidebar',
+  components: {
+    UiScrolls,
+  },
   props: {
     position: {
       type: String,
@@ -30,6 +37,9 @@ export default {
     this.$on('navigate', () => this.$parent.$emit('navigate'));
   },
   methods: {
+    refresh() {
+      this.$refs.scrolls.refresh();
+    },
     toggleStoryboard(open) {
       clearTimeout(this.openSbTimeout);
 
@@ -68,7 +78,14 @@ export default {
   top: 80px;
   bottom: 20px;
   width: 0;
-  overflow: auto;
+
+  .scrolls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
 
   &::before {
     content: '';

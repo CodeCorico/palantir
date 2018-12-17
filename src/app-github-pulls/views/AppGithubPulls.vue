@@ -1,6 +1,6 @@
 <template>
   <div class="app-github-pulls">
-    <ui-scrolls class="scrolls">
+    <ui-scrolls ref="scrolls" class="scrolls" content-display="table">
       <div class="scrolls-content">
 
         <div
@@ -69,7 +69,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import store from '@/services/store';
 import UiScrolls from '@/ui/views/Scrolls.vue';
 import GithubPullChart from './GithubPullChart.vue';
@@ -85,7 +84,11 @@ export default {
     config: Object,
   },
   computed: {
-    ...mapState('GithubPulls', ['groups']),
+    groups() {
+      this.$nextTick(() => this.$refs.scrolls.refresh());
+
+      return this.$store.state.GithubPulls.groups;
+    }
   },
 };
 </script>

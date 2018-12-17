@@ -6,7 +6,14 @@
       :style="`right: ${-scrollSize}px; bottom: ${-scrollSize}px;`"
       @scroll="onScroll"
     >
-      <div ref="content" class="ui-scrolls-content" :style="`display: ${contentDisplay}`">
+      <div
+        ref="content"
+        class="ui-scrolls-content"
+        :style="`
+          display: ${contentDisplay};
+          min-height: ${contentDisplay === 'block' ? '0' : '100%'};
+        `"
+      >
         <slot></slot>
       </div>
     </div>
@@ -38,7 +45,7 @@ export default {
   props: {
     contentDisplay: {
       type: String,
-      default: 'table',
+      default: 'block',
     },
     fixed: {
       type: Boolean,
@@ -210,10 +217,6 @@ export default {
     overflow: scroll;
   }
 
-  .ui-scrolls-content {
-    min-height: 100%;
-  }
-
   &.fixed {
     .ui-scrolls-vertical, .ui-scrolls-horizontal {
       z-index: 9;
@@ -246,6 +249,7 @@ export default {
       > div {
         position: absolute;
         background: rgba(121, 121, 121, 0.4);
+        transition: width 0.35s $easeOutQuart, height 0.35s $easeOutQuart;
 
         &:hover {
           background: rgba(121, 121, 121, 0.6);

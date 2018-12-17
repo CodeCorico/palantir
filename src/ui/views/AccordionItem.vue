@@ -22,7 +22,7 @@
           <router-link
             :to="listItem.url || '/'"
             :target="listItem.external ? '_blank' : ''"
-            @click.native="$parent.$emit('navigate')"
+            @click.native="$emit('navigate')"
           >
             <i
               v-if="listItem.icon"
@@ -80,6 +80,10 @@ export default {
 
       this.$emit(open ? 'open' : 'close');
       this.$parent.$emit(open ? 'accordion-item-open' : 'accordion-item-close', this);
+
+      setTimeout(() => {
+        this.$emit(open ? 'open-after' : 'close-after');
+      }, 400);
     },
     listFilter(list) {
       if (!this.selected) {

@@ -1,9 +1,8 @@
 <template>
   <sidebar
+    ref="sidebar"
     :position="position"
-    :opened.sync="opened"
-    @open="$emit('open')"
-    @close="$emit('close')"
+    :opened="opened"
   >
     <ui-accordion>
       <div v-for="(category, categoryIndex) in menu" :key="categoryIndex">
@@ -15,6 +14,9 @@
           :title="section.title"
           :list="section.links"
           :selectors="section.selectors"
+          @open-after="onOpenCloseItem"
+          @close-after="onOpenCloseItem"
+          @navigate="onNavigate"
         ></ui-accordion-item>
       </div>
     </ui-accordion>
@@ -46,16 +48,23 @@ export default {
       default: false,
     },
   },
-  mounted() {
-    this.$on('navigate', () => {
+  computed: {
+    menu() {
+      this.$nextTick(() => this.$refs.sidebar.refresh());
+
+      return this.$store.state.Menu.menu;
+    }
+  },
+  methods: {
+    onOpenCloseItem() {
+      this.$nextTick(() => this.$refs.sidebar.refresh());
+    },
+    onNavigate() {
       this.$store.dispatch('Page/toggleButton', {
         location: 'left',
         id: 'menu-sidebar',
       });
-    });
-  },
-  computed: {
-    ...mapState('Menu', ['menu']),
+    },
   },
 };
 </script>

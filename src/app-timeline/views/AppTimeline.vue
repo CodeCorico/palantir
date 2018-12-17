@@ -13,6 +13,7 @@
     <ui-scrolls
       ref="scrolls"
       class="map-container"
+      content-display="table"
       :fixed="true"
       :is-over="inScrolls"
       :v-offset-top="160"

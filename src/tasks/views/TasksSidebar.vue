@@ -1,9 +1,8 @@
 <template>
   <sidebar
+    ref="sidebar"
     :position="position"
-    :opened.sync="opened"
-    @open="$emit('open')"
-    @close="$emit('close')"
+    :opened="opened"
   >
     <task
       v-for="task in tasks"
@@ -11,7 +10,6 @@
       :id="task.id"
       :title="task.title"
       :description="task.description"
-      :remaining-time="2000"
       :status="task.status"
       :dispatch="task.dispatch"
       :config="task.config"
@@ -20,7 +18,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import store from '@/services/store';
 import Sidebar from '@/layouts/views/Sidebar.vue';
 import Task from './Task.vue';
@@ -43,7 +40,11 @@ export default {
     },
   },
   computed: {
-    ...mapState('Apps', ['tasks']),
+    tasks() {
+      this.$nextTick(() => this.$refs.sidebar.refresh());
+
+      return this.$store.state.Apps.tasks;
+    }
   },
 };
 </script>
