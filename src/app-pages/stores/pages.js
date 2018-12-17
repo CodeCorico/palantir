@@ -2,12 +2,25 @@ import axios from 'axios';
 
 const name = 'Pages';
 
+const unescapeHtml = (text) => {
+  var map = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+    '&#039;': '\'',
+  };
+
+  return text.replace(/&[#0-9a-z]+;/gi, m => map[m]);
+}
+
 const store = {
   namespaced: true,
   state: {
     appRoute: '',
     base: '',
     content: '',
+    summary: [],
   },
   mutations: {
     updateAppRoute: (state, appRoute) => {
@@ -28,6 +41,23 @@ const store = {
         }
 
         return `<a local="router-link" href="${newUrl}">`;
+      });
+
+      state.summary = [];
+
+      (content.match(/<h[1-4].*?>.*?<\/h[1-4]>/gi) || []).forEach((h) => {
+        let text = h.match(/<h([1-4]).*?>(.*?)<\/h[1-4]>/i);
+        if (!text) {
+          return;
+        }
+
+        const level = text[1];
+        text = unescapeHtml(text[2].replace(/<(?:.|\n)*?>/g, ''));
+
+        let id = h.match(/<h[1-4].*?id="(.*?)">(.*?)<\/h[1-4]>/i);
+        id = id ? id[1] : text;
+
+        state.summary.push({ id, text, level });
       });
     },
   },

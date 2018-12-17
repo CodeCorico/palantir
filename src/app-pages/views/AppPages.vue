@@ -1,7 +1,15 @@
 <template>
   <div class="app-pages">
-    <ui-scrolls ref="scrolls" class="scrolls" content-display="block">
+    <ui-scrolls ref="scrolls" class="scrolls">
       <div class="content" v-html="content"></div>
+    </ui-scrolls>
+
+    <ui-scrolls ref="summaryScrolls" class="summary-scrolls">
+      <ul class="summary">
+        <li v-for="title in summary" :key="title.id" :class="`level-${title.level}`">
+          <a :href="`#${title.id}`">{{ title.text }}</a>
+        </li>
+      </ul>
     </ui-scrolls>
   </div>
 </template>
@@ -41,10 +49,15 @@ export default {
       this.$nextTick(() => {
         Prism.highlightAll();
 
-        this.$refs.scrolls.refresh()
+        this.$refs.scrolls.refresh();
       });
 
-      return store.state.Pages.content;
+      return this.$store.state.Pages.content;
+    },
+    summary() {
+      this.$nextTick(() => this.$refs.summaryScrolls.refresh());
+
+      return this.$store.state.Pages.summary;
     }
   },
   watch: {
@@ -91,7 +104,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/ui/assets/variables.scss';
 @import '../assets/prism-atom-dark.css';
+
+$readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial, sans-serif;
 
 .app-pages {
   position: relative;
@@ -114,8 +130,10 @@ export default {
     background: rgba(0, 0, 0, 0.3);
 
     /deep/ {
-      font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+      font-family: $readFont;
       font-size: 14px;
+      font-size: 17px;
+      font-weight: 300;
       line-height: 1.5;
       color: #fff;
 
@@ -160,6 +178,59 @@ export default {
         border: 1px solid #1c3642;
         border-radius: 3px;
       }
+    }
+  }
+
+  .summary-scrolls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 240px;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .summary {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 20px;
+    font-size: 16px;
+    list-style: square inside;
+    font-family: $readFont;
+
+    li {
+      user-select: none;
+      list-style-type: square;
+      font-weight: 300;
+      line-height: 1.4;
+
+      a, a:hover, a:visited, a:focus {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      a {
+        transition: color 0.25s $easeOutQuart;
+
+        &:hover {
+          color: #fe8033;
+        }
+      }
+    }
+
+    .level-1 {
+      list-style: none;
+      margin-bottom: 5px;
+      font-weight: 400;
+      font-size: 20px;
+    }
+
+    .level-3 {
+      padding-left: 15px;
+    }
+
+    .level-4 {
+      padding-left: 30px;
     }
   }
 }
