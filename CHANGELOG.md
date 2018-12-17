@@ -1,3 +1,22 @@
+## [0.1.4](https://github.com/CodeCorico/palantir/compare/v0.1.3...v0.1.4) (2018-12-17)
+
+
+### Bug Fixes
+
+* **layout page:** move the sidebars & header buttons logics in a store ([b5469a9](https://github.com/CodeCorico/palantir/commit/b5469a9))
+* **ui scrolls:** the block display is the new default ([87dec8d](https://github.com/CodeCorico/palantir/commit/87dec8d))
+
+
+### Features
+
+* **app frame:** create the iframe app ([30030b3](https://github.com/CodeCorico/palantir/commit/30030b3))
+* **app pages:** add content styles ([177a3c8](https://github.com/CodeCorico/palantir/commit/177a3c8))
+* **app pages:** create a glossary ([020ed66](https://github.com/CodeCorico/palantir/commit/020ed66))
+* **app pages:** create a summary ([ac5d6e6](https://github.com/CodeCorico/palantir/commit/ac5d6e6))
+* **scripts documentation:** generate the glossary ([469c62d](https://github.com/CodeCorico/palantir/commit/469c62d))
+
+
+
 ## [0.1.3](https://github.com/CodeCorico/palantir/compare/v0.1.2...v0.1.3) (2018-12-16)
 
 
