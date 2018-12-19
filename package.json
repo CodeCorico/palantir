@@ -2,6 +2,9 @@
   "name": "palantir",
   "version": "0.1.4",
   "private": true,
+  "bin": {
+    "palantir": "src/cli/index.js"
+  },
   "scripts": {
     "serve": "vue-cli-service serve ./src/bootstrap/index.js",
     "build": "vue-cli-service build ./src/bootstrap/index.js",
