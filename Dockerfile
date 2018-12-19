@@ -3,12 +3,10 @@ FROM node:lts-alpine AS build
 
 COPY . /app
 
-WORKDIR /app
-
 # Install the deps & build the website
-RUN npm i && npm run build
+RUN cd /app && npm i && npm run build
 
-# Stage 2: Install the server
+# Stage 2: Install the cli & server
 FROM node:lts-alpine
 
 ENV SERVER_PORT=80
@@ -27,8 +25,8 @@ COPY --from=build /app/dist /app/dist
 
 WORKDIR /app
 
-# Install only the production deps
-RUN npm i --production
+# Install only the production deps & link the cli as global
+RUN npm i --production && npm link
 
 EXPOSE 80
 
