@@ -3,6 +3,7 @@ node_modules
 /dist
 *.orig
 /palantir
+palantir-*.tgz
 
 # local env files
 .env

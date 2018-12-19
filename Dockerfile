@@ -25,8 +25,8 @@ COPY --from=build /app/dist /app/dist
 
 WORKDIR /app
 
-# Install only the production deps & link the cli as global
-RUN npm i --production && npm link
+# Install only the production deps & install the cli as global
+RUN npm i --production && npm pack && npm i -g palantir-*.tgz && rm palantir-*.tgz
 
 EXPOSE 80
 
