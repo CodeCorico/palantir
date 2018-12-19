@@ -1,3 +1,12 @@
+## [0.1.6](https://github.com/CodeCorico/palantir/compare/v0.1.5...v0.1.6) (2018-12-19)
+
+
+### Performance Improvements
+
+* **docker:** use npm pack instead of npm link to install the cli ([889a381](https://github.com/CodeCorico/palantir/commit/889a381))
+
+
+
 ## [0.1.5](https://github.com/CodeCorico/palantir/compare/v0.1.4...v0.1.5) (2018-12-19)
 
 
