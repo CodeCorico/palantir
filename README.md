@@ -28,7 +28,7 @@ npm run lint
 ### Changelog to Timeline
 
 ```
-npm run changelog-to-timeline -- -s "/source.md" -d "/destination.json"
+palantir changelog "../my-project/CHANGELOG.md" "./my-project.json"
 ```
 
 ### Documentation generator
