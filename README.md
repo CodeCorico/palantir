@@ -34,5 +34,5 @@ npm run changelog-to-timeline -- -s "/source.md" -d "/destination.json"
 ### Documentation generator
 
 ```
-npm run documentation -- -s "/my-repo/{*.md,\!(node_modules)/**/*.md}" -d "/destination"
+palantir doc "../my-project/{*.md,\!(node_modules)/**/*.md}" "./my-project" "../my-project"
 ```
