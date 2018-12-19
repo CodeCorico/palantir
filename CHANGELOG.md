@@ -1,3 +1,19 @@
+## [0.1.5](https://github.com/CodeCorico/palantir/compare/v0.1.4...v0.1.5) (2018-12-19)
+
+
+### Bug Fixes
+
+* **cli changelog:** migrate the changelog script to the cli ([eb4ac08](https://github.com/CodeCorico/palantir/commit/eb4ac08))
+* **cli doc:** migrate the documentation script to the cli ([655b403](https://github.com/CodeCorico/palantir/commit/655b403))
+
+
+### Features
+
+* **cli:** create the cli bootstrap ([842ca46](https://github.com/CodeCorico/palantir/commit/842ca46))
+* **docker:** link the cli in the image ([8cc3790](https://github.com/CodeCorico/palantir/commit/8cc3790))
+
+
+
 ## [0.1.4](https://github.com/CodeCorico/palantir/compare/v0.1.3...v0.1.4) (2018-12-17)
 
 

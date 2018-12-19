@@ -1,6 +1,6 @@
 {
   "name": "palantir",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "bin": {
     "palantir": "src/cli/index.js"
