@@ -7,7 +7,7 @@
     "build": "vue-cli-service build ./src/bootstrap/index.js",
     "build:watch": "vue-cli-service build --watch ./src/bootstrap/index.js",
     "lint": "vue-cli-service lint",
-    "start": "node ./src/bootstrap/server.js",
+    "start": "node ./src/server/index.js",
     "storybook": "start-storybook -p 9000 -c ./src/bootstrap/storybook",
     "changelog-to-timeline": "node ./scripts/changelog-to-timeline.js",
     "documentation": "node ./scripts/documentation.js",
