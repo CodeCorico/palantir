@@ -272,7 +272,7 @@ const menuSection = (menuItemId, id) => {
   const findMenuSection = () => configData.menu[findMenuIndex()].sections[findMenuSectionIndex()];
 
   if (!findMenuSection()) {
-    throwError(`The menu section "${id}" doesn't exist`);
+    throwError(`The menu section "${id}" doesn't exist in "${menuItemId}"`);
   }
 
   return base({
@@ -346,7 +346,7 @@ const menuLink = (menuItemId, sectionId, id) => {
     .links[findMenuLinkIndex()];
 
   if (!findMenuLink()) {
-    throwError(`The menu link "${id}" doesn't exist`);
+    throwError(`The menu link "${id}" doesn't exist in "${sectionId}" from "${menuItemId}"`);
   }
 
   return base({
