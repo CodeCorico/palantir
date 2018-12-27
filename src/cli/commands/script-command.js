@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const glob = require('glob');
 const configChain = require(path.resolve(__dirname, '../config-chain'));
 const { banner, log, logDate, logSuccess, logWarning } =
   require(path.resolve(__dirname, '../command-console-format'));
@@ -20,7 +21,7 @@ const handler = (argv) => {
 
   const script = require(fileReal);
 
-  script({ config: configChain, log: logDate });
+  script({ config: configChain, log: logDate, glob });
 
   logSuccess('Finished');
 
