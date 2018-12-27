@@ -22,6 +22,8 @@ const logSuccess = message => log(`${clc.greenBright(date())} ${clc.greenBright(
 
 const logWarning = message => log(`${clc.greenBright(date())} ${clc.yellowBright(message || '')}`);
 
+const logError = message => log(`${clc.greenBright(date())} ${clc.redBright(message || '')}`);
+
 const banner = (title, useProcessTitle) => {
   console.log('');
   console.log(clc.redBright('┌────────────────────────┐'));
@@ -39,4 +41,4 @@ const banner = (title, useProcessTitle) => {
   console.log('');
 };
 
-module.exports = { date, log, logDate, logSuccess, logWarning, banner };
+module.exports = { date, log, logDate, logSuccess, logWarning, logError, banner };
