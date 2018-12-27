@@ -34,5 +34,5 @@ palantir changelog "../my-project/CHANGELOG.md" "./my-project.json"
 ### Documentation generator
 
 ```
-palantir doc "../my-project/{*.md,\!(node_modules)/**/*.md}" "./my-project" "../my-project"
+palantir doc "../my-project/{*.md,\!(node_modules)/**/*.md}" "./my-project" "../my-project/"
 ```
