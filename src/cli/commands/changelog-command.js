@@ -26,6 +26,7 @@ const handler = (argv) => {
   banner();
 
   const { source, destination } = argv;
+  const realDestination = path.resolve(destination);
 
   if (!fs.existsSync(source)) {
     logWarning('No file found\n');
@@ -33,7 +34,7 @@ const handler = (argv) => {
     return;
   }
 
-  logDate('Found 1 file');
+  logDate(`Get data from "${source}"`);
 
   const markdown = fs.readFileSync(source, 'utf8');
   const html = marked(markdown).replace(/<a /g, () => '<a target="_blank" ');
@@ -106,9 +107,9 @@ const handler = (argv) => {
     dates.push(date);
   });
 
-  logDate('Write the timeline file');
+  logDate(`Write the timeline file: "${realDestination}"`);
 
-  fs.writeFileSync(destination, JSON.stringify({ dates }));
+  fs.writeFileSync(realDestination, JSON.stringify({ dates }));
 
   logSuccess('Finished');
 
