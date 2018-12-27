@@ -1,3 +1,18 @@
+## [0.1.8](https://github.com/CodeCorico/palantir/compare/v0.1.7...v0.1.8) (2018-12-27)
+
+
+### Bug Fixes
+
+* **cli changelog-command:** better logs ([e072e36](https://github.com/CodeCorico/palantir/commit/e072e36))
+* **cli config-chain:** better logs ([581fe6b](https://github.com/CodeCorico/palantir/commit/581fe6b))
+
+
+### Features
+
+* **cli script-command:** serve the glob module ([ca14f60](https://github.com/CodeCorico/palantir/commit/ca14f60))
+
+
+
 ## [0.1.7](https://github.com/CodeCorico/palantir/compare/v0.1.6...v0.1.7) (2018-12-27)
 
 
