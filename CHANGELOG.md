@@ -1,3 +1,13 @@
+## [0.1.7](https://github.com/CodeCorico/palantir/compare/v0.1.6...v0.1.7) (2018-12-27)
+
+
+### Features
+
+* **cli console-format:** add the log error format ([e1955b4](https://github.com/CodeCorico/palantir/commit/e1955b4))
+* **cli script-command:** create the script with config chain feature ([1b4fc74](https://github.com/CodeCorico/palantir/commit/1b4fc74))
+
+
+
 ## [0.1.6](https://github.com/CodeCorico/palantir/compare/v0.1.5...v0.1.6) (2018-12-19)
 
 
