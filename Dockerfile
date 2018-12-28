@@ -17,6 +17,7 @@ RUN mkdir /docker-entrypoint.d
 
 # Create the flexible docker entrypoints
 COPY ./docker/docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 # Backwards compat
 RUN ln -s usr/local/bin/docker-entrypoint.sh /
 
