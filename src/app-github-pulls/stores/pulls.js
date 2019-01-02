@@ -21,12 +21,15 @@ const fetchPull = async (pullSummary) => {
 const store = {
   namespaced: true,
   state: {
+    changes: [],
     groups: [],
     cachePulls: {},
   },
   mutations: {
     mutatePulls: (state, { pulls }) => {
       const groups = {};
+      let hasNew = false;
+      let hasUnclean = false;
 
       pulls.forEach(pullRaw => {
         const { title } = pullRaw;
@@ -50,11 +53,21 @@ const store = {
           ? 'alert'
           : (pullDateDiff >= warningDays ? 'warning' : '');
 
+        hasNew = !state.cachePulls[pullRaw.id] ? true : hasNew;
+
         state.cachePulls[pullRaw.id] = state.cachePulls[pullRaw.id] || {
           animationDelay: Math.round(Math.random() * 2000),
           animationDuration: Math.floor(Math.random() * (5001 - 2000)) + 2000,
           reviewers: {},
+          mergeableState: null,
         };
+
+        hasUnclean = (state.cachePulls[pullRaw.id].mergeableState === 'clean'
+          && (pullRaw.review_comments || pullRaw.mergeable_state !== 'clean')) || hasUnclean;
+
+        const mergeableState = pullRaw.review_comments ? 'comments' : pullRaw.mergeable_state;
+
+        state.cachePulls[pullRaw.id].mergeableState = mergeableState;
 
         const cachePull = state.cachePulls[pullRaw.id];
 
@@ -68,10 +81,11 @@ const store = {
           lines: [
             pullRaw.additions,
             pullRaw.deletions,
-            Math.max(0, 500 - (pullRaw.additions + pullRaw.deletions)), // 500 lines is big
+            // 500 lines is big
+            Math.max(0, 500 - (pullRaw.additions + pullRaw.deletions)),
           ],
           commits: pullRaw.commits,
-          state: pullRaw.review_comments ? 'dirty' : pullRaw.mergeable_state,
+          mergeableState,
           animationDelay: cachePull.animationDelay,
           animationDuration: cachePull.animationDuration,
           reviewers: (pullRaw.assignees || []).map((assignee) => {
@@ -91,6 +105,16 @@ const store = {
           }),
         });
       });
+
+      state.changes = [];
+
+      if (hasNew) {
+        state.changes.push('new');
+      }
+
+      if (hasUnclean) {
+        state.changes.push('unclean');
+      }
 
       state.groups = Object.keys(groups)
         .map(title => groups[title])

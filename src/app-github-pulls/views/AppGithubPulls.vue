@@ -43,15 +43,23 @@
 
             <h3><span>{{ pull.scope }}</span></h3>
             <div class="pull-content">
-              <div class="pull-background" :style="{ 'background-image': `url(${pull.authorImg})` }"></div>
+              <div
+                class="pull-background"
+                :style="{ 'background-image': `url(${pull.authorImg})` }"
+              ></div>
 
               <div
-                v-if="pull.state === 'dirty' || pull.state === 'unstable'"
+                v-if="
+                  pull.mergeableState === 'dirty'
+                  || pull.mergeableState === 'unstable'
+                  || pull.mergeableState === 'comments'
+                "
                 class="pull-state"
-                :class="[`state-${pull.state}`]"
+                :class="[`state-${pull.mergeableState}`]"
               >
-                <i v-if="pull.state === 'dirty'" class="fas fa-times"></i>
-                <i v-if="pull.state === 'unstable'" class="fas fa-skull-crossbones"></i>
+                <i v-if="pull.mergeableState === 'dirty'" class="fas fa-code-branch"></i>
+                <i v-if="pull.mergeableState === 'unstable'" class="fas fa-skull-crossbones"></i>
+                <i v-if="pull.mergeableState === 'comments'" class="fas fa-comment-alt"></i>
               </div>
 
               <github-pull-chart :values="pull.lines"></github-pull-chart>
@@ -69,6 +77,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import store from '@/services/store';
 import UiScrolls from '@/ui/views/Scrolls.vue';
 import GithubPullChart from './GithubPullChart.vue';
@@ -83,12 +92,39 @@ export default {
   props: {
     config: Object,
   },
+  watch: {
+    changes() {
+      this.playChanges();
+    },
+  },
   computed: {
+    ...mapState('GithubPulls', ['changes']),
     groups() {
       this.$nextTick(() => this.$refs.scrolls.refresh());
 
       return this.$store.state.GithubPulls.groups;
     }
+  },
+  methods: {
+    playChanges() {
+      const changesEvents = ['new', 'unclean'];
+
+      for (let i = 0; i < changesEvents.length; i++) {
+        const name = changesEvents[i];
+
+        if (this.changes.indexOf(name) > -1 && this.config.sounds && this.config.sounds[name]) {
+          const audio = new Audio(this.config.sounds[name]);
+          audio.loop = false;
+          // eslint-disable-next-line no-console
+          audio.play().catch(() => console.warn(
+            `Impossible to play "${this.config.sounds[name]}"`,
+            `(maybe the user didn't interact with the page)`
+          ));
+
+          break;
+        }
+      }
+    },
   },
 };
 </script>
@@ -109,7 +145,7 @@ $pullReviewerAnimationCount: 10;
 
 @keyframes pull-state-animation {
   from { opacity: 0.9; }
-  50% { opacity: 0.4; }
+  50% { opacity: 0.2; }
   to { opacity: 0.9; }
 }
 
@@ -205,12 +241,29 @@ $pullReviewerAnimationCount: 10;
     .pull-state {
       position: absolute;
       bottom: 5px;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 10px;
       font-size: 30px;
 
       i {
         animation: pull-state-animation 1.75s linear infinite;
+
+        &::after {
+          z-index: -1;
+          content: '';
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translateY(-50%) translateX(-50%);
+          width: 0;
+          height: 0;
+          background: white;
+          border-radius: 50%;
+          box-shadow: 0 0 20px 20px rgba(255, 255, 255, 0.2)
+        }
+      }
+
+      &.state-comments {
+        color: #f7ba3d;
       }
 
       &.state-dirty {
