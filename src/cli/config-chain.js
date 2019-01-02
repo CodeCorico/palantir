@@ -51,6 +51,14 @@ const save = (indent, file) => {
   fs.writeFileSync(fileReal, JSON.stringify(configData, ...indentArgs));
 };
 
+const reset = () => {
+  configData = {};
+
+  return base();
+};
+
+const data = () => configData;
+
 const display = () => {
   log(configData);
 
@@ -399,6 +407,8 @@ const base = (obj = {}) => {
   obj.menu = menu;
   obj.save = save;
   obj.load = load;
+  obj.reset = reset;
+  obj.data = data;
   obj.display = display;
 
   return obj;
