@@ -1,3 +1,18 @@
+# [0.2.0](https://github.com/CodeCorico/palantir/compare/v0.1.8...v0.2.0) (2019-01-02)
+
+
+### Bug Fixes
+
+* **docker:** add missing execution rights on the docker-entrypoint ([71f20a2](https://github.com/CodeCorico/palantir/commit/71f20a2))
+
+
+### Features
+
+* **app github-pulls:** add new & unclean commits sounds + better state icons ([4be49e6](https://github.com/CodeCorico/palantir/commit/4be49e6))
+* **cli config-chain:** add config.reset() & config.data() ([9e51a87](https://github.com/CodeCorico/palantir/commit/9e51a87))
+
+
+
 ## [0.1.8](https://github.com/CodeCorico/palantir/compare/v0.1.7...v0.1.8) (2018-12-27)
 
 
