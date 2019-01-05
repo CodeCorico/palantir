@@ -13,7 +13,7 @@ const store = {
     datesEvents: [],
   },
   mutations: {
-    updateFilter(state, type, value) {
+    updateFilter(state, { type, value }) {
       state[`${type}Filter`] = value;
     },
     updateDates: (state, dates) => {
@@ -142,15 +142,15 @@ const store = {
       const { data } = await axios.get(url);
 
       if (reset) {
-        commit('updateFilter', 'date', '');
-        commit('updateFilter', 'domain', '');
+        commit('updateFilter', { type: 'date', value: '' });
+        commit('updateFilter', { type: 'domain', value: '' });
       }
 
       commit('updateDates', data.dates);
       commit('computeStore');
     },
-    filter({ commit }, type, value) {
-      commit('updateFilter', type, value);
+    filter({ commit }, { type, value }) {
+      commit('updateFilter', { type, value });
       commit('computeStore');
     },
   },

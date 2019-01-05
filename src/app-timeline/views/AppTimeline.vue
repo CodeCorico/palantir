@@ -180,7 +180,7 @@ export default {
         clearTimeout(this.filterDateTimeout);
 
         this.filterDateTimeout = setTimeout(() => {
-          this.$store.dispatch('Timeline/filter', 'date', value);
+          this.$store.dispatch('Timeline/filter', { type: 'date', value });
         }, 250);
       }
     },
@@ -192,7 +192,7 @@ export default {
         clearTimeout(this.filterDomainTimeout);
 
         this.filterDomainTimeout = setTimeout(() => {
-          this.$store.dispatch('Timeline/filter', 'domain', value);
+          this.$store.dispatch('Timeline/filter', { type: 'domain', value });
         }, 250);
       }
     }
