@@ -24,12 +24,17 @@ const store = {
     changes: [],
     groups: [],
     cachePulls: {},
+    lastTaskId: null,
   },
   mutations: {
-    mutatePulls: (state, { pulls }) => {
+    mutatePulls: (state, { taskId, pulls }) => {
+      const firstMutation = taskId !== state.lastTaskId;
       const groups = {};
-      let hasNew = false;
-      let hasUnclean = false;
+      const changes = {
+        new: false,
+        unclean: false,
+      };
+      const newCachePulls = {};
 
       pulls.forEach(pullRaw => {
         const { title } = pullRaw;
@@ -53,23 +58,29 @@ const store = {
           ? 'alert'
           : (pullDateDiff >= warningDays ? 'warning' : '');
 
-        hasNew = !state.cachePulls[pullRaw.id] ? true : hasNew;
+        if (!firstMutation && !changes.new) {
+          changes.new = !state.cachePulls[pullRaw.id];
+        }
 
-        state.cachePulls[pullRaw.id] = state.cachePulls[pullRaw.id] || {
+        newCachePulls[pullRaw.id] = state.cachePulls[pullRaw.id] || {
           animationDelay: Math.round(Math.random() * 2000),
           animationDuration: Math.floor(Math.random() * (5001 - 2000)) + 2000,
           reviewers: {},
           mergeableState: null,
         };
 
-        hasUnclean = (state.cachePulls[pullRaw.id].mergeableState === 'clean'
-          && (pullRaw.review_comments || pullRaw.mergeable_state !== 'clean')) || hasUnclean;
+        let mergeableState = pullRaw.review_comments.length ? 'comments' : pullRaw.mergeable_state;
+        mergeableState = mergeableState === 'unknown' ? 'clean' : mergeableState;
 
-        const mergeableState = pullRaw.review_comments ? 'comments' : pullRaw.mergeable_state;
+        const oldMergeableState = newCachePulls[pullRaw.id].mergeableState;
 
-        state.cachePulls[pullRaw.id].mergeableState = mergeableState;
+        if (!changes.unclean) {
+          changes.unclean = oldMergeableState === 'clean' && mergeableState !== 'clean';
+        }
 
-        const cachePull = state.cachePulls[pullRaw.id];
+        newCachePulls[pullRaw.id].mergeableState = mergeableState;
+
+        const cachePull = newCachePulls[pullRaw.id];
 
         groups[title].pulls.push({
           id: pullRaw.id,
@@ -106,25 +117,14 @@ const store = {
         });
       });
 
-      state.changes = [];
 
-      if (hasNew) {
-        state.changes.push('new');
-      }
-
-      if (hasUnclean) {
-        state.changes.push('unclean');
-      }
-
-      state.groups = Object.keys(groups)
+      state.lastTaskId = taskId;
+      state.changes = Object.keys(changes).filter(key => changes[key]);
+      state.cachePulls = newCachePulls;
+      state.groups = Object
+        .keys(groups)
         .map(title => groups[title])
-        .sort((a, b) => {
-          return a.createdAt < b.createdAt
-            ? -1
-            : a.createdAt > b.createdAt
-            ? 1
-            : 0;
-        });
+        .sort((a, b) => a.createdAt < b.createdAt ? -1 : (a.createdAt > b.createdAt ? 1 : 0));
     },
   },
   actions: {
@@ -152,7 +152,7 @@ const store = {
         pullsSummary.map(pullSummary => fetchPull(pullSummary))
       );
 
-      commit('mutatePulls', { pulls });
+      commit('mutatePulls', { taskId: task.id, pulls });
     },
   },
 };

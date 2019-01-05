@@ -51,13 +51,17 @@
               <div
                 v-if="
                   pull.mergeableState === 'dirty'
+                  || pull.mergeableState === 'behind'
                   || pull.mergeableState === 'unstable'
                   || pull.mergeableState === 'comments'
                 "
                 class="pull-state"
                 :class="[`state-${pull.mergeableState}`]"
               >
-                <i v-if="pull.mergeableState === 'dirty'" class="fas fa-code-branch"></i>
+                <i
+                  v-if="pull.mergeableState === 'dirty' || pull.mergeableState === 'behind'"
+                  class="fas fa-code-branch"
+                ></i>
                 <i v-if="pull.mergeableState === 'unstable'" class="fas fa-skull-crossbones"></i>
                 <i v-if="pull.mergeableState === 'comments'" class="fas fa-comment-alt"></i>
               </div>
@@ -262,11 +266,7 @@ $pullReviewerAnimationCount: 10;
         }
       }
 
-      &.state-comments {
-        color: #f7ba3d;
-      }
-
-      &.state-dirty {
+      &.state-comments, &.state-dirty, &.state-behind {
         color: #f7ba3d;
       }
 
