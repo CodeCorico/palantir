@@ -19,7 +19,7 @@ const store = {
     appRoot: null,
     apps: {},
     tasks: [],
-    tasksIds: 0,
+    tasksNumbers: 0,
     activeApp: null,
   },
   mutations: {
@@ -35,11 +35,11 @@ const store = {
         const app = apps[appId];
 
         (app.tasks || []).forEach((task) => {
-          state.tasksIds++;
+          state.tasksNumbers++;
 
           const disabled = !(tasksTypes[app.type] && tasksTypes[app.type].static);
 
-          task.id = state.tasksIds < 10 ? `0${state.tasksIds}` : state.tasksIds;
+          task.number = state.tasksNumbers < 10 ? `0${state.tasksNumbers}` : state.tasksNumbers;
           task.disabled = disabled;
 
           if (!tasksTypes[app.type] || !tasksTypes[app.type][task.trigger]) {

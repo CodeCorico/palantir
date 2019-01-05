@@ -8,6 +8,7 @@
       v-for="task in tasks"
       :key="task.id"
       :id="task.id"
+      :number="task.number"
       :title="task.title"
       :description="task.description"
       :status="task.status"

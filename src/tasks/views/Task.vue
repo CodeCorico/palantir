@@ -1,7 +1,7 @@
 <template>
-  <section class="ui-task" :class="[`status-${status}`]" @click="start">
-    <span v-if="id" class="task-id" :class="{ fade: status === 'running' }">
-      {{ id }}
+  <section class="task" :class="[`status-${status}`]" @click="start">
+    <span v-if="number" class="task-number" :class="{ fade: status === 'running' }">
+      {{ number }}
     </span>
     <h1>{{ title }}</h1>
     <p>{{ description }}</p>
@@ -11,9 +11,10 @@
 
 <script>
 export default {
-  name: 'ui-task',
+  name: 'task',
   props: {
     id: String,
+    number: String,
     status: {
       type: String,
       default: 'idle',
@@ -52,7 +53,7 @@ export default {
   100% { transform: translateY(-50%) rotate(360deg); }
 }
 
-.ui-task {
+.task {
   user-select: none;
   cursor: pointer;
   position: relative;
@@ -65,7 +66,7 @@ export default {
     color: rgba(146, 146, 146, 0.8);
     border-color: rgba(97, 97, 97, 0.8);
 
-    .task-id {
+    .task-number {
       color: rgba(146, 146, 146, 0.8);
     }
   }
@@ -104,7 +105,7 @@ export default {
     padding-left: 54px;
   }
 
-  .task-id {
+  .task-number {
     position: absolute;
     top: 15px;
     left: 20px;
