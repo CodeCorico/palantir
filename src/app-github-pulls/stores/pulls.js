@@ -33,6 +33,7 @@ const store = {
       const changes = {
         new: false,
         unclean: false,
+        merged: false,
       };
       const newCachePulls = {};
 
@@ -117,6 +118,11 @@ const store = {
         });
       });
 
+      Object.keys(state.cachePulls).forEach((id) => {
+        if (!newCachePulls[id]) {
+          changes.merged = true;
+        }
+      });
 
       state.lastTaskId = taskId;
       state.changes = Object.keys(changes).filter(key => changes[key]);
