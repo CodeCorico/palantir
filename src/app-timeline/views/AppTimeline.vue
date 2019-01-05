@@ -145,6 +145,11 @@ export default {
     clearTimeout(this.filterDomainTimeout);
     window.removeEventListener('resize', this.onWindowResize);
   },
+  watch: {
+    config() {
+      this.$store.dispatch('Timeline/load', this.config.url);
+    },
+  },
   data() {
     return {
       mapScrollTop: 0,
