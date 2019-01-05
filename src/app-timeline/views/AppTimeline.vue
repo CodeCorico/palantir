@@ -291,11 +291,13 @@ export default {
         return {};
       }
 
+      const marginTop = 5;
+
       // height + padding-top + padding-bottom + border-top + border-bottom + margin-top
-      const eventSize = 16 + 2 + 2 + 5 + 5 + 5;
+      const eventSize = 16 + 2 + 2 + 5 + 5 + marginTop;
 
       return {
-        marginTop: `${eventSize * (spaceEvents)}px`,
+        marginTop: `${(eventSize * (spaceEvents)) + marginTop}px`,
       };
     },
     eventLinkStyle(dateIndex, lastWarning) {
@@ -377,12 +379,14 @@ export default {
       margin-top: 80px;
 
       .domain {
-        font-size: 12px;
+        height: 15px;
         margin-bottom: 20px;
         padding: 0 20px;
+        font-size: 12px;
+        overflow: hidden;
 
         &:first-child {
-          margin-top: 20px;
+          margin-top: 22px;
         }
       }
     }
