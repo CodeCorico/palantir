@@ -138,8 +138,6 @@ export default {
   mounted() {
     window.addEventListener('resize', this.onWindowResize);
 
-    this.onWindowResize();
-
     this.$store.dispatch('Timeline/load', this.config.url);
   },
   destroyed() {
@@ -170,8 +168,12 @@ export default {
       'lastWarnings',
       'domains',
       'datesColumns',
-      'datesEvents',
     ]),
+    datesEvents() {
+      this.$nextTick(() => this.onWindowResize());
+
+      return this.$store.state.Timeline.datesEvents;
+    },
     dateFilter: {
       get() {
         return this.$store.state.Timeline.dateFilter;
