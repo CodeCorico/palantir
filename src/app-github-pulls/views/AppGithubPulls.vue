@@ -3,11 +3,7 @@
     <ui-scrolls ref="scrolls" class="scrolls" content-display="table">
       <div class="scrolls-content">
 
-        <div
-          v-for="group in groups"
-          :key="group.id"
-          class="pull-group"
-        >
+        <div v-for="group in groups" :key="group.id" class="pull-group">
           <div class="pull-group-title">
             <h2>{{ group.title }}</h2>
           </div>
@@ -18,12 +14,22 @@
             :href="pull.url"
             target="_blank"
             class="pull"
-            :class="[pull.type]"
+            :class="[
+              pull.type,
+              pullsCache[pull.id] && pullsCache[pull.id].changeState
+                ? `change-state-${pullsCache[pull.id].changeState}`
+                : ''
+            ]"
             :style="{
               'animation-delay': `${pull.animationDelay}ms`,
               'animation-duration': `${pull.animationDuration}ms`,
             }"
           >
+            <div
+              v-if="pullsCache[pull.id] && pullsCache[pull.id].changeState === 'new'"
+              class="pull-new-anim"
+            ></div>
+
             <a
               v-for="reviewer in pull.reviewers"
               :key="reviewer.id"
@@ -49,12 +55,7 @@
               ></div>
 
               <div
-                v-if="
-                  pull.mergeableState === 'dirty'
-                  || pull.mergeableState === 'behind'
-                  || pull.mergeableState === 'unstable'
-                  || pull.mergeableState === 'comments'
-                "
+                v-if="pull.mergeableState !== 'clean'"
                 class="pull-state"
                 :class="[`state-${pull.mergeableState}`]"
               >
@@ -101,13 +102,18 @@ export default {
       this.playChanges();
     },
   },
+  data() {
+    return {
+      pullsCache: {},
+    };
+  },
   computed: {
     ...mapState('GithubPulls', ['changes']),
     groups() {
       this.$nextTick(() => this.$refs.scrolls.refresh());
 
       return this.$store.state.GithubPulls.groups;
-    }
+    },
   },
   methods: {
     playChanges() {
@@ -128,12 +134,45 @@ export default {
           break;
         }
       }
+
+      const isNew = this.changes.indexOf('new') > -1;
+      const isInit = this.changes.indexOf('init') > -1;
+
+      if (isNew || isInit) {
+        const { groups } = this.$store.state.GithubPulls;
+        const pullsCache = {};
+
+        groups.forEach(group => group.pulls.forEach((pull) => {
+          if (this.pullsCache[pull.id]) {
+            pullsCache[pull.id] = this.pullsCache[pull.id];
+          } else if (isInit) {
+            pullsCache[pull.id] = { changeState: 'idle' };
+          } else if (isNew) {
+            pullsCache[pull.id] = { changeState: '' };
+            this.$nextTick(() => {
+              pullsCache[pull.id].changeState = 'new';
+              setTimeout(() => this.resetChangeState(pull.id, 'new'), 1000);
+            });
+          }
+        }));
+
+        this.$set(this, 'pullsCache', pullsCache);
+      }
+    },
+    resetChangeState(pullId, changeState) {
+      if (!this.pullsCache[pullId] || this.pullsCache[pullId].changeState !== changeState) {
+        return;
+      }
+
+      this.pullsCache[pullId].changeState = 'idle';
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@import '@/ui/assets/variables.scss';
+
 $pullReviewerAnimationCount: 10;
 
 @keyframes github-pull-alert {
@@ -151,6 +190,15 @@ $pullReviewerAnimationCount: 10;
   from { opacity: 0.9; }
   50% { opacity: 0.2; }
   to { opacity: 0.9; }
+}
+
+@keyframes pull-new-anim-notif {
+  0% { opacity: 0; width: 150px; height: 180px; transform: translateY(1px) translateX(1px); }
+  49% { opacity: 0; width: 150px; height: 180px; transform: translateY(1px) translateX(1px); }
+  50% { opacity: 1; width: 150px; height: 180px; transform: translateY(1px) translateX(1px); }
+  75% { opacity: 0; width: 200px; height: 230px; transform: translateY(-25px) translateX(-25px); }
+  76% { opacity: 1; width: 150px; height: 180px; transform: translateY(1px) translateX(1px); }
+  100% { opacity: 0; width: 200px; height: 230px; transform: translateY(-25px) translateX(-25px); }
 }
 
 @for $i from 0 through $pullReviewerAnimationCount {
@@ -219,6 +267,17 @@ $pullReviewerAnimationCount: 10;
     text-decoration: none;
   }
 
+  .pull-new-anim {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 5px solid #62bbe3;
+    border-radius: 5px;
+    opacity: 0;
+    animation: pull-new-anim-notif 1s $easeOutQuart infinite;
+  }
+
   .pull {
     position: relative;
     display: block;
@@ -226,9 +285,23 @@ $pullReviewerAnimationCount: 10;
     width: 150px;
     height: 180px;
     margin: 0 25px 0 0;
-    box-shadow: 0 31px 81px rgba(0, 0, 0, 0.4);
     border-radius: 5px;
-    animation: pull-updown 4s linear alternate infinite;
+    transform: scale(0);
+    opacity: 0;
+
+    &.change-state-idle {
+      transform: scale(1);
+      opacity: 1;
+      box-shadow: 0 31px 81px rgba(0, 0, 0, 0.4);
+      animation: pull-updown 4s linear alternate infinite;
+    }
+
+    &.change-state-new {
+      transform: scale(1);
+      opacity: 1;
+      box-shadow: 0 31px 81px rgba(0, 0, 0, 0.4);
+      transition: all 0.4s $easeOutBackHard;
+    }
 
     &.warning h3 {
       background: linear-gradient(45deg, #fc9b00 0%,#ffb200 100%);

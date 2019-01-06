@@ -31,6 +31,7 @@ const store = {
       const firstMutation = taskId !== state.lastTaskId;
       const groups = {};
       const changes = {
+        init: firstMutation,
         new: false,
         unclean: false,
         merged: false,
