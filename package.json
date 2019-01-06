@@ -17,6 +17,7 @@
     "release": "npm version patch -m 'release: %s'"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "cli-color": "^1.4.0",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
@@ -31,7 +32,6 @@
     "@vue/cli-plugin-babel": "^3.0.5",
     "@vue/cli-plugin-eslint": "^3.0.5",
     "@vue/cli-service": "^3.0.5",
-    "axios": "^0.18.0",
     "babel-eslint": "^10.0.1",
     "babel-plugin-import-glob": "^2.0.0",
     "babel-preset-vue": "^2.0.2",
