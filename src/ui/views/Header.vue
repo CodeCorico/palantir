@@ -40,6 +40,19 @@
       >
         <i :class="button.icon"></i>
       </button>
+
+      <a
+        v-if="upgrade"
+        :href="upgrade.link"
+        target="_blank"
+        :title="
+          `Your Palantir (${upgrade.version}) is out of date ` +
+          ` with the latest version (${upgrade.versionLatest})`
+        "
+        class="header-button upgrade"
+      >
+        <i class="fas fa-angle-double-up"></i>
+      </a>
     </div>
 
     <div class="date-time">{{ dateTime }}</div>
@@ -55,6 +68,9 @@ export default {
   store,
   destroyed() {
     clearTimeout(this.dateTimeTimeout);
+  },
+  props: {
+    upgrade: Object,
   },
   data() {
     return  {
@@ -283,6 +299,10 @@ export default {
     &.selected {
       color: #fff;
     }
+  }
+
+  .upgrade {
+    color: #4cbaab;
   }
 }
 </style>

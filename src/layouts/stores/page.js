@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const name = 'Page';
 
 const store = {
@@ -7,6 +9,7 @@ const store = {
     rightSidebars: [],
     leftButtons: [],
     rightButtons: [],
+    versions: null,
   },
   mutations: {
     pushSidebar: (state, sidebar) => {
@@ -74,6 +77,13 @@ const store = {
         state[`${location}Buttons`].forEach(button => (button.hidden = !visible));
       });
     },
+    updateVersions: (state, data) => {
+      state.versions = {
+        version: data.version,
+        versionLatest: data.versionLatest,
+        link: data.link,
+      };
+    },
   },
   actions: {
     addSidebar({ commit }, sidebar) {
@@ -91,6 +101,11 @@ const store = {
     showButtons({ commit }) {
       commit('updateButtonDisplay', true);
     },
+    async version({ commit }) {
+      const { data } = await axios.get('/api/version');
+
+      commit('updateVersions', data);
+    }
   },
 };
 

@@ -1,6 +1,10 @@
 <template>
   <div id="page">
-    <ui-header ref="header" @click="headerClick"></ui-header>
+    <ui-header
+      ref="header"
+      :upgrade="upgrade"
+      @click="headerClick"
+    ></ui-header>
 
     <div class="page-content">
       <router-view></router-view>
@@ -68,11 +72,21 @@ export default {
       unSelectable: true,
       icon: 'fas fa-lock',
     });
+    this.$store.dispatch('Page/version');
 
     this.load();
   },
   computed: {
     ...mapState('Page', ['leftSidebars', 'rightSidebars']),
+    upgrade() {
+      const { versions } = this.$store.state.Page;
+
+      if (!versions || versions.version === versions.versionLatest) {
+        return null;
+      }
+
+      return versions;
+    },
   },
   methods: {
     load() {
