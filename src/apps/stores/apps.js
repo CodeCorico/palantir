@@ -80,7 +80,10 @@ const store = {
         task.disabled = false;
         task.status = 'idle';
 
-        cron.update(task);
+        cron.update(task.id, {
+          disabled: task.disabled,
+          status: task.status,
+        });
       });
 
       const apps = {};
@@ -94,6 +97,11 @@ const store = {
           (app.tasks || []).forEach((task) => {
             task.disabled = true;
             task.status = 'disabled';
+
+            cron.update(task.id, {
+              disabled: task.disabled,
+              status: task.status,
+            });
           });
         }
 

@@ -76,10 +76,14 @@ class Cron {
     delete tasks[id];
   }
 
-  update(task) {
-    tasks[task.id] = task;
+  update(id, config) {
+    if (!tasks[id]) {
+      return;
+    }
 
-    prepareAndStart(task);
+    Object.assign(tasks[id], config);
+
+    prepareAndStart(tasks[id]);
   }
 }
 
