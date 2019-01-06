@@ -520,18 +520,23 @@ export default {
     }
 
     &.success {
-      background: linear-gradient(to bottom, #4cbaab 0%, #389393 100%)
+      background: linear-gradient(to bottom, #4cbaab 0%, #389393 100%);
     }
 
     &.warning {
-      background: linear-gradient(to bottom, #f39d4c 0%, #e48a41 100%)
+      background: linear-gradient(to bottom, #f39d4c 0%, #e48a41 100%);
     }
 
     &.error {
-      background: linear-gradient(to bottom, #f672a2 0%, #ec5f92 100%)
+      background: linear-gradient(to bottom, #f672a2 0%, #ec5f92 100%);
     }
 
-    &.success-warning, &.idle-success, &.idle-warning {
+    &.perf {
+      background: linear-gradient(to bottom, #904cba 0%, #683893 100%);
+    }
+
+    &.success-warning, &.success-perf, &.warning-perf,
+    &.idle-success, &.idle-warning, &.idle-perf {
       span {
         float: left;
         width: (72px / 2) - 10px;
@@ -543,7 +548,7 @@ export default {
       }
     }
 
-    &.idle-success-warning {
+    &.idle-success-warning, &.idle-success-perf, &.idle-warning-perf {
       span {
         width: (72px / 3);
         text-align: center;
@@ -560,8 +565,34 @@ export default {
       }
     }
 
+    &.idle-success-warning-perf {
+      span {
+        display: inline-block;
+        width: 24px;
+        text-align: center;
+
+        &:first-child {
+          float: left;
+          width: (72px / 4) - 10px;
+        }
+
+        &:last-child {
+          float: right;
+          width: (72px / 4) - 10px;
+        }
+      }
+    }
+
     &.success-warning {
       background: linear-gradient(135deg, #4cbaab 0%,#389393 49%,#f39d4c 51%,#e48a41 100%);
+    }
+
+    &.success-perf {
+      background: linear-gradient(135deg, #4cbaab 0%,#389393 49%,#904cba 51%,#683893 100%);
+    }
+
+    &.warning-perf {
+      background: linear-gradient(135deg, #f39d4c 0%,#e48a41 49%,#904cba 51%,#683893 100%);
     }
 
     &.idle-success {
@@ -572,8 +603,24 @@ export default {
       background: linear-gradient(135deg, #6998fc 0%,#6089e6 49%,#f39d4c 51%,#e48a41 100%);
     }
 
+    &.idle-perf {
+      background: linear-gradient(135deg, #6998fc 0%,#6089e6 49%,#904cba 51%,#683893 100%);
+    }
+
     &.idle-success-warning {
       background: linear-gradient(to right, #6998fc 0%,#6089e6 32%,#4cbaab 33%,#389393 65%,#f39d4c 66%,#e48a41 100%);
+    }
+
+    &.idle-success-perf {
+      background: linear-gradient(to right, #6998fc 0%,#6089e6 32%,#4cbaab 33%,#389393 65%,#904cba 66%,#683893 100%);
+    }
+
+    &.idle-warning-perf {
+      background: linear-gradient(to right, #6998fc 0%,#6089e6 32%,#f39d4c 33%,#e48a41 65%,#904cba 66%,#683893 100%);
+    }
+
+    &.idle-success-warning-perf {
+      background: linear-gradient(to right, #6998fc 0%,#6089e6 24%,#4cbaab 25%,#389393 49%,#f39d4c 50%,#e48a41 74%,#904cba 75%,#683893 100%);
     }
   }
 

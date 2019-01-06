@@ -42,15 +42,21 @@ export default {
       dragging: null,
       eventsTypes: [
         ['success', 'warning'],
+        ['success', 'perf'],
+        ['warning', 'perf'],
+        ['success', 'warning', 'perf'],
         ['idle', 'success'],
         ['idle', 'warning'],
+        ['idle', 'perf'],
         ['idle', 'success', 'warning'],
+        ['idle', 'success', 'warning', 'perf'],
       ],
       colors: {
         idle: '#6998fc',
         success: '#4cbaab',
         warning: '#f39d4c',
         error: '#f672a2',
+        perf: '#904cba',
       },
     };
   },

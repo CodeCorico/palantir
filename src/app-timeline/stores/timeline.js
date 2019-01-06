@@ -84,11 +84,13 @@ const store = {
             texts.push(event[eventKeys[0]][0]);
           }
           else {
-            ['idle', 'success', 'warning'].forEach((state) => {
-              if (event[state]) {
-                types.push(state);
-                texts.push(event[state].length);
+            ['idle', 'success', 'warning', 'perf'].forEach((state) => {
+              if (!event[state]) {
+                return;
               }
+
+              types.push(state);
+              texts.push(event[state].length);
             });
           }
 
@@ -120,11 +122,7 @@ const store = {
           }
         });
 
-        events.sort((a, b) => {
-          return a.domain > b.domain
-            ? 1
-            : a.domain < b.domain ? -1 : 0;
-        });
+        events.sort((a, b) => a.domain > b.domain ? 1 : (a.domain < b.domain ? -1 : 0));
 
         datesEvents.push({ title: date.title, events, content: date.content });
       });
