@@ -648,8 +648,22 @@ export default {
     right: 40px;
     bottom: 0;
     width: 340px;
-    background: $colorBg;
-    opacity: 0.9;
+
+    &::before, &::after {
+      z-index: -1;
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: $colorBg;
+      opacity: 0.9;
+    }
+
+    &::after {
+      background: rgba(0, 0, 0, 0.4);
+    }
 
     &.content-enter-active, &.content-leave-active {
       transition: all 0.25s $easeOutQuart;
@@ -673,16 +687,6 @@ export default {
     &.content-leave-to {
       opacity: 0;
       transform: translateX(50px);
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.4);
     }
 
     .content-scrolls {
@@ -720,9 +724,27 @@ export default {
         }
 
         h3 {
-          font-weight: 300;
-          font-size: 18px;
+          display: inline-block;
           margin: 0 0 15px;
+          font-weight: 600;
+          font-size: 18px;
+          padding: 2px 5px;
+
+          &#breaking-changes {
+            background: #6998fc;
+          }
+
+          &#features {
+            background: #4cbaab;
+          }
+
+          &#bug-fixes {
+            background: #f39d4c;
+          }
+
+          &#performance-improvements {
+            background: #904cba;
+          }
         }
 
         ul {
