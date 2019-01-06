@@ -1,3 +1,29 @@
+# [0.3.0](https://github.com/CodeCorico/palantir/compare/v0.2.0...v0.3.0) (2019-01-06)
+
+
+### Bug Fixes
+
+* **app github-pulls:** sounds changes & clean pulls cache ([b88ad82](https://github.com/CodeCorico/palantir/commit/b88ad82))
+* **app timeline:** better column popin content display ([e5a301d](https://github.com/CodeCorico/palantir/commit/e5a301d))
+* **app timeline:** events alignment ([5b30771](https://github.com/CodeCorico/palantir/commit/5b30771))
+* **app timeline:** input always cleaning ([1c8f9cd](https://github.com/CodeCorico/palantir/commit/1c8f9cd))
+* **app timeline:** refresh the minimap after data loaded ([a23c4dd](https://github.com/CodeCorico/palantir/commit/a23c4dd))
+* **app timeline:** reload data when the app config changed ([760fe5b](https://github.com/CodeCorico/palantir/commit/760fe5b))
+* **app timeline:** unselect popin content when switching app ([df56f8a](https://github.com/CodeCorico/palantir/commit/df56f8a))
+* **apps:** disable linked cron task when the app is exited ([063495e](https://github.com/CodeCorico/palantir/commit/063495e))
+* **tasks:** create a new attr instead of rewrite the id ([8df79bc](https://github.com/CodeCorico/palantir/commit/8df79bc))
+
+
+### Features
+
+* **app github-pulls:** add merged sound ([e9187d4](https://github.com/CodeCorico/palantir/commit/e9187d4))
+* **app github-pulls:** add new pull animation ([17c56d4](https://github.com/CodeCorico/palantir/commit/17c56d4))
+* **app timeline:** add performance improvements support ([547792c](https://github.com/CodeCorico/palantir/commit/547792c))
+* **cli changelog-command:** add performance improvements support ([7606ec3](https://github.com/CodeCorico/palantir/commit/7606ec3))
+* **layout page:** add a link when the Palantir is not up to date ([ea805d6](https://github.com/CodeCorico/palantir/commit/ea805d6))
+
+
+
 # [0.2.0](https://github.com/CodeCorico/palantir/compare/v0.1.8...v0.2.0) (2019-01-02)
 
 
