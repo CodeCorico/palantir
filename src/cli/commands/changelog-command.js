@@ -8,6 +8,7 @@ const TYPES = {
   'breaking changes': 'idle',
   'features': 'success',
   'bug fixes': 'warning',
+  'performance improvements': 'perf',
 };
 
 const unescapeHtml = (text) => {
