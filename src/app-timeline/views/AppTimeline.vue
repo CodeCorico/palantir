@@ -177,6 +177,8 @@ export default {
     datesEvents() {
       this.$nextTick(() => this.onWindowResize());
 
+      this.unselectColumns();
+
       return this.$store.state.Timeline.datesEvents;
     },
     dateFilter: {
