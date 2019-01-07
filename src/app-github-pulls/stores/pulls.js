@@ -71,7 +71,7 @@ const store = {
           mergeableState: null,
         };
 
-        let mergeableState = pullRaw.review_comments.length ? 'comments' : pullRaw.mergeable_state;
+        let mergeableState = pullRaw.review_comments ? 'comments' : pullRaw.mergeable_state;
         mergeableState = mergeableState === 'unknown' ? 'clean' : mergeableState;
 
         const oldMergeableState = newCachePulls[pullRaw.id].mergeableState;
