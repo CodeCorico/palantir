@@ -1,3 +1,12 @@
+## [0.3.1](https://github.com/CodeCorico/palantir/compare/v0.3.0...v0.3.1) (2019-01-07)
+
+
+### Bug Fixes
+
+* **app github-pulls:** use comments as number instead of array ([74e6c6a](https://github.com/CodeCorico/palantir/commit/74e6c6a))
+
+
+
 # [0.3.0](https://github.com/CodeCorico/palantir/compare/v0.2.0...v0.3.0) (2019-01-06)
 
 
