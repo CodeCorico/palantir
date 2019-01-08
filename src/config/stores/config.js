@@ -8,9 +8,13 @@ const store = {
   namespaced: true,
   state: {
     config: {},
+    variables: {},
   },
   mutations: {
-    config: (state, payload) => {
+    updateVariables: (state, variables) => {
+      state.variables = variables;
+    },
+    updateConfig: (state, payload) => {
       state.config = payload;
     },
   },
@@ -35,7 +39,8 @@ const store = {
         apps[key].url = `/app/${key}`;
       });
 
-      commit('config', config);
+      commit('updateVariables', variables);
+      commit('updateConfig', config);
 
       Object.keys(rootState).forEach((namespace) => {
         if (!rootState[namespace].hasConfig) {
