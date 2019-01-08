@@ -144,6 +144,7 @@ export default {
     clearTimeout(this.filterDateTimeout);
     clearTimeout(this.filterDomainTimeout);
     window.removeEventListener('resize', this.onWindowResize);
+    this.$store.dispatch('Timeline/clear');
   },
   watch: {
     config() {

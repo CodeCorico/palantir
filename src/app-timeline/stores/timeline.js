@@ -13,6 +13,14 @@ const store = {
     datesEvents: [],
   },
   mutations: {
+    clear(state) {
+      state.dateFilter = '';
+      state.domainFilter = '';
+      state.lastWarnings = {};
+      state.domains = [];
+      state.datesColumns = [];
+      state.datesEvents = [];
+    },
     updateFilter(state, { type, value }) {
       state[`${type}Filter`] = value;
     },
@@ -150,6 +158,9 @@ const store = {
     filter({ commit }, { type, value }) {
       commit('updateFilter', { type, value });
       commit('computeStore');
+    },
+    clear({ commit }) {
+      commit('clear');
     },
   },
 };
