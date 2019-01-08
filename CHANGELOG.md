@@ -1,3 +1,28 @@
+# [0.4.0](https://github.com/CodeCorico/palantir/compare/v0.3.1...v0.4.0) (2019-01-08)
+
+
+### Bug Fixes
+
+* **app images-randomizer:** starting a new process kills the active one ([b14857b](https://github.com/CodeCorico/palantir/commit/b14857b))
+* **app pages:** missing loading the data when changing the app id ([89208d9](https://github.com/CodeCorico/palantir/commit/89208d9))
+* **ui header:** adapt right button bar on locked mode ([daafb90](https://github.com/CodeCorico/palantir/commit/daafb90))
+
+
+### Features
+
+* **config:** add variables as a state ([3933f9d](https://github.com/CodeCorico/palantir/commit/3933f9d))
+* **layout page:** reload the page when the server's version changed ([428310c](https://github.com/CodeCorico/palantir/commit/428310c))
+* **layout page:** use variables to disable the upgrade features ([fc74929](https://github.com/CodeCorico/palantir/commit/fc74929))
+
+
+### Performance Improvements
+
+* **app github-pulls:** clear the store when destroying the app ([18de5b7](https://github.com/CodeCorico/palantir/commit/18de5b7))
+* **app pages:** clear the store when destroying the app ([c3f5b45](https://github.com/CodeCorico/palantir/commit/c3f5b45))
+* **app timeline:** clear the store when destroying the app ([ae4a8f0](https://github.com/CodeCorico/palantir/commit/ae4a8f0))
+
+
+
 ## [0.3.1](https://github.com/CodeCorico/palantir/compare/v0.3.0...v0.3.1) (2019-01-07)
 
 
