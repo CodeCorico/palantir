@@ -49,6 +49,8 @@ export default {
   },
   destroyed() {
     document.removeEventListener(this.clickEvent, this.clickHandler, false);
+
+    this.$store.dispatch('Pages/clear');
   },
   data() {
     return {

@@ -38,6 +38,13 @@ const store = {
     glossary: [],
   },
   mutations: {
+    clear(state) {
+      state.appRoute = '';
+      state.base = '';
+      state.content = '';
+      state.summary = [];
+      state.glossary = [];
+    },
     updateAppRoute: (state, appRoute) => {
       state.appRoute = (appRoute || '').replace(/\/$/, '');
     },
@@ -105,7 +112,10 @@ const store = {
       } catch (err) {
         commit('updateGlossary', []);
       }
-    }
+    },
+    clear({ commit }) {
+      commit('clear');
+    },
   },
 };
 
