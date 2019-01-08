@@ -14,7 +14,9 @@
     "storybook": "start-storybook -p 9000 -c ./src/bootstrap/storybook",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "version": "npm run changelog && git add CHANGELOG.md",
-    "release": "npm version patch -m 'release: %s'"
+    "patch": "npm version patch -m \"release: %s\"",
+    "minor": "npm version minor -m \"release: %s\"",
+    "major": "npm version major -m \"release: %s\""
   },
   "dependencies": {
     "axios": "^0.18.0",
