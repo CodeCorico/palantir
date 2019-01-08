@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     ...mapState('ImagesRandomizer', [
-      'started', 'icon', 'title', 'selectedText', 'images', 'fixedTime'
+      'id', 'icon', 'title', 'selectedText', 'images', 'fixedTime'
     ]),
   },
   data() {
@@ -47,8 +47,14 @@ export default {
     };
   },
   watch: {
-    started(value) {
-      this[value ? 'start' : 'stop']();
+    id() {
+      this.stop();
+
+      if (!this.id) {
+        return;
+      }
+
+      this.start();
     }
   },
   methods: {
@@ -70,18 +76,21 @@ export default {
       }, steps[step]);
     },
     start() {
+      this.clearAnim();
+      this.clearRandomizeImages();
+      this.clearEnd();
+
       this.anim('appearSb', [0, 350, 350], 0, () => setTimeout(this.startRandomizeImages, 350));
     },
     stop() {
       this.clearAnim();
       this.clearRandomizeImages();
+      this.clearEnd();
 
       this.$set(this, 'appearSb', -1);
       this.$set(this, 'fixedSb', -1);
       this.$set(this, 'image', null);
       this.$set(this, 'legend', '');
-
-      this.$store.dispatch('ImagesRandomizer/stop');
     },
     startRandomizeImages() {
       const minLoops = this.images.length * 4;
@@ -131,7 +140,9 @@ export default {
       this.endTimeout = setTimeout(() => {
         this.$set(this, 'fixedSb', this.fixedSb + 1);
 
-        this.endTimeout = setTimeout(() => this.stop(), 350);
+        this.endTimeout = setTimeout(() => {
+          this.$store.dispatch('ImagesRandomizer/stop');
+        }, 350);
       }, time);
     },
     clearAnim() {

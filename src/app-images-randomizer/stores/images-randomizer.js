@@ -3,7 +3,7 @@ const name = 'ImagesRandomizer';
 const store = {
   namespaced: true,
   state: {
-    started: false,
+    id: null,
     icon: null,
     title: null,
     selectedText: null,
@@ -11,23 +11,26 @@ const store = {
     fixedTime: null,
   },
   mutations: {
-    randomizer: (state, { started, icon, title, selectedText, images, fixedTime }) => {
-      state.started = started || false;
-      state.icon = icon || null;
-      state.title = title || null;
-      state.selectedText = selectedText || null;
-      state.images = images || null;
-      state.fixedTime = fixedTime || null;
+    updateRandomizer: (state, payload) => {
+      state.id = payload.id || null;
+      state.icon = payload.icon || null;
+      state.title = payload.title || null;
+      state.selectedText = payload.selectedText || null;
+      state.images = payload.images || null;
+      state.fixedTime = payload.fixedTime || null;
     },
   },
   actions: {
     start({ commit }, task) {
-      commit('randomizer', Object.assign({
-        started: true,
-      }, task.config));
+      commit('updateRandomizer', {});
+      setTimeout(() => {
+        commit('updateRandomizer', Object.assign({
+          id: task.id,
+        }, task.config));
+      });
     },
     stop({ commit }) {
-      commit('randomizer', {});
+      commit('updateRandomizer', {});
     }
   },
 };
