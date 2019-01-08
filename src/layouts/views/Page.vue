@@ -72,9 +72,13 @@ export default {
       unSelectable: true,
       icon: 'fas fa-lock',
     });
-    this.$store.dispatch('Page/version');
 
     this.load();
+  },
+  data() {
+    return {
+      lastVersionChecked: null,
+    };
   },
   computed: {
     ...mapState('Page', ['leftSidebars', 'rightSidebars']),
@@ -82,6 +86,13 @@ export default {
       const { versions } = this.$store.state.Page;
 
       if (!versions || versions.version === versions.versionLatest) {
+        if (this.lastVersionChecked && this.lastVersionChecked !== versions.version) {
+          window.location.reload();
+
+          return;
+        }
+
+        this.$set(this, 'lastVersionChecked', versions.version);
         return null;
       }
 
@@ -90,6 +101,7 @@ export default {
   },
   methods: {
     load() {
+      this.checkVersion();
       this.$store.dispatch('Config/load');
     },
     lockHandler() {
@@ -97,6 +109,12 @@ export default {
     },
     headerClick() {
       this.$refs.header.toggleLock(false);
+    },
+    checkVersion() {
+      this.$store.dispatch('Page/version');
+
+      // 5min
+      setTimeout(() => this.checkVersion(), 5 * 60 * 1000);
     },
   },
 };
