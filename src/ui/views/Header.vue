@@ -185,16 +185,22 @@ export default {
 
   .left {
     left: 10px;
+    transition: left 0.35s $easeOutQuart;
   }
 
   .right {
     right: 130px;
+    transition: right 0.35s $easeOutQuart;
   }
 
   &.bigger {
     .date-time {
       font-size: 22px;
       bottom: 16px;
+    }
+
+    .right {
+      right: 157px;
     }
   }
 
