@@ -82,10 +82,15 @@ export default {
   },
   computed: {
     ...mapState('Page', ['leftSidebars', 'rightSidebars']),
+    ...mapState('Config', ['variables']),
     upgrade() {
       const { versions } = this.$store.state.Page;
 
-      if (!versions || versions.version === versions.versionLatest) {
+      if (!versions) {
+        return null;
+      }
+
+      if (this.hasUpgradeReload) {
         if (this.lastVersionChecked && this.lastVersionChecked !== versions.version) {
           window.location.reload();
 
@@ -93,10 +98,21 @@ export default {
         }
 
         this.$set(this, 'lastVersionChecked', versions.version);
+      }
+
+      if (!this.hasUpgradeButton || !versions || versions.version === versions.versionLatest) {
         return null;
       }
 
       return versions;
+    },
+    hasUpgradeButton() {
+      return typeof this.variables['upgrade.button'] === 'undefined'
+        || this.variables['upgrade.button'];
+    },
+    hasUpgradeReload() {
+      return typeof this.variables['upgrade.reload'] === 'undefined'
+        || this.variables['upgrade.reload'];
     },
   },
   methods: {
@@ -111,6 +127,10 @@ export default {
       this.$refs.header.toggleLock(false);
     },
     checkVersion() {
+      if (!this.hasUpgradeButton && !this.hasUpgradeReload) {
+        return;
+      }
+
       this.$store.dispatch('Page/version');
 
       // 5min
