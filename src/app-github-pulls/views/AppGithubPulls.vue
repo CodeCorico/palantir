@@ -97,6 +97,9 @@ export default {
   props: {
     config: Object,
   },
+  destroyed() {
+    this.$store.dispatch('GithubPulls/clear');
+  },
   watch: {
     changes() {
       this.playChanges();

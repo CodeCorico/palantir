@@ -27,6 +27,12 @@ const store = {
     lastTaskId: null,
   },
   mutations: {
+    clear(state) {
+      state.changes = [];
+      state.groups = [];
+      state.cachePulls = [];
+      state.lastTaskId = null;
+    },
     mutatePulls: (state, { taskId, pulls }) => {
       const firstMutation = taskId !== state.lastTaskId;
       const groups = {};
@@ -160,6 +166,9 @@ const store = {
       );
 
       commit('mutatePulls', { taskId: task.id, pulls });
+    },
+    clear({ commit }) {
+      commit('clear');
     },
   },
 };
