@@ -81,6 +81,7 @@ export default {
       this.load();
     },
     appRoute() {
+      this.load();
       this.loadGlossary();
     },
   },
