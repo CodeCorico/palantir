@@ -1,10 +1,19 @@
 <template>
-  <section class="task" :class="[`status-${status}`]" @click="start">
+  <section
+    class="task"
+    :class="[`status-${status}`]"
+    v-shortkey="shortcut"
+    @click="start"
+    @shortkey="start"
+  >
     <span v-if="number" class="task-number" :class="{ fade: status === 'running' }">
       {{ number }}
     </span>
     <h1>{{ title }}</h1>
     <p>{{ description }}</p>
+    <div v-if="shortcut" class="shortcuts">
+      <span v-for="key in shortcut" :key="key">{{ key }}</span>
+    </div>
     <i v-if="status === 'running'" class="fas fa-cog"></i>
   </section>
 </template>
@@ -23,6 +32,7 @@ export default {
     title: String,
     description: String,
     dispatch: String,
+    shortcut: Array,
     config: Object,
   },
   methods: {
@@ -31,7 +41,7 @@ export default {
         return;
       }
 
-      this.$store.dispatch('Page/toggleButton', {
+      this.$store.dispatch('Page/closeButton', {
         location: 'right',
         id: 'tasks-sidebar',
       });
@@ -103,6 +113,25 @@ export default {
     font-size: 13px;
     opacity: 0.7;
     padding-left: 54px;
+  }
+
+  .shortcuts {
+    padding: 25px 0 0;
+    font-size: 13px;
+    opacity: 0.7;
+    padding-left: 54px;
+
+    span {
+      background: #fff;
+      font-weight: 700;
+      padding: 3px 7px;
+      font-size: 13px;
+      margin-right: 2px;
+      border-radius: 4px;
+      color: #3d3c40;
+      border-bottom: 2px solid #9e9ea6;
+      box-shadow: 0 1px 2px rgba(0,0,0,.5);
+    }
   }
 
   .task-number {

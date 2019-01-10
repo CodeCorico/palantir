@@ -1,11 +1,13 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import VueShortkey from 'vue-shortkey';
 import Page from '@/layouts/views/Page.vue';
 import routes from './routes.js';
 
 Vue.config.productionTip = false;
 
 Vue.use(VueRouter);
+Vue.use(VueShortkey);
 
 const router = new VueRouter({
   mode: 'history',

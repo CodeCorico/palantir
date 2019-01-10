@@ -47,13 +47,14 @@ const store = {
       });
     },
     updateButtonSelected: (state, payload) => {
-      const { location } = payload;
+      const { location, close = false } = payload;
 
       let isSelected = false;
       let handler = false;
 
       state[`${location}Buttons`].forEach((button) => {
-        button.selected = button.id === payload.id ? !button.selected : false;
+        button.selected = !close && button.id === payload.id ? !button.selected : false;
+
         if (button.selected) {
           handler = button.handler;
           isSelected = true;
@@ -94,6 +95,9 @@ const store = {
     },
     toggleButton({ commit }, payload) {
       commit('updateButtonSelected', payload);
+    },
+    closeButton({ commit }, payload) {
+      commit('updateButtonSelected', Object.assign({ close: true }, payload));
     },
     hideButtons({ commit }) {
       commit('updateButtonDisplay', false);

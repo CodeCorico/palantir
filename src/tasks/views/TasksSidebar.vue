@@ -13,6 +13,7 @@
       :description="task.description"
       :status="task.status"
       :dispatch="task.dispatch"
+      :shortcut="task.shortcut"
       :config="task.config"
     ></task>
   </sidebar>
