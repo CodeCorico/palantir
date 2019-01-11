@@ -11,6 +11,7 @@
 <script>
 import { mapState } from 'vuex';
 import store from '@/services/store';
+import AppError from '@/app-error/views/AppError';
 import AppGithubPulls from '@/app-github-pulls/views/AppGithubPulls';
 import AppTimeline from '@/app-timeline/views/AppTimeline';
 import AppFrame from '@/app-frame/views/AppFrame.vue';
@@ -20,6 +21,7 @@ export default {
   name: 'app',
   store,
   components: {
+    AppError,
     AppGithubPulls,
     AppTimeline,
     AppFrame,
