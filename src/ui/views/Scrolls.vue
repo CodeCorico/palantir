@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div class="ui-scrolls-vertical" v-if="barVSize < 100">
+    <div class="ui-scrolls-vertical" v-if="scrollSize && barVSize < 100">
       <div ref="barAreaV" :style="`top: ${vOffsetTop}px; bottom: ${vOffsetBottom}px`">
         <div
           :style="`height: ${barVSize}%; top: ${barVOffset}%`"
@@ -27,7 +27,7 @@
         ></div>
       </div>
     </div>
-    <div class="ui-scrolls-horizontal" v-if="barHSize < 100">
+    <div class="ui-scrolls-horizontal" v-if="scrollSize && barHSize < 100">
       <div ref="barAreaH" :style="`left: ${hOffsetLeft}px; right: ${hOffsetRight}px`">
         <div
           :style="`width: ${barHSize}%; left: ${barHOffset}%`"
