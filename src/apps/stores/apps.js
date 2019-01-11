@@ -67,11 +67,12 @@ const store = {
         });
       });
     },
-    activeApp: (state, id) => {
-      const appId = id || state.appRoot;
+    updateActiveApp: (state, id) => {
+      let appId = id || state.appRoot;
 
-      if (!state.apps || !state.apps[appId]) {
-        throw new Error(`No app with the id "${appId}"`);
+      if (!appId || !state.apps[appId]) {
+        appId = '$error';
+        state.apps[appId].config.error = 'No app found';
       }
 
       state.activeApp = state.apps[appId];
@@ -118,7 +119,7 @@ const store = {
       commit('config', payload);
     },
     activeApp({ commit }, appId) {
-      commit('activeApp', appId);
+      commit('updateActiveApp', appId);
     },
   }
 };
