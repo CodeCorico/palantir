@@ -173,9 +173,10 @@ export default {
 
 @keyframes image-fixed-anim-notif {
   0% { opacity: 0; width: 118px; height: 118px; transform: translateY(1px) translateX(1px); }
+  89% { opacity: 0; width: 118px; height: 118px; transform: translateY(1px) translateX(1px); }
   90% { opacity: 1; width: 118px; height: 118px; transform: translateY(1px) translateX(1px); }
-  95% { opacity: 0; width: 170px; height: 170px; transform: translateY(-25px) translateX(-25px); }
-  95.01% { opacity: 1; width: 118px; height: 118px; transform: translateY(1px) translateX(1px); }
+  94.99% { opacity: 0; width: 170px; height: 170px; transform: translateY(-25px) translateX(-25px); }
+  95% { opacity: 1; width: 118px; height: 118px; transform: translateY(1px) translateX(1px); }
   100% { opacity: 0; width: 170px; height: 170px; transform: translateY(-25px) translateX(-25px); }
 }
 
