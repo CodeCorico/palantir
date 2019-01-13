@@ -96,15 +96,15 @@ export default {
   },
   mounted() {
     window.addEventListener('resize', this.onWindowResize);
-    document.body.addEventListener('mousemove', this.onBodyMouseMove);
-    document.body.addEventListener('mouseup', this.onBodyMouseUp);
+    window.addEventListener('mousemove', this.onBodyMouseMove);
+    window.addEventListener('mouseup', this.onBodyMouseUp);
 
     this.onWindowResize();
   },
   destroyed() {
     window.removeEventListener('resize', this.onWindowResize);
-    document.body.removeEventListener('mousemove', this.onBodyMouseMove);
-    document.body.removeEventListener('mouseup', this.onBodyMouseUp);
+    window.removeEventListener('mousemove', this.onBodyMouseMove);
+    window.removeEventListener('mouseup', this.onBodyMouseUp);
   },
   data() {
     return {
