@@ -30,6 +30,15 @@ const fillTree = (tree, fileSplitted, index = 0) => {
   fillTree(tree[actualTree].tree, fileSplitted, index + 1);
 };
 
+const contentProcesses = {
+  md: (content, basePath) => marked(content)
+    .replace(/<!--\s*import:\s*(.*?.mmd)\s*-->/ig, (search, file) => {
+      const filePath = path.resolve(`${basePath}/${file}`);
+      return contentProcesses.mmd(fs.readFileSync(filePath, 'utf8'));
+    }),
+  mmd: content => `<div class="mermaid">${content}</div>`,
+};
+
 const handler = (argv) => {
   banner();
 
@@ -47,10 +56,13 @@ const handler = (argv) => {
   logDate(`Found ${files.length} files to generate`);
 
   files.forEach((file) => {
-    const markdown = fs.readFileSync(file, 'utf8');
-    const html = marked(markdown);
+    const fileType = path.extname(file);
 
-    const newFile = file.replace(origin, '').replace(/.md$/i, '.html');
+    const content = contentProcesses[fileType.replace('.', '')](
+      fs.readFileSync(file, 'utf8'),
+      path.dirname(path.resolve(file)));
+
+    const newFile = `${file.replace(origin, '')}.html`;
     const newFilePath = `${destination}/${newFile}`;
     const newDir = path.dirname(newFilePath);
 
@@ -58,7 +70,7 @@ const handler = (argv) => {
 
     mkp.sync(newDir);
 
-    fs.writeFileSync(newFilePath, html);
+    fs.writeFileSync(newFilePath, content);
   });
 
   logDate(`Generate the glossary`);
