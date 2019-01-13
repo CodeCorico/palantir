@@ -40,6 +40,7 @@
     "conventional-changelog-cli": "^2.0.11",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0-0",
+    "mermaid": "^8.0.0",
     "node-sass": "^4.10.0",
     "prismjs": "^1.15.0",
     "sass-loader": "^7.1.0",
