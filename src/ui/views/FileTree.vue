@@ -71,7 +71,14 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
     font-size: 16px;
     font-weight: 300;
     line-height: 1.4;
-    text-transform: capitalize;
+
+    * {
+      text-transform: lowercase;
+
+      &:first-letter {
+        text-transform: uppercase;
+      }
+    }
   }
 
   .folder-indent {
