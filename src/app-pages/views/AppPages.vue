@@ -1,7 +1,7 @@
 <template>
   <div class="app-pages">
     <ui-scrolls ref="scrolls" class="scrolls">
-      <div class="content" v-html="content"></div>
+      <div ref="content" class="content" v-html="content"></div>
     </ui-scrolls>
 
     <ui-scrolls ref="sideScrolls" class="side-scrolls">
@@ -27,6 +27,7 @@ import store from '@/services/store';
 import UiScrolls from '@/ui/views/Scrolls.vue';
 import UiFileTree from '@/ui/views/FileTree.vue';
 import Prism from 'prismjs';
+import Mermaid from 'mermaid';
 
 export default {
   name: 'app-pages',
@@ -41,6 +42,16 @@ export default {
     appLocalRoute: String,
   },
   mounted() {
+    // Mermaid.initialize({
+    //   startOnLoad: false,
+    //   cloneCssStyles: false,
+    //   leftMargin: 0,
+    //   flowchart: {
+    //     useMaxWidth: false,
+    //     htmlLabels: true,
+    //   },
+    // });
+
     this.clickEvent = document.ontouchstart ? 'touchstart' : 'click';
     document.addEventListener(this.clickEvent, this.clickHandler, false);
 
@@ -60,7 +71,12 @@ export default {
   computed: {
     content() {
       this.$nextTick(() => {
-        Prism.highlightAll();
+        if (this.$store.state.Pages.content) {
+          Prism.highlightAll();
+
+          Mermaid.mermaidAPI.initialize({ startOnLoad: false }, this.$refs.content);
+          Mermaid.init();
+        }
 
         this.$refs.scrolls.refresh();
       });
@@ -162,6 +178,8 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
       font-weight: 300;
       line-height: 1.5;
       color: #fff;
+
+      @import '../assets/mermaid.scss';
 
       > *:first-child {
         margin-top: 0 !important;

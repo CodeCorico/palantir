@@ -53,7 +53,7 @@ const store = {
     },
     updateContent: (state, content) => {
       state.content = content.replace(/<a\s+href="(.*?)"\s*>/g, (link, match) => {
-        if (!match.match(/.md$/i) || match.match(/^http/i)) {
+        if (!match.match(/.mm?d$/i) || match.match(/^http/i)) {
           return `<a href="${match}" target="_blank">`;
         }
 

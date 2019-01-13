@@ -1,0 +1,142 @@
+g.cluster rect {
+  fill: none !important;
+  rx: 0 !important;
+  ry: 0 !important;
+  stroke: #333 !important;
+  stroke-width: 2px !important;
+}
+
+g.cluster text {
+  fill: #fff !important;
+  text-transform: uppercase !important;
+  transform: translateY(-30px);
+}
+
+@keyframes dash {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.edgePath .path,
+.messageLine0, .messageLine1 {
+  stroke: #949494 !important;
+  stroke-width: 3 !important;
+  stroke-dasharray: 5,5 !important;
+  stroke-dashoffset: 50 !important;
+  animation: dash 5s linear infinite;
+}
+
+.messageLine0, .messageLine1 {
+  stroke: #ccc !important;
+}
+
+#arrowhead, .messageText {
+  fill: #fff !important;
+  font-size: 12px !important;
+}
+
+.activation0, .activation1 {
+  fill: #666 !important;
+}
+
+.node circle,
+.node ellipse,
+.node polygon,
+.node rect,
+.node rect,
+.actor {
+  fill: none !important;
+  stroke: #666 !important;
+  stroke-width: 1px !important;
+  rx: 2 !important;
+  ry: 2 !important;
+
+  tspan {
+    stroke: #ccc !important;
+  }
+}
+
+.node circle,
+.node ellipse,
+.node polygon,
+.node rect,
+.node rect {
+  stroke: #ccc !important;
+}
+
+.actor {
+  fill: #111 !important;
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+}
+
+.node div {
+  display: block;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.edgeLabel {
+  background-color: #111 !important;
+  color: #9d9d9d !important;
+}
+
+.note {
+  fill: rgba(17, 17, 17, 0.6) !important;
+  stroke: transparent !important;
+}
+
+.noteText, .noteText tspan {
+  fill: #FFEB3B !important;
+  font-size: 12px !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.loopText, .loopText tspan {
+  fill: #BBDEFB !important;
+  font-size: 13px !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.loopLine {
+  stroke-width: 1px !important;
+  stroke: #BBDEFB !important;
+}
+
+.labelBox {
+  fill: #BBDEFB !important;
+  stroke: #BBDEFB !important;
+}
+
+/* SPECIAL CLASSES */
+
+.node.app > rect {
+  fill: #73b955 !important;
+  stroke: #73b955 !important;
+  cursor: pointer;
+}
+
+.node.app div {
+  cursor: pointer;
+}
+
+.node.db > rect {
+  fill: #2e0c57 !important;
+  stroke: #2e0c57 !important;
+}
+
+.node.db-fast > rect {
+  fill: #570C33 !important;
+  stroke: #570C33 !important;
+}
+
+.edgeLabel.sequences {
+  cursor: pointer;
+  background-color: #006064 !important;
+  color: #fff !important;
+  border-radius: 5px;
+  padding: 2px 10px 5px;
+}
