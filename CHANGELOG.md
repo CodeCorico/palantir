@@ -1,3 +1,29 @@
+# [0.5.0](https://github.com/CodeCorico/palantir/compare/v0.4.0...v0.5.0) (2019-01-13)
+
+
+### Bug Fixes
+
+* **app images-randomizer:** don't display the border animation on transparent images ([26026ad](https://github.com/CodeCorico/palantir/commit/26026ad))
+* **ui file-tree:** capitalize only the first character ([fc9429a](https://github.com/CodeCorico/palantir/commit/fc9429a))
+* **ui scrolls:** don't loose the handling when scrolling outside the window ([7dbdfb7](https://github.com/CodeCorico/palantir/commit/7dbdfb7))
+
+
+### Features
+
+* **app error:** create the error app ([55d862e](https://github.com/CodeCorico/palantir/commit/55d862e))
+* **app pages:** display mermaid diagrams ([aeea1c5](https://github.com/CodeCorico/palantir/commit/aeea1c5))
+* **apps:** inform the user when it is on a unknown app ([1715807](https://github.com/CodeCorico/palantir/commit/1715807))
+* **cli commands doc:** process .mmd (mermaid) files ([718fafe](https://github.com/CodeCorico/palantir/commit/718fafe))
+* **config:** add a palantir.json config validator ([a1c3d1c](https://github.com/CodeCorico/palantir/commit/a1c3d1c))
+* **tasks task:** add keyboard "shortcut" to tasks ([33b6093](https://github.com/CodeCorico/palantir/commit/33b6093))
+
+
+### Performance Improvements
+
+* **ui scrolls:** don't create scrollbars DOM when not needed ([7c4a0cd](https://github.com/CodeCorico/palantir/commit/7c4a0cd))
+
+
+
 # [0.4.0](https://github.com/CodeCorico/palantir/compare/v0.3.1...v0.4.0) (2019-01-08)
 
 
