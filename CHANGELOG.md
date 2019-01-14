@@ -1,3 +1,17 @@
+## [0.5.1](https://github.com/CodeCorico/palantir/compare/v0.5.0...v0.5.1) (2019-01-14)
+
+
+### Bug Fixes
+
+* **app pages:** relative links support new files extensions ([87994a5](https://github.com/CodeCorico/palantir/commit/87994a5))
+
+
+### Features
+
+* **app pages:** add table & mermaid container styles ([189d7ad](https://github.com/CodeCorico/palantir/commit/189d7ad))
+
+
+
 # [0.5.0](https://github.com/CodeCorico/palantir/compare/v0.4.0...v0.5.0) (2019-01-13)
 
 
