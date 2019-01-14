@@ -57,7 +57,8 @@ const store = {
           return `<a href="${match}" target="_blank">`;
         }
 
-        let newUrl = match.replace(/.md/i, '.html');
+        let newUrl = match.replace(/(.mm?d)/i, '$1.html');
+
         if (!newUrl.match(/^\./)) {
           newUrl = `${state.appRoute}/${newUrl}`;
         }
