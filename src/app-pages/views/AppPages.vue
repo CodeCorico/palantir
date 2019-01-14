@@ -179,6 +179,10 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
       line-height: 1.5;
       color: #fff;
 
+      .mermaid {
+        text-align: center;
+      }
+
       @import '../assets/mermaid.scss';
 
       > *:first-child {
@@ -212,7 +216,29 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
         font-size: 16px;
       }
 
-      p > code, li > code, h1 > code, h2 > code, h3 > code, h4 > code {
+      table {
+        border-spacing: 0;
+      }
+
+      table tr:nth-child(2n) {
+        background: #14272f;
+      }
+
+      td {
+        padding: 6px 13px;
+        border-top: 1px solid #525252;
+        border-left: 1px dashed #525252;
+
+        &:last-child {
+          border-right: 1px dashed #525252;
+        }
+      }
+
+      tr:last-child td {
+        border-bottom: 1px solid #525252;
+      }
+
+      p > code, li > code, h1 > code, h2 > code, h3 > code, h4 > code, th > code, td > code {
         font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
         padding: 2px 5px 3px;
         font-variant-ligatures: none;
