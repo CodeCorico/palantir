@@ -5,9 +5,9 @@
     </ui-scrolls>
 
     <ui-scrolls ref="sideScrolls" class="side-scrolls">
-      <h2 class="title-summary">Summary</h2>
+      <h2 class="title-summary" v-if="summary.length">Summary</h2>
 
-      <ul class="summary">
+      <ul class="summary" v-if="summary.length">
         <li v-for="(title, index) in summary" :key="index" :class="`level-${title.level}`">
           <a :href="`#${title.id}`">{{ title.text }}</a>
         </li>
