@@ -57,13 +57,18 @@ const store = {
           return `<a href="${match}" target="_blank">`;
         }
 
-        let newUrl = match.replace(/(.mm?d)/i, '$1.html');
-
-        if (!newUrl.match(/^\./)) {
-          newUrl = `${state.appRoute}/${newUrl}`;
+        let url = window.location.pathname;
+        if (url.match(/.html$/)) {
+          const split = url.split('/');
+          split.pop();
+          url = split.join('/');
         }
+        url = !url.match(/\/$/) ? `${url}/` : url;
 
-        return `<a local="router-link" href="${newUrl}">`;
+        let uri = match.replace(/(.mm?d)/i, '$1.html');
+        uri = !uri.match(/^[.|/]/) ? `./${uri}` : uri;
+
+        return `<a local="router-link" href="${url}${uri}">`;
       });
 
       state.summary = [];
