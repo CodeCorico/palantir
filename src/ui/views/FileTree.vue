@@ -7,7 +7,7 @@
       <div :class="{ inline }" v-if="item.path">
         <i v-if="indent > 0 && !inline" class="folder-indent fas fa-caret-right"></i>
         <span v-if="inline" class="file-indent">/</span>
-        {{ item.path }}
+        <span class="label">{{ item.path }}</span>
         <ui-file-tree
           v-if="item.tree.length"
           :tree="item.tree"
@@ -24,7 +24,8 @@
         <i v-if="indent > 0 && !inline" class="folder-indent fas fa-caret-right"></i>
         <span v-if="inline" class="file-indent">/</span>
         <router-link :to="`${baseUrl}/${item.link}`">
-          {{ item.file.replace('.html', '') }}
+          <i class="file-icon" :class="fileIcon(item.file)"></i>
+          <span class="label">{{ fileName(item.file) }}</span>
         </router-link>
       </div>
     </div>
@@ -42,6 +43,25 @@ export default {
     },
     inline: Boolean,
     baseUrl: String,
+  },
+  data() {
+    return {
+      icons: {
+        md: 'fas fa-align-left',
+        mmd: 'fas fa-project-diagram',
+        uknown: 'fas fa-file',
+      }
+    };
+  },
+  methods: {
+    fileName(file) {
+      return file.replace(/.html$/i, '').replace(/.mm?d$/i, '');
+    },
+    fileIcon(file) {
+      const ext = file.replace(/.html$/i, '').match(/\.(.*?)$/);
+
+      return (ext && this.icons[ext[1]]) || this.icons.uknown;
+    },
   },
 };
 </script>
@@ -72,10 +92,11 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
     font-weight: 300;
     line-height: 1.4;
 
-    * {
+    .label {
+      display: inline-block;
       text-transform: lowercase;
 
-      &:first-letter {
+      &::first-letter {
         text-transform: uppercase;
       }
     }
@@ -114,6 +135,13 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
 
       &:hover {
         color: #fe8033;
+      }
+
+      .file-icon {
+        position: relative;
+        top: -1px;
+        font-size: 11px;
+        margin-right: 6px;
       }
     }
   }
