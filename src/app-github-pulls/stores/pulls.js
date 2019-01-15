@@ -18,6 +18,9 @@ const fetchPull = async (pullSummary) => {
   return data;
 };
 
+const sortByDate = arr =>
+  arr.sort((a, b) => a.createdAt < b.createdAt ? -1 : (a.createdAt > b.createdAt ? 1 : 0));
+
 const store = {
   namespaced: true,
   state: {
@@ -93,6 +96,7 @@ const store = {
         groups[title].pulls.push({
           id: pullRaw.id,
           number: pullRaw.number,
+          createdAt: createdAt,
           url: pullRaw.html_url,
           scope: pullRaw.palantirScope,
           authorImg: pullRaw.user.avatar_url,
@@ -131,13 +135,14 @@ const store = {
         }
       });
 
+      Object.keys(groups).forEach(key => sortByDate(groups[key].pulls));
+
       state.lastTaskId = taskId;
       state.changes = Object.keys(changes).filter(key => changes[key]);
       state.cachePulls = newCachePulls;
-      state.groups = Object
-        .keys(groups)
-        .map(title => groups[title])
-        .sort((a, b) => a.createdAt < b.createdAt ? -1 : (a.createdAt > b.createdAt ? 1 : 0));
+      state.groups = Object.keys(groups).map(title => groups[title]);
+
+      sortByDate(state.groups);
     },
   },
   actions: {
