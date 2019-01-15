@@ -7,9 +7,11 @@ g.cluster rect {
 }
 
 g.cluster text {
-  fill: #fff !important;
+  fill: #55adb9 !important;
   text-transform: uppercase !important;
-  transform: translateY(-30px);
+  transform: translateY(-10px);
+  box-shadow: 0px 3px 5px 5px red;
+  text-shadow: 0 0 10px #000;
 }
 
 @keyframes dash {

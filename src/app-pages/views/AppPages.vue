@@ -1,7 +1,7 @@
 <template>
   <div class="app-pages">
     <ui-scrolls ref="scrolls" class="scrolls">
-      <div ref="content" class="content" v-html="content"></div>
+      <div ref="content" id="content" class="content" v-html="content"></div>
     </ui-scrolls>
 
     <ui-scrolls ref="sideScrolls" class="side-scrolls">
@@ -164,7 +164,7 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
     bottom: 0;
   }
 
-  .content {
+  #content.content {
     box-sizing: border-box;
     max-width: 980px;
     margin: 0 auto;
@@ -181,6 +181,7 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
 
       .mermaid {
         text-align: center;
+        margin: 20px 0;
       }
 
       @import '../assets/mermaid.scss';
