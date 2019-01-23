@@ -1,3 +1,20 @@
+# [0.6.0](https://github.com/CodeCorico/palantir/compare/v0.5.1...v0.6.0) (2019-01-23)
+
+
+### Bug Fixes
+
+* **app github-pulls:** sort PR in groups ([4a4b0b3](https://github.com/CodeCorico/palantir/commit/4a4b0b3)), closes [#9](https://github.com/CodeCorico/palantir/issues/9)
+* **app pages:** add better flow chart css ([3ee99bc](https://github.com/CodeCorico/palantir/commit/3ee99bc))
+* **app pages:** don't break relative urls ([4a77f67](https://github.com/CodeCorico/palantir/commit/4a77f67))
+* **app pages:** don't display the summary if empty ([084b8ac](https://github.com/CodeCorico/palantir/commit/084b8ac))
+
+
+### Features
+
+* **ui file-tree:** display icons instead of extensions ([6f65a48](https://github.com/CodeCorico/palantir/commit/6f65a48))
+
+
+
 ## [0.5.1](https://github.com/CodeCorico/palantir/compare/v0.5.0...v0.5.1) (2019-01-14)
 
 
