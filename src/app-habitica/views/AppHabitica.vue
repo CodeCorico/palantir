@@ -11,8 +11,8 @@
         <div data-app-habitica class="avatar" style="padding-top: 0px;">
           <div data-app-habitica class="character-sprites" style="margin: 0px auto 0px 24px;">
 
-            <span data-app-habitica v-if="member.items.currentMount"
-              :class="`Mount_Body_${member.items.currentMount}`"
+            <span data-app-habitica v-if="member.mount"
+              :class="`Mount_Body_${member.mount}`"
             ></span>
 
             <span data-app-habitica :class="`hair_flower_${member.preferences.hair.flower}`"></span>
@@ -84,23 +84,24 @@
           </div>
         </div>
 
-        <div style="display: none;">
-          {{ member.username }}: ({{ Math.round(member.pendingAttack * 100) / 100 }} pending)
-          ({{ member.hp }}/{{ member.hpMax }} HP) ({{ member.level }} lvl) ({{ member.stats.class }})
-        </div>
+        <div class="member-shadow" :class="{ mount: member.mount }"></div>
       </div>
     </div>
 
     <div v-if="quest" class="boss-container">
-      <div class="boss-life-bar">
-        <div class="life-bar-fill" :style="`width: ${bossHpPercent}%;`"></div>
-        <div
-          class="life-bar-pending"
-          :style="`left: ${bossHpPercent}%; width: ${bossPendingPercent}%;`"
-        ></div>
+      <div class="boss">
+        <div class="boss-life-bar">
+          <div class="life-bar-fill" :style="`width: ${bossHpPercent}%;`"></div>
+          <div
+            class="life-bar-pending"
+            :style="`left: ${bossHpPercent}%; width: ${bossPendingPercent}%;`"
+          ></div>
+        </div>
+
+        <div data-app-habitica class="quest-boss" :class="[`quest_${quest.key}`]"></div>
       </div>
 
-      <div data-app-habitica class="quest-boss" :class="[`quest_${quest.key}`]"></div>
+      <div class="boss-shadow"></div>
     </div>
   </div>
 </template>
@@ -191,7 +192,12 @@ export default {
 
 @keyframes boss-updown {
   from { transform: translateY(0); }
-  to { transform: translateY(10px); }
+  to { transform: translateY(-10px); }
+}
+
+@keyframes boss-shadow-updown {
+  from { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.5); opacity: 1; }
+  to { box-shadow: 0 0 13px 9px rgba(0, 0, 0, 0.5); opacity: 0.5; }
 }
 
 .app-habitica {
@@ -219,8 +225,8 @@ export default {
     justify-content: center;
 
     .member {
+      position: relative;
       width: 140px;
-      margin: 0 15px;
       padding-top: 15px;
       color: white;
 
@@ -233,16 +239,54 @@ export default {
         text-overflow: ellipsis;
         text-align: center;
       }
+
+      .member-shadow {
+        z-index: -1;
+        position: absolute;
+        bottom: 54px;
+        left: 60px;
+        width: 40px;
+        height: 10px;
+        margin: 10px auto 0;
+        border-radius: 50%;
+        background: #000;
+        box-shadow: 0 0 13px 9px rgba(0, 0, 0, 0.5);
+        opacity: 0.4;
+
+        &.mount {
+          left: 47px;
+          bottom: 18px;
+          width: 80px;
+          height: 20px;
+           opacity: 0.5;
+        }
+      }
     }
   }
 
   .boss-container {
-    margin-top: 120px;
-    animation: boss-updown 2s linear alternate infinite;
-  }
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding-top: 10px;
 
-  .quest-boss {
-    margin: 0 auto;
+    .boss {
+      animation: boss-updown 2s linear alternate infinite;
+
+      .quest-boss {
+        margin: 0 auto;
+      }
+    }
+
+    .boss-shadow {
+      width: 80px;
+      height: 15px;
+      margin: 10px auto 0;
+      border-radius: 50%;
+      background: #000;
+      animation: boss-shadow-updown 2s linear alternate infinite;
+    }
   }
 
   .life-bar, .boss-life-bar {
