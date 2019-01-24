@@ -1,3 +1,12 @@
+## [0.6.1](https://github.com/CodeCorico/palantir/compare/v0.6.0...v0.6.1) (2019-01-24)
+
+
+### Bug Fixes
+
+* **app github-pulls:** use github /reviews and /status api to display the icons states ([5bc0268](https://github.com/CodeCorico/palantir/commit/5bc0268))
+
+
+
 # [0.6.0](https://github.com/CodeCorico/palantir/compare/v0.5.1...v0.6.0) (2019-01-23)
 
 
