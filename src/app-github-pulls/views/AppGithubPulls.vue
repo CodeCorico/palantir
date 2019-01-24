@@ -55,7 +55,7 @@
               ></div>
 
               <div
-                v-if="pull.mergeableState !== 'clean'"
+                v-if="pull.mergeableState !== 'clean' && pull.mergeableState !== 'unknown'"
                 class="pull-state"
                 :class="[`state-${pull.mergeableState}`]"
               >
@@ -65,6 +65,7 @@
                 ></i>
                 <i v-if="pull.mergeableState === 'unstable'" class="fas fa-skull-crossbones"></i>
                 <i v-if="pull.mergeableState === 'comments'" class="fas fa-comment-alt"></i>
+                <i v-if="pull.mergeableState === 'pending'" class="fas fa-cog"></i>
               </div>
 
               <github-pull-chart :values="pull.lines"></github-pull-chart>
@@ -193,6 +194,11 @@ $pullReviewerAnimationCount: 10;
   from { opacity: 0.9; }
   50% { opacity: 0.2; }
   to { opacity: 0.9; }
+}
+
+@keyframes pull-state-rotate-animation {
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes pull-new-anim-notif {
@@ -348,6 +354,14 @@ $pullReviewerAnimationCount: 10;
 
       &.state-unstable {
         color: #f73f3d;
+      }
+
+      &.state-pending {
+        color: #4bd1c4;
+
+        i {
+          animation: pull-state-rotate-animation 1.75s linear infinite;
+        }
       }
     }
 

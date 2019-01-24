@@ -11,7 +11,16 @@ const fetchRepo = async (key, repo) => {
 };
 
 const fetchPull = async (pullSummary) => {
-  const { data } = await github.get(pullSummary.url);
+  const pull = await github.get(pullSummary.url);
+  const data = Object.assign({}, pull.data);
+
+  const reviews = await github.get(`${pullSummary.url}/reviews`);
+  data.pReviews = reviews.data;
+
+  if (data.statuses_url) {
+    const status = await github.get(data.statuses_url);
+    data.pStatus = status.data;
+  }
 
   data.palantirScope = pullSummary.palantirScope;
 
@@ -80,8 +89,38 @@ const store = {
           mergeableState: null,
         };
 
-        let mergeableState = pullRaw.review_comments ? 'comments' : pullRaw.mergeable_state;
-        mergeableState = mergeableState === 'unknown' ? 'clean' : mergeableState;
+        let mergeableState = 'clean';
+
+        // C.I. check
+        if (pullRaw.pStatus && pullRaw.pStatus.length) {
+          if (pullRaw.pStatus[0].state === 'error') {
+            mergeableState = 'unstable';
+          } else if (pullRaw.pStatus[0].state === 'pending') {
+            mergeableState = 'pending';
+          }
+        }
+
+        // Review changes requests check
+        if (mergeableState === 'clean' && pullRaw.pReviews && pullRaw.pReviews.length) {
+          let changesRequested = 0;
+
+          pullRaw.pReviews.forEach((review) => {
+            if (review.state === 'CHANGES_REQUESTED') {
+              changesRequested++;
+            } else if (review.state === 'APPROVED') {
+              changesRequested--;
+            }
+          });
+
+          if (changesRequested > 0) {
+            mergeableState = 'comments';
+          }
+        }
+
+        // Github mergeable state
+        if (mergeableState === 'clean') {
+          mergeableState = pullRaw.mergeable_state;
+        }
 
         const oldMergeableState = newCachePulls[pullRaw.id].mergeableState;
 
