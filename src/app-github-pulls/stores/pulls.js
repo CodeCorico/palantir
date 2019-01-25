@@ -102,17 +102,17 @@ const store = {
 
         // Review changes requests check
         if (mergeableState === 'clean' && pullRaw.pReviews && pullRaw.pReviews.length) {
-          let changesRequested = 0;
+          const requests = {};
 
           pullRaw.pReviews.forEach((review) => {
             if (review.state === 'CHANGES_REQUESTED') {
-              changesRequested++;
+              requests[review.user.id] = true;
             } else if (review.state === 'APPROVED') {
-              changesRequested--;
+              delete requests[review.user.id];
             }
           });
 
-          if (changesRequested > 0) {
+          if (Object.keys(requests).length > 0) {
             mergeableState = 'comments';
           }
         }
