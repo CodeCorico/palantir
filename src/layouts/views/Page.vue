@@ -133,8 +133,8 @@ export default {
 
       this.$store.dispatch('Page/version');
 
-      // 5min
-      setTimeout(() => this.checkVersion(), 5 * 60 * 1000);
+      // 1h
+      setTimeout(() => this.checkVersion(), 3600 * 1000);
     },
   },
 };
