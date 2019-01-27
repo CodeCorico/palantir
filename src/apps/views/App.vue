@@ -16,6 +16,7 @@ import AppGithubPulls from '@/app-github-pulls/views/AppGithubPulls';
 import AppTimeline from '@/app-timeline/views/AppTimeline';
 import AppFrame from '@/app-frame/views/AppFrame.vue';
 import AppPages from '@/app-pages/views/AppPages.vue';
+import AppGoogleCalendar from '@/app-google-calendar/views/AppGoogleCalendar.vue';
 
 export default {
   name: 'app',
@@ -26,6 +27,7 @@ export default {
     AppTimeline,
     AppFrame,
     AppPages,
+    AppGoogleCalendar,
   },
   mounted() {
     this.routeUpdated();
