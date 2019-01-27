@@ -155,6 +155,27 @@ body {
   padding: 0;
   color: $colorText;
 }
+
+a, a:hover, a:visited, a:focus, button.link {
+  font-family: Montserrat, Helvetica, Arial, sans-serif;
+  outline: none;
+  color: #fd7d34;
+  text-decoration: none;
+}
+
+a:hover, button.link:hover {
+  color: #ef605c;
+}
+
+button.link {
+  cursor: pointer;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  font-size: 14px;
+}
 </style>
 
 <style lang="scss" scoped>
