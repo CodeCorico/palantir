@@ -42,16 +42,6 @@ export default {
     appLocalRoute: String,
   },
   mounted() {
-    // Mermaid.initialize({
-    //   startOnLoad: false,
-    //   cloneCssStyles: false,
-    //   leftMargin: 0,
-    //   flowchart: {
-    //     useMaxWidth: false,
-    //     htmlLabels: true,
-    //   },
-    // });
-
     this.clickEvent = document.ontouchstart ? 'touchstart' : 'click';
     document.addEventListener(this.clickEvent, this.clickHandler, false);
 
