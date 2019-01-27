@@ -1,3 +1,21 @@
+# [0.7.0](https://github.com/CodeCorico/palantir/compare/v0.6.1...v0.7.0) (2019-01-27)
+
+
+### Bug Fixes
+
+* **app github-pulls:** check changes requested by user ([fd916d8](https://github.com/CodeCorico/palantir/commit/fd916d8))
+* **layout page:** check for new version every hour instead of 5 minutes ([85cf94f](https://github.com/CodeCorico/palantir/commit/85cf94f))
+
+
+### Features
+
+* **app google-calendar:** create the app ([6946566](https://github.com/CodeCorico/palantir/commit/6946566))
+* **app grid:** create the app ([2c0e4b4](https://github.com/CodeCorico/palantir/commit/2c0e4b4))
+* **apps:** add a switch tasks mutation ([f56bdc8](https://github.com/CodeCorico/palantir/commit/f56bdc8))
+* **layout page:** add global links style ([07a2c6a](https://github.com/CodeCorico/palantir/commit/07a2c6a))
+
+
+
 ## [0.6.1](https://github.com/CodeCorico/palantir/compare/v0.6.0...v0.6.1) (2019-01-24)
 
 
