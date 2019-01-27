@@ -113,6 +113,23 @@ const store = {
 
       state.tasks = state.tasks.map(task => task);
     },
+    mutateTasksEnable: (state, { appsIds, enable }) => {
+      Object.keys(state.apps).forEach((id) => {
+        const app = state.apps[id];
+
+        if (appsIds.indexOf(id) > -1) {
+          (app.tasks || []).forEach((task) => {
+            task.disabled = !enable;
+            task.status = enable ? 'idle' : 'disabled';
+
+            cron.update(task.id, {
+              disabled: task.disabled,
+              status: task.status,
+            });
+          });
+        }
+      });
+    },
   },
   actions: {
     config({ commit }, payload) {
@@ -120,6 +137,9 @@ const store = {
     },
     activeApp({ commit }, appId) {
       commit('updateActiveApp', appId);
+    },
+    switchTasks({ commit }, { appsIds, enable }) {
+      commit('mutateTasksEnable', { appsIds, enable });
     },
   }
 };
