@@ -62,7 +62,11 @@
       ]
     ],
     "plugins": [
-      "import-glob"
+      "import-glob",
+      ["prismjs", {
+        "languages": ["javascript", "json", "css", "markup", "bash"],
+        "plugins": ["line-numbers"]
+      }]
     ]
   },
   "eslintConfig": {
