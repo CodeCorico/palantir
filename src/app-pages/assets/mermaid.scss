@@ -1,3 +1,10 @@
+$readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial, sans-serif;
+
+text, tspan, .label {
+  font-family: $readFont !important;
+  font-size: 16px !important;
+}
+
 g.cluster rect {
   fill: none !important;
   rx: 0 !important;
@@ -23,23 +30,19 @@ g.cluster text {
 .edgePath .path,
 .messageLine0, .messageLine1 {
   stroke: #949494 !important;
-  stroke-width: 3 !important;
+  stroke-width: 2 !important;
   stroke-dasharray: 5,5 !important;
   stroke-dashoffset: 50 !important;
   animation: dash 5s linear infinite;
 }
 
-.messageLine0, .messageLine1 {
-  stroke: #ccc !important;
-}
-
 #arrowhead, .messageText {
-  fill: #fff !important;
-  font-size: 12px !important;
+  fill: #5f6368 !important;
 }
 
 .activation0, .activation1 {
-  fill: #666 !important;
+  fill: #ddd !important;
+  stroke: none !important;
 }
 
 .node circle,
@@ -48,14 +51,14 @@ g.cluster text {
 .node rect,
 .node rect,
 .actor {
-  fill: none !important;
+  fill: #111540 !important;
   stroke: #666 !important;
   stroke-width: 1px !important;
-  rx: 2 !important;
-  ry: 2 !important;
+  rx: 5 !important;
+  ry: 5 !important;
 
   tspan {
-    stroke: #ccc !important;
+    stroke: none !important;
   }
 }
 
@@ -64,14 +67,17 @@ g.cluster text {
 .node polygon,
 .node rect,
 .node rect {
-  stroke: #ccc !important;
+  stroke: none !important;
 }
 
 .actor {
-  fill: #111 !important;
-  font-size: 12px !important;
+  fill: #fff !important;
   text-transform: uppercase !important;
-  color: #fff !important;
+  stroke: #5f6368 !important;
+
+  tspan {
+    fill: #5f6368 !important;
+  }
 }
 
 .node div {
@@ -82,57 +88,67 @@ g.cluster text {
 }
 
 .edgeLabel {
-  background-color: #111 !important;
-  color: #9d9d9d !important;
+  background-color: #fff !important;
+  color: #5f6368 !important;
 }
 
 .note {
-  fill: rgba(17, 17, 17, 0.6) !important;
+  fill: rgba(105, 152, 252, 0.2) !important;
   stroke: transparent !important;
 }
 
 .noteText, .noteText tspan {
-  fill: #FFEB3B !important;
-  font-size: 12px !important;
-  font-family: 'Roboto', sans-serif !important;
+  fill: #5f6368 !important;
+  font-family: $readFont !important;
 }
 
 .loopText, .loopText tspan {
-  fill: #BBDEFB !important;
-  font-size: 13px !important;
-  font-family: 'Roboto', sans-serif !important;
+  fill: #904cba !important;
+  font-family: $readFont !important;
 }
 
 .loopLine {
   stroke-width: 1px !important;
-  stroke: #BBDEFB !important;
+  stroke: #904cba !important;
 }
 
 .labelBox {
-  fill: #BBDEFB !important;
-  stroke: #BBDEFB !important;
+  fill: #904cba !important;
+  stroke: #904cba !important;
+}
+
+.labelText tspan {
+  fill: #fff !important;
 }
 
 /* SPECIAL CLASSES */
-
-.node.app > rect {
-  fill: #73b955 !important;
-  stroke: #73b955 !important;
+.node.success, .node.warning {
   cursor: pointer;
+
+  div {
+    cursor: pointer;
+    color: #fff;
+  }
 }
 
-.node.app div {
-  cursor: pointer;
+.node.success > rect {
+  fill: #4cbaab !important;
+  stroke: #4cbaab !important;
 }
 
-.node.db > rect {
-  fill: #2e0c57 !important;
-  stroke: #2e0c57 !important;
+.node.warning > rect {
+  fill: #f39d4c !important;
+  stroke: #f39d4c !important;
 }
 
-.node.db-fast > rect {
-  fill: #570C33 !important;
-  stroke: #570C33 !important;
+.node.error > rect {
+  fill: #f672a2 !important;
+  stroke: #f672a2 !important;
+}
+
+.node.special > rect {
+  fill: #904cba !important;
+  stroke: #904cba !important;
 }
 
 .edgeLabel.sequences {

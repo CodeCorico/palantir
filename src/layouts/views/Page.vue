@@ -120,7 +120,11 @@ export default {
       this.checkVersion();
       this.$store.dispatch('Config/load');
     },
-    lockHandler() {
+    lockHandler(isSelected) {
+      if (!isSelected) {
+        return;
+      }
+
       this.$refs.header.toggleLock();
     },
     headerClick() {

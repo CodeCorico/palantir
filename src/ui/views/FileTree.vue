@@ -4,8 +4,7 @@
     :class="{ indented: indent > 0 && !inline, inline }"
   >
     <div class="tree-content" v-for="(item, index) in tree" :key="index">
-      <div :class="{ inline }" v-if="item.path">
-        <i v-if="indent > 0 && !inline" class="folder-indent fas fa-caret-right"></i>
+      <div class="tree-line" :class="{ inline }" v-if="item.path">
         <span v-if="inline" class="file-indent">/</span>
         <span class="label">{{ item.path }}</span>
         <ui-file-tree
@@ -18,12 +17,11 @@
       </div>
       <div
         v-if="item.file"
-        class="file"
+        class="file tree-line"
         :class="{ inline }"
       >
-        <i v-if="indent > 0 && !inline" class="folder-indent fas fa-caret-right"></i>
         <span v-if="inline" class="file-indent">/</span>
-        <router-link :to="`${baseUrl}/${item.link}`">
+        <router-link :to="`${baseUrl}/${item.link}`" @click.native="$emit('navigate')">
           <i class="file-icon" :class="fileIcon(item.file)"></i>
           <span class="label">{{ fileName(item.file) }}</span>
         </router-link>
@@ -88,9 +86,11 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
     position: relative;
     user-select: none;
     display: inline;
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 1.4;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #5f6368;
 
     .label {
       display: inline-block;
@@ -102,14 +102,8 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
     }
   }
 
-  .folder-indent {
-    position: absolute;
-    left: -11px;
-    top: 4px;
-    transform: rotate(45deg);
-    transform-origin: center;
-    font-size: 14px;
-    opacity: 0.2;
+  .tree-line {
+    padding: 4px 0;
   }
 
   .file-indent {
@@ -126,7 +120,7 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
     }
 
     a, a:hover, a:visited, a:focus {
-      color: #fdd8c1;
+      color: #fe8033;
       text-decoration: none;
     }
 
@@ -134,7 +128,7 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
       transition: color 0.25s $easeOutQuart;
 
       &:hover {
-        color: #fe8033;
+        color: #d46423;
       }
 
       .file-icon {

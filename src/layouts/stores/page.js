@@ -50,14 +50,21 @@ const store = {
       const { location, close = false } = payload;
 
       let isSelected = false;
-      let handler = false;
 
       state[`${location}Buttons`].forEach((button) => {
+        const wasSelected = button.selected;
         button.selected = !close && button.id === payload.id ? !button.selected : false;
 
+        if (wasSelected && !button.selected && button.handler) {
+          button.handler(false);
+        }
+
         if (button.selected) {
-          handler = button.handler;
           isSelected = true;
+
+          if (button.handler) {
+            button.handler(true);
+          }
 
           if (button.unSelectable) {
             button.selected = false;
@@ -68,10 +75,6 @@ const store = {
       state[`${location}Sidebars`].forEach((sidebar) => {
         sidebar.opened = (isSelected && sidebar.id === payload.id) || false;
       });
-
-      if (handler) {
-        handler();
-      }
     },
     updateButtonDisplay: (state, visible) => {
       ['left', 'right'].forEach((location) => {

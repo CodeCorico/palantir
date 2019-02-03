@@ -32,6 +32,7 @@ const store = {
   namespaced: true,
   state: {
     appRoute: '',
+    appLocalRoute: '',
     base: '',
     content: '',
     summary: [],
@@ -40,36 +41,51 @@ const store = {
   mutations: {
     clear(state) {
       state.appRoute = '';
+      state.appLocalRoute = '';
       state.base = '';
       state.content = '';
       state.summary = [];
       state.glossary = [];
     },
-    updateAppRoute: (state, appRoute) => {
+    updateAppRoute: (state, { appRoute, appLocalRoute }) => {
       state.appRoute = (appRoute || '').replace(/\/$/, '');
+      state.appLocalRoute = (appLocalRoute || '').replace(/\/$/, '');
     },
     updateBase: (state, base) => {
       state.base = (base || '').replace(/\/$/, '');
     },
     updateContent: (state, content) => {
-      state.content = content.replace(/<a\s+href="(.*?)"\s*>/g, (link, match) => {
-        if (!match.match(/.mm?d$/i) || match.match(/^http/i)) {
-          return `<a href="${match}" target="_blank">`;
-        }
+      const imgBase = state.base ? `${state.base}/` : '';
+      let imgRoute = '';
+      if (state.appLocalRoute && state.appLocalRoute.indexOf('/') > -1) {
+        imgRoute = state.appLocalRoute.split('/');
+        imgRoute.pop();
+        imgRoute = `${imgRoute.join('/')}/`;
+      }
 
-        let url = window.location.pathname;
-        if (url.match(/.html$/)) {
-          const split = url.split('/');
-          split.pop();
-          url = split.join('/');
-        }
-        url = !url.match(/\/$/) ? `${url}/` : url;
+      state.content = content
+        .replace(/<a.*?href="(.*?)".*?>/g, (link, match) => {
+          if (!match.match(/.mm?d.html$/i) || match.match(/^http/i)) {
+            return `<a href="${match}" target="_blank">`;
+          }
 
-        let uri = match.replace(/(.mm?d)/i, '$1.html');
-        uri = !uri.match(/^[.|/]/) ? `./${uri}` : uri;
+          let url = window.location.pathname;
+          if (url.match(/.html$/)) {
+            const split = url.split('/');
+            split.pop();
+            url = split.join('/');
+          }
+          url = !url.match(/\/$/) ? `${url}/` : url;
 
-        return `<a local="router-link" href="${url}${uri}">`;
-      });
+          return `<a local="router-link" href="${url}${match}">`;
+        })
+        .replace(/<img.*?src="(.*?)".*?>/g, (img, match) => {
+          if (match.match(/^http/i)) {
+            return img;
+          }
+
+          return img.replace(match, `${imgBase}${imgRoute}${match}`);
+        });
 
       state.summary = [];
 
@@ -93,8 +109,8 @@ const store = {
     },
   },
   actions: {
-    changeAppRoute({ commit }, appRoute) {
-      commit('updateAppRoute', appRoute);
+    changeAppRoute({ commit }, { appRoute, appLocalRoute }) {
+      commit('updateAppRoute', { appRoute, appLocalRoute });
     },
     changeBase({ commit }, base) {
       commit('updateBase', base);

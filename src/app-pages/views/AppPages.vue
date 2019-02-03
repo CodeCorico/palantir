@@ -4,19 +4,17 @@
       <div ref="content" id="content" class="content" v-html="content"></div>
     </ui-scrolls>
 
-    <ui-scrolls ref="sideScrolls" class="side-scrolls">
-      <h2 class="title-summary" v-if="summary.length">Summary</h2>
+    <div class="mask" :class="{ opened: summaryOpened }" @click="closeSummary"></div>
 
+    <ui-scrolls ref="sideScrolls" class="side-scrolls" :class="{ opened: summaryOpened }">
       <ul class="summary" v-if="summary.length">
         <li v-for="(title, index) in summary" :key="index" :class="`level-${title.level}`">
-          <a :href="`#${title.id}`">{{ title.text }}</a>
+          <a :href="`#${title.id}`" @click="closeSummary">{{ title.text }}</a>
         </li>
       </ul>
 
-      <h2 class="title-glossary">Glossary</h2>
-
       <div class="glossary">
-        <ui-file-tree :tree="glossary" :base-url="appRoute"></ui-file-tree>
+        <ui-file-tree :tree="glossary" :base-url="appRoute" @navigate="closeSummary"></ui-file-tree>
       </div>
     </ui-scrolls>
   </div>
@@ -28,6 +26,12 @@ import UiScrolls from '@/ui/views/Scrolls.vue';
 import UiFileTree from '@/ui/views/FileTree.vue';
 import Prism from 'prismjs';
 import Mermaid from 'mermaid';
+
+const SCREEN_SIZES = {
+  tablet: 921,
+  desktop: 1321,
+  large: 1545,
+};
 
 export default {
   name: 'app-pages',
@@ -44,18 +48,23 @@ export default {
   mounted() {
     this.clickEvent = document.ontouchstart ? 'touchstart' : 'click';
     document.addEventListener(this.clickEvent, this.clickHandler, false);
+    window.addEventListener('resize', this.onWindowResize);
 
+    this.onWindowResize();
     this.load();
     this.loadGlossary();
   },
   destroyed() {
     document.removeEventListener(this.clickEvent, this.clickHandler, false);
+    window.removeEventListener('resize', this.onWindowResize);
 
+    this.$store.dispatch('Page/removeSidebar', 'app-pages-menu');
     this.$store.dispatch('Pages/clear');
   },
   data() {
     return {
       clickEvent: null,
+      summaryOpened: false,
     };
   },
   computed: {
@@ -94,10 +103,43 @@ export default {
     },
   },
   methods: {
+    onWindowResize() {
+      const below = this.$el.clientWidth < SCREEN_SIZES.desktop;
+
+      if (below) {
+        this.$store.dispatch('Page/addSidebar', {
+          location: 'left',
+          id: 'app-pages-menu',
+          title: 'Summary',
+          handler: (isSelected) => {
+            this.$set(this, 'summaryOpened', isSelected);
+          },
+          icon: 'fas fa-align-left',
+        });
+
+        return;
+      }
+
+      this.$set(this, 'summaryOpened', false);
+      this.$store.dispatch('Page/removeSidebar', 'app-pages-menu');
+    },
+    closeSummary() {
+      if (!this.summaryOpened) {
+        return;
+      }
+
+      this.$store.dispatch('Page/closeButton', {
+        location: 'left',
+        id: 'app-pages-menu',
+      });
+    },
     load() {
       this.$refs.scrolls.scrollToY(0);
 
-      this.$store.dispatch('Pages/changeAppRoute', this.appRoute);
+      this.$store.dispatch('Pages/changeAppRoute', {
+        appRoute: this.appRoute,
+        appLocalRoute: this.appLocalRoute,
+      });
       this.$store.dispatch('Pages/changeBase', this.config.directory);
       this.$store.dispatch('Pages/load', this.appLocalRoute || this.config.index);
     },
@@ -137,7 +179,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/ui/assets/variables.scss';
-@import '../assets/prism-atom-dark.css';
+@import '../assets/prism-vs.css';
+
+$screenTablet: 921px;
+$screenDesktop: 1321px;
+$screenLarge: 1545px;
 
 $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial, sans-serif;
 
@@ -145,6 +191,8 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
   position: relative;
   box-sizing: border-box;
   height: 100%;
+  background: #fff;
+  color: #5f6368;
 
   .scrolls {
     position: absolute;
@@ -154,20 +202,37 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
     bottom: 0;
   }
 
+  .hr {
+    height: 1px;
+  }
+
   #content.content {
     box-sizing: border-box;
-    max-width: 980px;
+    max-width: 392px;
     margin: 0 auto;
-    padding: 20px 30px;
-    background: rgba(0, 0, 0, 0.3);
+    padding: 80px 16px 0;
+
+    @media screen and (min-width: $screenTablet) {
+      max-width: 840px;
+      padding: 80px 40px 40px;
+    }
+
+    @media screen and (min-width: $screenDesktop) {
+      max-width: 1120px;
+      padding: 80px 40px 40px 320px;
+    }
+
+    @media screen and (min-width: $screenLarge) {
+      max-width: 1400px;
+      padding: 80px 320px 0;
+    }
 
     /deep/ {
       font-family: $readFont;
-      font-size: 14px;
-      font-size: 17px;
-      font-weight: 300;
+      font-size: 16px;
+      font-weight: 400;
       line-height: 1.5;
-      color: #fff;
+      color: #5f6368;
 
       .mermaid {
         text-align: center;
@@ -176,11 +241,13 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
 
       @import '../assets/mermaid.scss';
 
-      > *:first-child {
-        margin-top: 0 !important;
+      pre[class*="language-"] {
+        border-radius: 0;
+        box-shadow: 0 0 8px 0 rgba(0,0,0,.08), 0 0 15px 0 rgba(0,0,0,.02), 0 0 20px 4px rgba(0,0,0,.06);
       }
 
       a, a:hover, a:visited, a:focus {
+        font-family: $readFont;
         color: #fe8033;
       }
 
@@ -188,23 +255,48 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
         margin: 0 0 16px;
       }
 
+      img {
+        max-width: 100%;
+      }
+
+      hr {
+        height: 1px;
+        width: 100%;
+        margin: 80px 0;
+        background: rgba(0,0,0,.12);
+        border: 0;
+      }
+
       h1 {
-        font-size: 32px;
-        line-height: 40px;
-        font-weight: 600;
-        margin-bottom: 26px;
+        margin: 40px 0 16px;
+        font-size: 60px;
+        font-weight: 400;
+        line-height: 1.2;
+        color: #202124;
       }
 
       h2 {
-        font-size: 24px;
+        margin: 48px 0 24px;
+        font-size: 32px;
+        font-weight: 400;
+        line-height: 1.2;
+        color: #202124;
       }
 
       h3 {
-        font-size: 20px;
+        margin: 24px 0 16px;
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 1.2;
+        color: #202124;
       }
 
       h4 {
-        font-size: 16px;
+        margin: 24px 0 16px;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 1.2;
+        color: #5f6368;
       }
 
       table {
@@ -233,86 +325,106 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
         font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
         padding: 2px 5px 3px;
         font-variant-ligatures: none;
+        font-size: 14px;
         white-space: normal;
-        color: #f5aa93;
-        background-color: rgba(0, 0, 0, 0.8);
-        border: 1px solid #1c3642;
+        color: #af3b17;
+        background: #f2f2f2;
         border-radius: 3px;
       }
     }
   }
 
+  .mask {
+    display: none;
+
+    &.opened {
+      z-index: 1;
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,.5);
+    }
+  }
+
   .side-scrolls {
+    z-index: 2;
     position: absolute;
     top: 0;
-    left: 0;
+    left: -280px;
     bottom: 0;
-    width: 240px;
-    background: rgba(0, 0, 0, 0.8);
-  }
+    width: 280px;
+    background: #fff;
+    transition: left 0.25s $easeOutQuart;
 
-  .title-summary, .title-glossary {
-    position: relative;
-    margin: 0;
-    padding: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.3);
-    text-transform: uppercase;
-  }
+    &.opened {
+      left: 0;
+    }
 
-  .title-summary {
-    background: #0b161b;
+    @media screen and (min-width: $screenDesktop) {
+      left: 0;
+    }
   }
 
   .summary {
     box-sizing: border-box;
     margin: 0;
-    padding: 0 20px 20px;
-    font-size: 16px;
-    list-style: square inside;
+    padding: 40px 0;
+    list-style: none;
     font-family: $readFont;
-    background: #0b161b;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #5f6368;
+    border-bottom: 1px solid rgba(0, 0, 0, .12);
 
     li {
       user-select: none;
-      list-style-type: square;
-      font-weight: 300;
-      line-height: 1.4;
+      list-style-type: none;
 
       a, a:hover, a:visited, a:focus {
-        color: #fff;
+        color: #5f6368;
         text-decoration: none;
       }
 
       a {
+        display: block;
+        padding: 10px 48px 10px 24px;
+        font-family: $readFont;
+        font-weight: 400;
         transition: color 0.25s $easeOutQuart;
 
         &:hover {
           color: #fe8033;
+          background: #f5f5f5;
         }
       }
-    }
 
-    .level-1 {
-      list-style: none;
-      margin-bottom: 5px;
-      font-weight: 400;
-      font-size: 20px;
-    }
+      &.level-1 {
+        font-size: 18px;
+        line-height: 27px;
 
-    .level-3 {
-      padding-left: 15px;
-    }
+        a, a:hover, a:visited, a:focus {
+          font-weight: 600;
+          color: #202124;
+        }
+      }
 
-    .level-4 {
-      padding-left: 30px;
+      &.level-3 a {
+        padding-left: 48px;
+      }
+
+      &.level-4 a {
+        padding-left: 72px;
+      }
     }
   }
 
   .glossary {
-    padding: 0 20px 20px;
+    padding: 40px 20px;
   }
 }
 </style>

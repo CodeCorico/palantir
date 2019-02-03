@@ -60,7 +60,18 @@ const handler = (argv) => {
 
     const content = contentProcesses[fileType.replace('.', '')](
       fs.readFileSync(file, 'utf8'),
-      path.dirname(path.resolve(file)));
+      path.dirname(path.resolve(file))
+    )
+      .replace(/<a\s+href="(.*?)"\s*>/g, (link, match) => {
+        if (!match.match(/.mm?d$/i) || match.match(/^http/i)) {
+          return `<a href="${match}" target="_blank">`;
+        }
+
+        let uri = match.replace(/(.mm?d)/i, '$1.html');
+        uri = !uri.match(/^[.|/]/) ? `./${uri}` : uri;
+
+        return `<a local="router-link" href="${uri}">`;
+      });
 
     const newFile = `${file.replace(origin, '')}.html`;
     const newFilePath = `${destination}/${newFile}`;
