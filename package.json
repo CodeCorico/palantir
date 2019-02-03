@@ -36,6 +36,7 @@
     "@vue/cli-service": "^3.0.5",
     "babel-eslint": "^10.0.1",
     "babel-plugin-import-glob": "^2.0.0",
+    "babel-plugin-prismjs": "^1.0.2",
     "babel-preset-vue": "^2.0.2",
     "conventional-changelog-cli": "^2.0.11",
     "eslint": "^5.8.0",
