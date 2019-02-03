@@ -139,7 +139,8 @@ export default {
       let hours = minutesLeft < 60 ? '' : Math.floor(minutesLeft / 60);
       hours = hours ? `${hours}h` : '';
       let minutes = minutesLeft % 60;
-      minutes = hours ? ` ${minutes || ''}` : `${minutes}m`;
+      minutes = minutes ? `${minutes}m` : '';
+      minutes = hours && minutes ? ` ${minutes}` : minutes;
 
       return `${hours}${minutes}`;
     },

@@ -64,7 +64,7 @@ const loadCalendars = async ({ calendars, commit }) => {
   const eventsObj = {};
   calendarsEvents.forEach((calendarEvents) => {
     calendarEvents.forEach((event) => {
-      if (event.visibility === 'private' || event.status === 'cancelled') {
+      if (event.visibility === 'private' || event.status !== 'confirmed') {
         return;
       }
 
@@ -75,7 +75,9 @@ const loadCalendars = async ({ calendars, commit }) => {
       let hours = dateStart.getHours();
       let minutes = dateStart.getMinutes();
       const totalStart = (hours * 60) + minutes;
-      const total = ((dateEnd.getHours() * 60) + dateEnd.getMinutes()) - totalStart;
+      const total = dateEnd.getDate() !== dateStart.getDate()
+        ? (23 * 60) + 59 - totalStart
+        : ((dateEnd.getHours() * 60) + dateEnd.getMinutes()) - totalStart;
       eventsObj[event.id].pTime = {
         hours: Math.floor(total / 60),
         minutes: Math.round(total % 60),
