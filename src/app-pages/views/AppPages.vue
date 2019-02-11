@@ -78,6 +78,7 @@ export default {
         }
 
         this.$refs.scrolls.refresh();
+        this.$refs.scrolls.scrollToY(0);
       });
 
       return this.$store.state.Pages.content;
@@ -134,7 +135,6 @@ export default {
       });
     },
     load() {
-      this.$refs.scrolls.scrollToY(0);
 
       this.$store.dispatch('Pages/changeAppRoute', {
         appRoute: this.appRoute,
