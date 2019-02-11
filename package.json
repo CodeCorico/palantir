@@ -1,6 +1,6 @@
 {
   "name": "palantir",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "private": true,
   "bin": {
     "palantir": "src/cli/index.js"
@@ -66,10 +66,21 @@
     ],
     "plugins": [
       "import-glob",
-      ["prismjs", {
-        "languages": ["javascript", "json", "css", "markup", "bash"],
-        "plugins": ["line-numbers"]
-      }]
+      [
+        "prismjs",
+        {
+          "languages": [
+            "javascript",
+            "json",
+            "css",
+            "markup",
+            "bash"
+          ],
+          "plugins": [
+            "line-numbers"
+          ]
+        }
+      ]
     ]
   },
   "eslintConfig": {

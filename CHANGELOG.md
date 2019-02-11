@@ -1,3 +1,29 @@
+# [0.8.0](https://github.com/CodeCorico/palantir/compare/v0.7.0...v0.8.0) (2019-02-11)
+
+
+### Bug Fixes
+
+* **app google-calendar:** better events display ([13d0191](https://github.com/CodeCorico/palantir/commit/13d0191))
+* **app pages:** scroll on top after the page is loaded ([39e6f18](https://github.com/CodeCorico/palantir/commit/39e6f18))
+* **ui variables:** change the page background ([a80a2a2](https://github.com/CodeCorico/palantir/commit/a80a2a2))
+
+
+### Features
+
+* **app pages:** add custom columns display for html markdown ([5c41374](https://github.com/CodeCorico/palantir/commit/5c41374))
+* **app pages:** add json and bash code styles ([14c597e](https://github.com/CodeCorico/palantir/commit/14c597e))
+* **app pages:** don't add a title in summary when it contains summary="false" ([387fbc7](https://github.com/CodeCorico/palantir/commit/387fbc7))
+* **app pages:** new pages design ([8bde84e](https://github.com/CodeCorico/palantir/commit/8bde84e))
+
+
+### BREAKING CHANGES
+
+* **app pages:** The new design is inspired by the Material.io doc.
+It manages relative images, better code style support and devices screen
+sizes
+
+
+
 # [0.7.0](https://github.com/CodeCorico/palantir/compare/v0.6.1...v0.7.0) (2019-01-27)
 
 
