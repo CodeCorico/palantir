@@ -1,0 +1,5 @@
+# Configure the Palantir
+
+Introduction
+
+---
