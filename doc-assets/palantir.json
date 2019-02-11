@@ -1,0 +1,26 @@
+{
+  "apps": {
+    "palantir-docs": {
+      "type": "pages",
+      "config": {
+        "directory": "/docs",
+        "index": "README.md.html"
+      }
+    }
+  },
+  "menu": [{
+    "id": "menu-palantir",
+    "title": "Palantir",
+    "sections": [{
+      "id": "section-palantir",
+      "title": "Palantir",
+      "links": [{
+        "root": true,
+        "id": "link-palantir-docs",
+        "title": "Palantir Docs",
+        "icon": "fas fa-book",
+        "app": "palantir-docs"
+      }]
+    }]
+  }]
+}
