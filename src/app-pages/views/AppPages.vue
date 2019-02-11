@@ -135,7 +135,6 @@ export default {
       });
     },
     load() {
-
       this.$store.dispatch('Pages/changeAppRoute', {
         appRoute: this.appRoute,
         appLocalRoute: this.appLocalRoute,
@@ -210,21 +209,21 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
     box-sizing: border-box;
     max-width: 392px;
     margin: 0 auto;
-    padding: 80px 16px 0;
+    padding: 80px 16px;
 
     @media screen and (min-width: $screenTablet) {
       max-width: 840px;
-      padding: 80px 40px 40px;
+      padding: 80px 40px;
     }
 
     @media screen and (min-width: $screenDesktop) {
       max-width: 1120px;
-      padding: 80px 40px 40px 320px;
+      padding: 80px 40px 80px 320px;
     }
 
     @media screen and (min-width: $screenLarge) {
       max-width: 1400px;
-      padding: 80px 320px 0;
+      padding: 80px 320px;
     }
 
     /deep/ {
@@ -330,6 +329,60 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
         color: #af3b17;
         background: #f2f2f2;
         border-radius: 3px;
+      }
+
+      .row {
+        margin: 40px 0;
+
+        &:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        h3 {
+          margin: 10px 0 4px;
+          color: #5f6368;
+          line-height: 20px;
+          font-size: 14px;
+          text-transform: uppercase;
+        }
+
+        h4 {
+          margin: 8px 0 0;
+          font-size: 20px;
+        }
+
+        h3 a, h4 a {
+          color: #5f6368;
+
+          &:hover {
+            color: #fe8033;
+          }
+        }
+      }
+
+      .column, .columns {
+        width: 100%;
+        float: left;
+        box-sizing: border-box;
+      }
+
+      @media screen and (min-width: $screenTablet) {
+        .column, .columns { margin-left: 4%; }
+        .column:first-child, .columns:first-child { margin-left: 0; }
+        .one.column, .one.columns { width: 4.66666666667%; }
+        .two.columns { width: 13.3333333333%; }
+        .three.columns { width: 22%; }
+        .four.columns { width: 30.6666666667%; }
+        .five.columns { width: 39.3333333333%; }
+        .six.columns { width: 48%; }
+        .seven.columns { width: 56.6666666667%; }
+        .eight.columns { width: 65.3333333333%; }
+        .nine.columns { width: 74.0%; }
+        .ten.columns { width: 82.6666666667%; }
+        .eleven.columns { width: 91.3333333333%; }
+        .twelve.columns { width: 100%; margin-left: 0; }
       }
     }
   }
