@@ -95,6 +95,10 @@ const store = {
           return;
         }
 
+        if (h.match(/summary="false"/i)) {
+          return;
+        }
+
         const level = text[1];
         text = unescapeHtml(text[2].replace(/<(?:.|\n)*?>/g, ''));
 
