@@ -121,7 +121,7 @@ export default {
   },
   methods: {
     playChanges() {
-      const changesEvents = ['new', 'unclean', 'merged'];
+      const changesEvents = ['new', 'merged', 'unclean'];
 
       for (let i = 0; i < changesEvents.length; i++) {
         const name = changesEvents[i];
