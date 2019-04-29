@@ -125,7 +125,9 @@ const store = {
         const oldMergeableState = newCachePulls[pullRaw.id].mergeableState;
 
         if (!changes.unclean) {
-          changes.unclean = oldMergeableState === 'clean' && mergeableState !== 'clean';
+          changes.unclean = oldMergeableState === 'clean'
+            && mergeableState !== 'clean'
+            && mergeableState !== 'pending';
         }
 
         newCachePulls[pullRaw.id].mergeableState = mergeableState;
