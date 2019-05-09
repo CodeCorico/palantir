@@ -30,6 +30,8 @@ const fetchPull = async (pullSummary) => {
 const sortByDate = arr =>
   arr.sort((a, b) => a.createdAt < b.createdAt ? -1 : (a.createdAt > b.createdAt ? 1 : 0));
 
+const sortWIP = arr => arr.sort(a => a.title.match(/^\[WIP\]/gi) ? -1 : 0);
+
 const store = {
   namespaced: true,
   state: {
@@ -182,6 +184,7 @@ const store = {
       state.groups = Object.keys(groups).map(title => groups[title]);
 
       sortByDate(state.groups);
+      sortWIP(state.groups);
     },
   },
   actions: {
