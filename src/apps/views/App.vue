@@ -17,6 +17,7 @@ import AppTimeline from '@/app-timeline/views/AppTimeline';
 import AppFrame from '@/app-frame/views/AppFrame.vue';
 import AppPages from '@/app-pages/views/AppPages.vue';
 import AppGoogleCalendar from '@/app-google-calendar/views/AppGoogleCalendar.vue';
+import AppTrello from '@/app-trello/views/AppTrello.vue';
 import AppGrid from '@/app-grid/views/AppGrid.vue';
 
 export default {
@@ -29,6 +30,7 @@ export default {
     AppFrame,
     AppPages,
     AppGoogleCalendar,
+    AppTrello,
     AppGrid,
   },
   mounted() {

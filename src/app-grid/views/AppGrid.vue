@@ -23,6 +23,7 @@ import AppTimeline from '@/app-timeline/views/AppTimeline';
 import AppFrame from '@/app-frame/views/AppFrame.vue';
 import AppPages from '@/app-pages/views/AppPages.vue';
 import AppGoogleCalendar from '@/app-google-calendar/views/AppGoogleCalendar.vue';
+import AppTrello from '@/app-trello/views/AppTrello.vue';
 
 export default {
   name: 'app-grid',
@@ -33,6 +34,7 @@ export default {
     AppFrame,
     AppPages,
     AppGoogleCalendar,
+    AppTrello,
   },
   props: {
     config: Object,
