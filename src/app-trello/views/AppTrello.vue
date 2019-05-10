@@ -135,7 +135,7 @@ export default {
 
   .done {
     position: absolute;
-    top: -3px;
+    bottom: -20px;
     right: 0;
     color: #61bd4f;
     font-size: 70px;
