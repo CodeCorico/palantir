@@ -192,35 +192,36 @@ export default {
   &.locked.appear-sb-2 {
     top: -60px;
 
+    @keyframes header-lock {
+      49% { top: 16px; left: 50%; transform: translateX(-50%); }
+      50% { top: 16px; left: 100%; transform: translateX(-100%); }
+      100% { top: 76px; left: 100%; transform: translateX(-100%); }
+    }
+
     h1 {
       cursor: pointer;
-      top: 76px;
-      transform: translateX(-100%);
-      left: 100%;
-      width: 244px;
+      animation: header-lock 1s $easeOutQuart forwards;
+    }
+
+    @keyframes logo-lock {
+      49% { position: relative; top: auto; right: auto; margin: -26px 10px 0 0; transform: translateY(-70px) translateX(47px); }
+      50% { position: absolute; top: -18px; right: -2px; margin: 0; transform: scale(0.7); }
+      100% { position: absolute; top: -18px; right: -2px; margin: 0; transform: scale(0.7); }
     }
 
     .logo {
       z-index: 1;
-      float: right;
+      animation: logo-lock 1s $easeOutQuart forwards;
+    }
+
+    @keyframes title-lock {
+      49% { width: auto; margin-top: 0; padding: 0; font-size: 23px; background: none; }
+      50% { width: 118px; margin-top: 5px; padding: 5px 25px 5px 10px; font-size: 19px; background: $colorBg; }
+      100% { width: 118px; margin-top: 5px; padding: 5px 25px 5px 10px; font-size: 19px; background: $colorBg; }
     }
 
     .title {
-      display: inline-block;
-      width: 136px;
-      margin-top: -2px;
-      margin-right: -24px;
-      padding: 5px 30px 5px 10px;
-      background: $colorBg;
-    }
-
-    .date-time {
-      font-size: 22px;
-      bottom: 16px;
-    }
-
-    .right {
-      right: 157px;
+      animation: title-lock 1s $easeOutQuart forwards;
     }
   }
 
@@ -239,14 +240,11 @@ export default {
     top: 16px;
     left: 50%;
     height: 25px;
-    width: 244px;
+    width: 194px;
     transform: translateX(-50%);
     margin: 0;
     padding: 0;
-    font-size: 23px;
     font-weight: 500;
-    transform: translateZ(0);
-    transition: all 0.35s $easeOutQuart;
   }
 
   .logo, .title {
@@ -305,6 +303,7 @@ export default {
     float: left;
     transform: translateX(-47px);
     opacity: 0;
+    font-size: 23px;
   }
 
   .header-button {
