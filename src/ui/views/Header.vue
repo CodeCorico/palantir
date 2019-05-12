@@ -1,7 +1,7 @@
 <template>
   <header
     class="ui-header"
-    :class="[`appear-sb-${appearSb}`, { bigger: locked }]"
+    :class="[`appear-sb-${appearSb}`, { locked }]"
     @click.self="$emit('click')"
   >
     <div class="left">
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="title">Palantir</div>
+      <div class="title">{{ locked ? dateTime : 'Palantir' }}</div>
     </h1>
 
     <div class="right">
@@ -150,14 +150,12 @@ export default {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   // background: $colorPanelLighter;
   background: rgba($colorPanelDarker, 0.7);
-  transition: height 0.35s $easeOutQuart;
+  transition: height 0.35s $easeOutQuart, top 0.35s $easeOutQuart;
 
   &.appear-sb-0, &.appear-sb-1, &.appear-sb-2 {
-    h1 {
-      .logo {
-        opacity: 1;
-        transform: translateY(0) translateX(47px);
-      }
+    .logo {
+      opacity: 1;
+      transform: translateY(0) translateX(47px);
     }
   }
 
@@ -166,15 +164,13 @@ export default {
   }
 
   &.appear-sb-2 {
-    h1 {
-      .logo {
-        transform: translateY(0) translateX(0);
-      }
+    .logo {
+      transform: translateY(0) translateX(0);
+    }
 
-      .title {
-        transform: translateX(0);
-        opacity: 1;
-      }
+    .title {
+      transform: translateX(0);
+      opacity: 1;
     }
   }
 
@@ -193,7 +189,31 @@ export default {
     transition: right 0.35s $easeOutQuart;
   }
 
-  &.bigger {
+  &.locked.appear-sb-2 {
+    top: -60px;
+
+    h1 {
+      cursor: pointer;
+      top: 76px;
+      transform: translateX(-100%);
+      left: 100%;
+      width: 244px;
+    }
+
+    .logo {
+      z-index: 1;
+      float: right;
+    }
+
+    .title {
+      display: inline-block;
+      width: 136px;
+      margin-top: -2px;
+      margin-right: -24px;
+      padding: 5px 30px 5px 10px;
+      background: $colorBg;
+    }
+
     .date-time {
       font-size: 22px;
       bottom: 16px;
@@ -219,69 +239,72 @@ export default {
     top: 16px;
     left: 50%;
     height: 25px;
+    width: 244px;
     transform: translateX(-50%);
     margin: 0;
     padding: 0;
     font-size: 23px;
     font-weight: 500;
+    transform: translateZ(0);
+    transition: all 0.35s $easeOutQuart;
+  }
 
-    .logo, .title {
-      transition: all 0.35s $easeOutQuart;
+  .logo, .title {
+    transition: all 0.35s $easeOutQuart;
+  }
+
+  .logo {
+    user-select: none;
+    position: relative;
+    opacity: 0;
+    float: left;
+    width: 80px;
+    height: 80px;
+    margin: -26px 10px 0 0;
+    transform: translateY(-70px) translateX(47px);
+
+    .logo-container {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      width: 50px;
+      height: 50px;
+      border: 3px solid #000;
+      transform: rotate(-45deg);
+      overflow: hidden;
+      transform-origin: top left;
     }
 
-    .logo {
-      user-select: none;
-      position: relative;
-      opacity: 0;
-      float: left;
-      width: 80px;
-      height: 80px;
-      margin: -26px 10px 0 0;
-      transform: translateY(-70px) translateX(47px);
-
-      .logo-container {
-        position: absolute;
-        top: 40px;
-        left: 0;
-        width: 50px;
-        height: 50px;
-        border: 3px solid #000;
-        transform: rotate(-45deg);
-        overflow: hidden;
-        transform-origin: top left;
-      }
-
-      .logo-align {
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: rotate(45deg);
-        transform-origin: top left;
-      }
-
-      .logo-content {
-        position: absolute;
-        top: -35px;
-        left: 0px;
-        width: 71px;
-        height: 71px;
-        background: #383838;
-      }
-
-      .logo-img {
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        width: 60px;
-        height: 60px;
-      }
+    .logo-align {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: top left;
     }
 
-    .title {
-      float: left;
-      transform: translateX(-47px);
-      opacity: 0;
+    .logo-content {
+      position: absolute;
+      top: -35px;
+      left: 0px;
+      width: 71px;
+      height: 71px;
+      background: #383838;
     }
+
+    .logo-img {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  .title {
+    float: left;
+    transform: translateX(-47px);
+    opacity: 0;
   }
 
   .header-button {

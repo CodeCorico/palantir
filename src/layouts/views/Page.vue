@@ -1,5 +1,5 @@
 <template>
-  <div id="page">
+  <div id="page" :class="{ locked }">
     <ui-header
       ref="header"
       :upgrade="upgrade"
@@ -78,6 +78,7 @@ export default {
   data() {
     return {
       lastVersionChecked: null,
+      locked: false,
     };
   },
   computed: {
@@ -125,10 +126,18 @@ export default {
         return;
       }
 
-      this.$refs.header.toggleLock();
+      this.lock(true);
     },
     headerClick() {
-      this.$refs.header.toggleLock(false);
+      this.lock(false);
+    },
+    lock(value) {
+      this.locked = value;
+      this.$refs.header.toggleLock(value);
+
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 350);
     },
     checkVersion() {
       if (!this.hasUpgradeButton && !this.hasUpgradeReload) {
@@ -137,8 +146,8 @@ export default {
 
       this.$store.dispatch('Page/version');
 
-      // 1h
-      setTimeout(() => this.checkVersion(), 3600 * 1000);
+      // 12h
+      setTimeout(() => this.checkVersion(), 3600 * 12* 1000);
     },
   },
 };
@@ -183,6 +192,8 @@ button.link {
 </style>
 
 <style lang="scss" scoped>
+@import '@/ui/assets/variables.scss';
+
 #page {
   height: 100%;
   overflow: hidden;
@@ -193,10 +204,17 @@ button.link {
     height: 100%;
     padding-top: 60px;
     overflow: hidden;
+    transition: padding-top 0.35s $easeOutQuart;
   }
 
   .page-sidebar {
     z-index: 10000;
+  }
+
+  &.locked {
+    .page-content {
+      padding-top: 0;
+    }
   }
 }
 </style>
