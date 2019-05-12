@@ -1,10 +1,23 @@
 {
+  "variables": {
+    "upgrade.button": false,
+    "upgrade.reload": false
+  },
   "apps": {
     "palantir-docs": {
       "type": "pages",
       "config": {
         "directory": "/docs",
         "index": "README.md.html"
+      }
+    },
+    "palantir-changelog": {
+      "type": "timeline",
+      "config": {
+        "url": "/changelog/changelog.json",
+        "capitalizeDomains": true,
+        "datesTitle": "Versions...",
+        "filterText": "Filter..."
       }
     }
   },
@@ -17,9 +30,14 @@
       "links": [{
         "root": true,
         "id": "link-palantir-docs",
-        "title": "Palantir Docs",
+        "title": "Documentations",
         "icon": "fas fa-book",
         "app": "palantir-docs"
+      }, {
+        "id": "link-palantir-changelog",
+        "title": "Changelog",
+        "icon": "fas fa-stream",
+        "app": "palantir-changelog"
       }]
     }]
   }]
