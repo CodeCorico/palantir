@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const mkp = require('mkp');
 const marked = require('marked');
 const { banner, log, logDate, logSuccess, logWarning } =
   require(path.resolve(__dirname, '../command-console-format'));
@@ -28,6 +29,7 @@ const handler = (argv) => {
 
   const { source, destination } = argv;
   const realDestination = path.resolve(destination);
+  const realDestinationDir = path.dirname(realDestination);
 
   if (!fs.existsSync(source)) {
     logWarning('No file found\n');
@@ -109,6 +111,8 @@ const handler = (argv) => {
   });
 
   logDate(`Write the timeline file: "${realDestination}"`);
+
+  mkp.sync(realDestinationDir);
 
   fs.writeFileSync(realDestination, JSON.stringify({ dates }));
 
