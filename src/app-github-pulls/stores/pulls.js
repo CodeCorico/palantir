@@ -30,36 +30,45 @@ const fetchPull = async (pullSummary) => {
 const sortByDate = arr =>
   arr.sort((a, b) => a.createdAt < b.createdAt ? -1 : (a.createdAt > b.createdAt ? 1 : 0));
 
-const regexSort = (list, patterns) => {
-  if (patterns.some(pattern => !(pattern === '*' || pattern instanceof RegExp))) {
-    throw Error('Accept only \'*\' or RegExp.');
-  }
-  const presetIndex = (input) => {
-    for (var i = 0; i < patterns.length; ++i) {
-      if (patterns[i] instanceof RegExp && patterns[i].test(input)) {
-        return i + 1;
-      }
+const presetIndex = (patterns, input) => {
+  for (let i = 0; i < patterns.length; i += 1) {
+    if (patterns[i] instanceof RegExp && patterns[i].test(input)) {
+      return i + 1;
     }
-    return 0;
   }
+  return 0;
+};
 
-  let indexes = list.map(c => ({
-    input: c,
-    index: presetIndex(c.text)
+const stringToRegExp = (pattern) => {
+  if (pattern instanceof RegExp || pattern === '*') {
+    return pattern;
+  }
+  try {
+    return new RegExp(...pattern.match(/\/(.*)\/(.*)/).slice(1));
+  } catch (err) {
+    throw Error("Accept only '*' or RegExp.");
+  }
+};
+
+const regexSort = (list, patternsRaw, key = item => item) => {
+  const patterns = patternsRaw.map(pattern => stringToRegExp(pattern));
+  const indexes = list.map((input, inputIndex) => ({
+    input,
+    inputIndex,
+    index: presetIndex(patterns, key(input)),
   }));
+  const defaultIndex =
+    patterns.indexOf('*') > -1 ? patterns.indexOf('*') : Infinity;
 
-  indexes.sort((a, b) => a.index < b.index ? -1 : 1);
-
-  const defaultIndex = patterns.includes('*') ? patterns.indexOf('*') : Infinity;
-
-  indexes = indexes.map(a => a.index === 0 ? {
-    ...a,
-    index: defaultIndex + 1,
-  } : a).sort(
-    (a, b) => a.index < b.index ? -1 : 1
-  );
-
-  return indexes.map(c => c.input);
+  return indexes
+    .sort((a, b) => a.index - b.index || b.inputIndex)
+    .map((a, inputIndex) => ({
+      ...a,
+      inputIndex,
+      index: a.index === 0 ? defaultIndex + 1 : a.index,
+    }))
+    .sort((a, b) => a.index - b.index || b.inputIndex)
+    .map(c => c.input);
 };
 
 const store = {
