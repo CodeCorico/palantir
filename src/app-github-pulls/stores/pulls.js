@@ -223,7 +223,7 @@ const store = {
       state.groups = Object.keys(groups).map(title => groups[title]);
 
       sortByDate(state.groups);
-      regexSort(state.groups, order.map(value => new RegExp(value)));
+      regexSort(state.groups, order);
     },
   },
   actions: {
