@@ -124,8 +124,9 @@ const store = {
 
         const oldMergeableState = newCachePulls[pullRaw.id].mergeableState;
 
+        // If original status (oldMergeableState) is clean or pending and becomes dirty (mergeableState)
         if (!changes.unclean) {
-          changes.unclean = oldMergeableState === 'clean'
+          changes.unclean = (oldMergeableState === 'clean' || oldMergeableState === 'pending')
             && mergeableState !== 'clean'
             && mergeableState !== 'pending';
         }
