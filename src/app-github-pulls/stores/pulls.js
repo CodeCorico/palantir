@@ -30,6 +30,64 @@ const fetchPull = async (pullSummary) => {
 const sortByDate = arr =>
   arr.sort((a, b) => a.createdAt < b.createdAt ? -1 : (a.createdAt > b.createdAt ? 1 : 0));
 
+const presetIndex = (patterns, input) => {
+  for (let i = 0; i < patterns.length; i += 1) {
+    if (patterns[i] instanceof RegExp && input.match(patterns[i])) {
+      return i + 1;
+    }
+  }
+  return 0;
+};
+
+const stringToRegExp = (patternObj) => {
+  if (patternObj instanceof RegExp || patternObj === '*') {
+    return patternObj;
+  }
+  let modifier = 'gi', pattern;
+  if (Array.isArray(patternObj)) {
+    if (patternObj.length === 1) {
+      [pattern] = patternObj;
+    }
+    else if (patternObj.length === 2) {
+      [pattern, modifier] = patternObj;
+    }
+    else {
+      throw Error("Accept only two-d array with [pattern, modifier].");
+    }
+  } else if (typeof patternObj === 'string') {
+    pattern = patternObj;
+  } else {
+    throw Error(`Unsupported RegEx declaration, must be String | Array, got ${typeof patternObj}`);
+  }
+  try {
+    return new RegExp(pattern, modifier);
+  } catch (err) {
+    throw Error(`Accept only '*' or valid RegExp declaration, [pattern: ${
+      pattern}, modifier: ${modifier}]`);
+  }
+};
+
+const regexSort = (list, patternsRaw, key = item => item) => {
+  const patterns = patternsRaw.map(pattern => stringToRegExp(pattern));
+  const defaultIndex =
+    patterns.indexOf('*') > -1 ? patterns.indexOf('*') : Infinity;
+
+  return list
+    .map((input, oldIndex) => ({
+      input,
+      oldIndex,
+      index: presetIndex(patterns, key(input)),
+    }))
+    .sort((a, b) => a.index - b.index || b.oldIndex)
+    .map((item, oldIndex) => ({
+      ...item,
+      oldIndex,
+      index: item.index === 0 ? defaultIndex + 1 : item.index,
+    }))
+    .sort((a, b) => a.index - b.index || b.oldIndex)
+    .map(c => c.input);
+};
+
 const store = {
   namespaced: true,
   state: {
@@ -45,7 +103,7 @@ const store = {
       state.cachePulls = [];
       state.lastTaskId = null;
     },
-    mutatePulls: (state, { taskId, pulls }) => {
+    mutatePulls: (state, { taskId, pulls, order }) => {
       const firstMutation = taskId !== state.lastTaskId;
       const groups = {};
       const changes = {
@@ -155,7 +213,7 @@ const store = {
           animationDuration: cachePull.animationDuration,
           reviewers: (pullRaw.assignees || []).map((assignee) => {
             cachePull.reviewers[assignee.id] = cachePull.reviewers[assignee.id] || {
-              spaceIndex:Math.floor(Math.random() * (10 + 1))
+              spaceIndex: Math.floor(Math.random() * (10 + 1))
             };
 
             const cacheReviwer = cachePull.reviewers[assignee.id];
@@ -185,11 +243,12 @@ const store = {
       state.groups = Object.keys(groups).map(title => groups[title]);
 
       sortByDate(state.groups);
+      state.groups = regexSort(state.groups, order, item => item.title);
     },
   },
   actions: {
     async reload({ commit }, task) {
-      const { token = '', repositories = [] } = task.config;
+      const { token = '', repositories = [], order = [] } = task.config;
 
       github.defaults.headers.common.Authorization = `token ${token}`;
 
@@ -212,7 +271,7 @@ const store = {
         pullsSummary.map(pullSummary => fetchPull(pullSummary))
       );
 
-      commit('mutatePulls', { taskId: task.id, pulls });
+      commit('mutatePulls', { taskId: task.id, pulls, order });
     },
     clear({ commit }) {
       commit('clear');
