@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="title">{{ locked ? dateTime : 'Palantir' }}</div>
+      <div class="title" :class="{date : locked}">{{ locked ? dateTime : 'Palantir' }}</div>
     </h1>
 
     <div class="right">
@@ -55,7 +55,7 @@
       </a>
     </div>
 
-    <div class="date-time">{{ dateTime }}</div>
+    <div class="date-time far fa-clock">{{ dateTime }}</div>
   </header>
 </template>
 
@@ -220,8 +220,21 @@ export default {
       100% { width: 118px; margin-top: 5px; padding: 5px 25px 5px 10px; font-size: 19px; background: $colorBg; }
     }
 
+     @keyframes fadeOut {
+      99% { visibility: hidden; }
+      100% { visibility: visible; }
+    }
+
     .title {
       animation: title-lock 1s $easeOutQuart forwards;
+
+      &.date {
+        position: relative;
+        top: 10px;
+        visibility: hidden;
+        animation: 0.5s fadeOut;
+        animation-fill-mode: forwards;
+      }
     }
   }
 
