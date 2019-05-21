@@ -28,7 +28,7 @@ const trigger = (task) => {
   store.dispatch(task.dispatch, task);
 };
 
-const clearTaskLoop = task => clearInterval(task.timeout);
+const clearTaskLoop = task => clearTimeout(task.timeout);
 
 const intervalLoop = (task) => {
   task.timeout = setTimeout(() => {
