@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import io from 'socket.io-client';
+
 export default {
   name: 'task',
   props: {
@@ -34,6 +36,13 @@ export default {
     dispatch: String,
     shortcut: Array,
     config: Object,
+    slackCommand: String
+  },
+  mounted() {
+    if(this.slackCommand) {
+      const socket = io.connect('/')
+      socket.on(this.slackCommand, this.start)
+    }
   },
   methods: {
     start() {
