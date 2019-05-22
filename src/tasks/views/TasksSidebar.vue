@@ -15,6 +15,7 @@
       :dispatch="task.dispatch"
       :shortcut="task.shortcut"
       :config="task.config"
+      :slack-command="task.slackCommand"
     ></task>
   </sidebar>
 </template>
