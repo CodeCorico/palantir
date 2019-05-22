@@ -5,6 +5,9 @@ const fs = require('fs');
 const glob = require('glob');
 const axios = require('axios');
 const express = require('express');
+const { RTMClient } = require('@slack/rtm-api');
+const socket = require('socket.io');
+
 const app = express();
 const port = process.env.SERVER_PORT || 80;
 
@@ -50,5 +53,40 @@ app.use((req, res) => {
   }
 });
 
+if (statics) {
+  const palantirFile = JSON.parse(fs.readFileSync(`${statics}/palantir.json`, 'utf8'));
+  const slackToken = palantirFile.variables['slack-token'];
+  if (slackToken) {
+    const rtm = new RTMClient(slackToken);
+
+    const registerSlack = async (apps) => {
+      await rtm.start();
+      rtm.on('message', ({ text, user, channel }) => {
+        if (text === 'palantir help') {
+          rtm.sendMessage(`<@${user}>, voici les commandes disponibles: ${
+            apps.map(command => `\n- \`${command}\``)
+            }`, channel);
+        } else if (apps.includes(text)) {
+          io.emit(text);
+          rtm.sendMessage('C\'est parti !!', channel);
+        }
+      });
+    }
+
+    const slackApps = Object
+      .values(palantirFile.apps)
+      .reduce((acc, { tasks }) => tasks ? [
+        ...acc,
+        ...tasks
+          .filter(({ slackCommand }) => slackCommand)
+          .map(({ slackCommand }) => slackCommand)] : acc, []);
+    registerSlack(slackApps);
+  }
+}
+
+
+
 // eslint-disable-next-line no-console
-app.listen(port, () => console.log(`Server started on :${port}`));
+const server = app.listen(port, () => console.log(`Server started on :${port}`));
+const io = socket(server)
+
