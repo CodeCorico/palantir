@@ -4,7 +4,7 @@ const glob = require('glob');
 const marked = require('marked');
 const mkp = require('mkp');
 const { banner, log, logDate, logSuccess, logWarning } =
-  require(path.resolve(__dirname, '../command-console-format'));
+  require(path.resolve(__dirname, '../cli/command-console-format'));
 
 const fillTree = (tree, fileSplitted, index = 0) => {
   let actualTree = -1;
