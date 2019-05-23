@@ -3,7 +3,7 @@ const fs = require('fs');
 const glob = require('glob');
 const configChain = require(path.resolve(__dirname, '../config-chain'));
 const { banner, log, logDate, logSuccess, logWarning } =
-  require(path.resolve(__dirname, '../command-console-format'));
+  require(path.resolve(__dirname, '../cli/command-console-format'));
 
 const handler = (argv) => {
   const { file } = argv;

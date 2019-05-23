@@ -3,7 +3,7 @@ const fs = require('fs');
 const mkp = require('mkp');
 const marked = require('marked');
 const { banner, log, logDate, logSuccess, logWarning } =
-  require(path.resolve(__dirname, '../command-console-format'));
+  require(path.resolve(__dirname, '../cli/command-console-format'));
 
 const TYPES = {
   'breaking changes': 'idle',
@@ -13,7 +13,7 @@ const TYPES = {
 };
 
 const unescapeHtml = (text) => {
-  var map = {
+  let map = {
     '&amp;': '&',
     '&lt;': '<',
     '&gt;': '>',
