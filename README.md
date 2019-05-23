@@ -23,6 +23,14 @@ The live dashboards are automatically updated and can alert you with sounds and 
 The configuration system lets your create your own Palantir in one single JSON file.
 You can declare apps, menus, automated tasks and more.
 
+### Contributors
+
+The Palantir project is Open Source. It exists thanks to all the people who contribute.
+
+<a href="https://github.com/codecorico/palantir/graphs/contributors" target="_blank">
+  <img src="https://contributors-img.firebaseapp.com/image?repo=codecorico/palantir" />
+</a>
+
 ## Up next
 
 <div class="row">
