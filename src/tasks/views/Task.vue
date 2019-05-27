@@ -36,16 +36,16 @@ export default {
     dispatch: String,
     shortcut: Array,
     config: Object,
-    slackCommand: String
+    slackCommand: String,
   },
   mounted() {
     if(this.slackCommand) {
-      const socket = io.connect('/')
-      socket.on(this.slackCommand, this.start)
+      const socket = io.connect('/');
+      socket.on(this.slackCommand, parameters => this.start(parameters));
     }
   },
   methods: {
-    start() {
+    start(slackParameters) {
       if (this.status === 'disabled' || this.status === 'running') {
         return;
       }
@@ -58,6 +58,7 @@ export default {
       this.$store.dispatch(this.dispatch, {
         id: this.id,
         config: this.config,
+        slack: slackParameters
       });
     },
   },

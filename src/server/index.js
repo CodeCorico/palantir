@@ -6,6 +6,7 @@ const glob = require('glob');
 const axios = require('axios');
 const express = require('express');
 const { RTMClient } = require('@slack/rtm-api');
+const { WebClient } = require('@slack/web-api');
 const socket = require('socket.io');
 
 const app = express();
@@ -55,21 +56,55 @@ app.use((req, res) => {
 
 if (statics) {
   const palantirFile = JSON.parse(fs.readFileSync(`${statics}/palantir.json`, 'utf8'));
+  process.env.GOOGLE_APPLICATION_CREDENTIALS = palantirFile.variables['gapi-credentials-path'];
+
   const slackToken = palantirFile.variables['slack-token'];
+
   if (slackToken) {
     const rtm = new RTMClient(slackToken);
+    const web = new WebClient(slackToken);
+
 
     const registerSlack = async (apps) => {
       await rtm.start();
-      rtm.on('message', ({ text, user, channel }) => {
-        if (text === 'palantir help') {
-          rtm.sendMessage(`<@${user}>, voici les commandes disponibles: ${
-            apps.map(command => `\n- \`${command}\``)
-            }`, channel);
-        } else if (apps.includes(text)) {
-          io.emit(text);
-          rtm.sendMessage('C\'est parti !!', channel);
+      io.on('connection', function (socket) {
+        socket.on('slackMessage', function (message, channel) {
+          try {
+            rtm.sendMessage(message, channel);
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+          }
+        });
+      });
+      rtm.on('message', async ({ text, user, channel }) => {
+        if (!text) {
+          return;
         }
+
+        const [command, parameters] = text.split(/ (.*)/).filter(e => e.length > 1);
+
+        if (apps.indexOf(command) === -1) {
+          if (command === 'help') {
+            rtm.sendMessage(`<@${user}>, here are the available commands: ${
+              apps.map(command => `\n- \`${command}\``)
+              }`, channel);
+          }
+
+          return;
+        }
+
+        const response = await web.users.info({ user });
+        io.emit(command, {
+          parameters,
+          user: response.user.profile.display_name,
+          channel,
+        });
+        rtm.sendMessage([
+          'Receiving...\n',
+          `command: \`${command}\`\n`,
+          parameters ? `parameters: \`${parameters}\`\n` : '',
+        ].join(''), channel);
       });
     }
 
@@ -80,6 +115,11 @@ if (statics) {
         ...tasks
           .filter(({ slackCommand }) => slackCommand)
           .map(({ slackCommand }) => slackCommand)] : acc, []);
+
+    if (slackApps.some(slackCommand => slackCommand.match(/\s/))) {
+      throw Error('slackCommand should not have any whitespace.');
+    }
+
     registerSlack(slackApps);
   }
 }
@@ -88,5 +128,4 @@ if (statics) {
 
 // eslint-disable-next-line no-console
 const server = app.listen(port, () => console.log(`Server started on :${port}`));
-const io = socket(server)
-
+const io = socket(server);
