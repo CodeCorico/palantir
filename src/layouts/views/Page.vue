@@ -10,6 +10,7 @@
       <router-view></router-view>
 
       <app-images-randomizer></app-images-randomizer>
+      <app-speech-synthesis></app-speech-synthesis>
     </div>
 
     <component
@@ -39,6 +40,7 @@ import UiHeader from '@/ui/views/Header.vue';
 import MenuSidebar from '@/menu/views/MenuSidebar.vue';
 import TasksSidebar from '@/tasks/views/TasksSidebar.vue';
 import AppImagesRandomizer from '@/app-images-randomizer/views/AppImagesRandomizer.vue';
+import AppSpeechSynthesis from '@/app-speech-synthesis/views/AppSpeechSynthesis.vue';
 
 export default {
   name: 'page',
@@ -48,6 +50,7 @@ export default {
     MenuSidebar,
     TasksSidebar,
     AppImagesRandomizer,
+    AppSpeechSynthesis,
   },
   mounted() {
     this.$store.dispatch('Page/addSidebar', {
