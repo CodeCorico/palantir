@@ -9,6 +9,7 @@ const store = {
     selectedText: null,
     images: null,
     fixedTime: null,
+    sounds: null,
   },
   mutations: {
     updateRandomizer: (state, payload) => {
@@ -18,6 +19,7 @@ const store = {
       state.selectedText = payload.selectedText || null;
       state.images = payload.images || null;
       state.fixedTime = payload.fixedTime || null;
+      state.sounds = payload.sounds || null;
     },
   },
   actions: {
