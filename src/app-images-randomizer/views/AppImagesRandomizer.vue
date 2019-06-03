@@ -25,6 +25,9 @@ import store from '@/services/store';
 export default {
   name: 'app-images-randomizer',
   store,
+  props: {
+    config: Object,
+  },
   destroyed() {
     this.clearAnim();
     this.clearRandomizeImages();
@@ -79,6 +82,16 @@ export default {
       this.clearAnim();
       this.clearRandomizeImages();
       this.clearEnd();
+
+      if (this.sounds && this.sounds.start) {
+        const audio = new Audio(this.sounds.start);
+        audio.loop = false;
+        // eslint-disable-next-line no-console
+        audio.play().catch(() => console.warn(
+          `Impossible to play "${this.sounds.start}"`,
+          `(maybe the user didn't interact with the page)`
+        ));
+      }
 
       this.anim('appearSb', [0, 350, 350], 0, () => setTimeout(this.startRandomizeImages, 350));
     },
