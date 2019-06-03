@@ -51,13 +51,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch('Page/addSidebar', {
-      location: 'left',
-      id: 'menu-sidebar',
-      title: 'Menu',
-      component: 'menu-sidebar',
-      icon: 'fas fa-bars',
-    });
-    this.$store.dispatch('Page/addSidebar', {
       location: 'right',
       id: 'tasks-sidebar',
       title: 'Tasks',
@@ -114,6 +107,22 @@ export default {
     hasUpgradeReload() {
       return typeof this.variables['upgrade.reload'] === 'undefined'
         || this.variables['upgrade.reload'];
+    },
+    menu() {
+      return this.$store.state.Menu.menu;
+    },
+  },
+  watch: {
+    menu() {
+      if (this.menu.length) {
+        this.$store.dispatch('Page/addSidebar', {
+          location: 'left',
+          id: 'menu-sidebar',
+          title: 'Menu',
+          component: 'menu-sidebar',
+          icon: 'fas fa-bars',
+        });
+      }
     },
   },
   methods: {
