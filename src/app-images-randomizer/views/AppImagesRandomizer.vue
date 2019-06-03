@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     ...mapState('ImagesRandomizer', [
-      'id', 'icon', 'title', 'selectedText', 'images', 'fixedTime'
+      'id', 'icon', 'title', 'selectedText', 'images', 'fixedTime', 'sounds',
     ]),
   },
   data() {
