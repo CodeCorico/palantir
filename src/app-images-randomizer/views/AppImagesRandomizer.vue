@@ -95,7 +95,7 @@ export default {
     startRandomizeImages() {
       const minLoops = this.images.length * 4;
       const maxLoops = this.images.length * 5;
-      const loops = Math.floor(Math.random() * (maxLoops - minLoops + 1) + minLoops) - 1;
+      const loops = Math.floor(Math.random() * (maxLoops - minLoops) + minLoops);
 
       this.randomizeImages(0, loops);
     },
