@@ -4,7 +4,7 @@ const store = {
   namespaced: true,
   state: {
     hasConfig: true,
-    menu: {},
+    menu: [],
   },
   mutations: {
     config: (state, payload) => {
