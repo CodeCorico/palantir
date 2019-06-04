@@ -24,9 +24,9 @@ const store = {
   },
   mutations: {
     config: (state, payload) => {
-      const { menu = [], apps = {} } = payload;
+      const { menu = [], apps = {}, root = false } = payload;
 
-      state.appRoot = null;
+      state.appRoot = root;
       state.apps = apps;
 
       state.tasks = [];
