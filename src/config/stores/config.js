@@ -46,9 +46,7 @@ const configValidation = (config) => {
     });
   }
 
-  if (!config.menu || !config.menu.length) {
-    errs.push(`A menu is required in the "palantir.json" config file`);
-  } else {
+  if (config.menu && config.menu.length) {
     itemsValidation(config.menu, 'menu', ['sections', 'links'], ({ el, treeNamespace, subTree }) => {
       if (!el.id) {
         errs.push(`No "id" key in ${treeNamespace}`);
