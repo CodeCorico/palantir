@@ -11,7 +11,7 @@ require('dotenv').config({
   path: path.resolve(__dirname, '../../.env'),
 });
 
-const commandFiles = glob.sync(path.resolve(__dirname, 'commands-*/*-command.js'));
+const commandFiles = glob.sync(path.resolve(__dirname, 'src/*/command.js'));
 
 yargs.usage('palantir <cmd> [args]');
 
