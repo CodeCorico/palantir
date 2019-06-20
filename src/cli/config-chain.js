@@ -2,8 +2,6 @@ const path = require('path');
 const fs = require('fs');
 const { log, logError } = require(path.resolve(__dirname, 'command-console-format'));
 
-let configData = {};
-
 const throwError = (message) => {
   logError(message);
 
@@ -13,7 +11,7 @@ const throwError = (message) => {
 const findIndex = (arr, attr, value) => {
   let index = -1;
 
-  for (let i = 0; i <arr.length; i++) {
+  for (let i = 0; i < arr.length; i++) {
     if (arr[i][attr] === value) {
       index = i;
 
@@ -29,7 +27,7 @@ const findIndex = (arr, attr, value) => {
 const palantirFile =
   file => file ? path.resolve(file) : `${process.env.SERVER_STATICS}/palantir.json`;
 
-const load = (file) => {
+const load = (file) => (configData) => {
   const fileReal = palantirFile(file);
 
   if (!fs.existsSync(fileReal)) {
@@ -38,54 +36,46 @@ const load = (file) => {
     throwError(`File "${fileReal}" doesn't exist`);
   }
 
-  configData = JSON.parse(fs.readFileSync(fileReal, 'utf8'));
-
-  return base();
+  return {
+    ...configData,
+    ...JSON.parse(fs.readFileSync(fileReal, 'utf8'))
+  };
 };
 
-const save = (indent, file) => {
+const save = (indent, file) => (configData) => {
   const fileReal = palantirFile(file);
 
   const indentArgs = indent ? [null, 2] : [];
 
   fs.writeFileSync(fileReal, JSON.stringify(configData, ...indentArgs));
+
+  return configData;
 };
 
 const reset = () => {
-  configData = {};
-
-  return base();
+  return {}
 };
-
-const data = () => configData;
-
-const display = () => {
-  log(configData);
-
-  return base();
-};
-
 
 // ----- VARIABLES
 
-const variables = {
-  get: name => base({
-    value: configData.variables ? configData.variables[name] : configData.variables
-  }),
-  set: (name, value) => {
-    configData.variables = configData.variables || {};
-    configData.variables[name] = value;
+const getVariables = name => configData => ({
+  ...configData,
+  value: configData.variables ? configData.variables[name] : configData.variables
+});
 
-    return base({
-      value: configData.variables[name],
-    });
+const setVariables = (name, value) => configData => ({
+  ...configData,
+  variables: {
+    ...configData.variables,
+    [name]: value,
   },
-};
+  value
+});
 
 // ----- APPS
 
-const apps = {
-  get: id => app(id),
+const apps = (configData) => ({
+  get: id => app(id)(configData),
   add: (id, type, config = null, tasks = null) => {
     if (!id || !type) {
       throwError(`The "id" and the "type" are needed to create an app`);
@@ -101,12 +91,12 @@ const apps = {
       configData.apps[id].tasks = tasks;
     }
 
-    return app(id);
+    return app(id)(configData);
   },
-  remove: id => app(id).remove(),
-};
+  remove: id => app(id)(configData).remove(),
+});
 
-const app = (id) => {
+const app = (id) => (configData) => {
   if (!configData.apps || !configData.apps[id]) {
     throwError(`The app "${id}" doesn't exist`);
   }
@@ -128,7 +118,7 @@ const app = (id) => {
 
       configData.apps[id].config = config;
 
-      return app(id);
+      return app(id)(configData);
     },
     removeConfig: () => {
       if (!configData.apps || !configData.apps[id]) {
@@ -137,7 +127,7 @@ const app = (id) => {
 
       delete configData.apps[id].config;
 
-      return app(id);
+      return app(id)(configData);
     },
     getTask: taskId => task(id, taskId),
     addTask: (taskId, config = {}) => {
@@ -158,7 +148,7 @@ const app = (id) => {
 
 // ----- TASKS
 
-const task = (appId, id) => {
+const task = (appId, id) => configData => {
   if (!configData.apps || !configData.apps[appId]) {
     throwError(`The app "${id}" doesn't exist`);
   }
@@ -183,7 +173,7 @@ const task = (appId, id) => {
     remove: () => {
       configData.apps[appId].tasks.splice(findTaskIndex(), 1);
 
-      return app(appId);
+      return app(appId)(configData);
     },
     setConfig: (config) => {
       const index = findTaskIndex();
@@ -195,15 +185,15 @@ const task = (appId, id) => {
 
       configData.apps[appId].tasks[index] = config;
 
-      return app(appId, id);
+      return app(appId, id)(configData);
     },
   });
 };
 
 // ----- MENU
 
-const menu = {
-  get: id => menuItem(id),
+const menu = configData => ({
+  get: id => menuItem(id)(configData),
   add: (id, title, sections = null) => {
     if (!id || !title) {
       throwError(`The "id" and the "title" are needed to create a menu item`);
@@ -218,12 +208,12 @@ const menu = {
 
     configData.menu.push(item);
 
-    return menuItem(id);
+    return menuItem(id)(configData);
   },
-  remove: id => menuItem(id).remove(),
-};
+  remove: id => menuItem(id)(configData).remove(),
+});
 
-const menuItem = (id) => {
+const menuItem = (id) => configData => {
   if (!configData.menu) {
     throwError(`The menu item "${id}" doesn't exist`);
   }
@@ -250,9 +240,9 @@ const menuItem = (id) => {
     setTitle: (title) => {
       configData.menu[findMenuIndex()].title = title;
 
-      return menuItem(id);
+      return menuItem(id)(configData);
     },
-    getSection: sectionId => menuSection(id, sectionId),
+    getSection: sectionId => menuSection(id, sectionId)(configData),
     addSection: (sectionId, sectionTitle) => {
       const index = findMenuIndex();
 
@@ -262,13 +252,13 @@ const menuItem = (id) => {
         title: sectionTitle,
       });
 
-      return menuSection(id, sectionId);
+      return menuSection(id, sectionId)(configData);
     },
-    removeSection: sectionId => menuSection(id, sectionId).remove(),
+    removeSection: sectionId => menuSection(id, sectionId)(configData).remove(),
   });
 };
 
-const menuSection = (menuItemId, id) => {
+const menuSection = (menuItemId, id) => configData => {
   const findMenuIndex = () => findIndex(
     configData.menu, 'id', menuItemId, `The menu item "${id}" doesn't exist`
   );
@@ -289,14 +279,14 @@ const menuSection = (menuItemId, id) => {
 
       sections.splice(findMenuSectionIndex(), 1);
 
-      return base(menuItem(menuItemId));
+      return base(menuItem(menuItemId)(configData));
     },
     setTitle: (title) => {
       findMenuSection().title = title;
 
-      return menuSection(menuItemId, id);
+      return menuSection(menuItemId, id)(configData);
     },
-    getLink: linkId => menuSection(menuItemId, id, linkId),
+    getLink: linkId => menuSection(menuItemId, id, linkId)(configData),
     addLink: (linkId, title, icon, app = null, url = null, root = false) => {
       if ((!title || !icon) || (!app && !url)) {
         throwError(`
@@ -328,12 +318,12 @@ const menuSection = (menuItemId, id) => {
       section.links = section.links || [];
       section.links.push(link);
 
-      return menuLink(menuItemId, id, linkId);
+      return menuLink(menuItemId, id, linkId)(configData);
     },
   });
 };
 
-const menuLink = (menuItemId, sectionId, id) => {
+const menuLink = (menuItemId, sectionId, id) => configData => {
   const findMenuIndex = () => findIndex(
     configData.menu, 'id', menuItemId, `The menu item "${id}" doesn't exist`
   );
@@ -363,29 +353,29 @@ const menuLink = (menuItemId, sectionId, id) => {
 
       links.splice(findMenuLinkIndex(), 1);
 
-      return base(menuSection(menuItemId, sectionId));
+      return base(menuSection(menuItemId, sectionId)(configData));
     },
     setTitle: (value) => {
       findMenuLink().title = value;
 
-      return menuLink(menuItemId, sectionId, id);
+      return menuLink(menuItemId, sectionId, id)(configData);
     },
     setIcon: (value) => {
       findMenuLink().icon = value;
 
-      return menuLink(menuItemId, sectionId, id);
+      return menuLink(menuItemId, sectionId, id)(configData);
     },
     setApp: (value) => {
       findMenuLink().app = value;
       delete findMenuLink().url;
 
-      return menuLink(menuItemId, sectionId, id);
+      return menuLink(menuItemId, sectionId, id)(configData);
     },
     setUrl: (value) => {
       findMenuLink().url = value;
       delete findMenuLink().app;
 
-      return menuLink(menuItemId, sectionId, id);
+      return menuLink(menuItemId, sectionId, id)(configData);
     },
     setRoot: (value) => {
       if (value) {
@@ -394,24 +384,35 @@ const menuLink = (menuItemId, sectionId, id) => {
         delete findMenuLink().root;
       }
 
-      return menuLink(menuItemId, sectionId, id);
+      return menuLink(menuItemId, sectionId, id)(configData);
     },
   });
 };
 
-// ----- BASE
+const Just = (value) => ({
+  map: fn => Just(fn(value)),
+  chain: fn => fn(value),
+  ap: monad => monad.map(value),
+  get: () => value,
+})
 
-const base = (obj = {}) => {
-  obj.variables = variables;
-  obj.apps = apps;
-  obj.menu = menu;
-  obj.save = save;
-  obj.load = load;
-  obj.reset = reset;
-  obj.data = data;
-  obj.display = display;
+const configDataMonad = Just({});
 
-  return obj;
-};
+const base = (obj) => ({
+  ...obj,
+  load: file => configDataMonad.map(load(file)),
+  save: (indent, file) => configDataMonad.map(save(indent, file)),
+  reset: () => configDataMonad.map(reset),
+  data: configDataMonad.get,
+  display: () => log(configDataMonad.get()),
+  variables: {
+    get: name => configDataMonad.map(getVariables(name)),
+    set: (name, value) => configDataMonad.map(setVariables(name, value))
+  },
+  value: configDataMonad.get().value,
+  apps: () => configDataMonad.chain(apps),
+  task: () => configDataMonad.chain(task),
+  menu: () => configDataMonad.chain(menu)
+});
 
 module.exports = base();
