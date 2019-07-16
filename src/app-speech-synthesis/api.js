@@ -17,14 +17,13 @@ const callback = async (req, res) => {
   const client = new textToSpeech.TextToSpeechClient();
 
   const languages = {
-    'default': 'fr-FR',
-    'fr': Math.random() > 0.5 ? 'fr-FR' : 'fr-CA', 
+    'default': 'fr-CA',
     'en': Math.random() > 0.5 ? 'en-GB' : 'en-US',
   };
   const guess = language.guess(text, ['fr', 'en'], 1);
   const languageCode = languages[guess[0].alpha2] || languages['default'];
 
-  const ssmlGender = Math.random() > 0.5 ? 'FEMALE' : 'MALE';
+  const ssmlGender = 'MALE';
 
   // Construct the request
   const request = {
