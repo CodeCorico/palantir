@@ -55,7 +55,7 @@
       </a>
     </div>
 
-    <div class="date-time far fa-clock">{{ dateTime }}</div>
+    <div class="date-time">{{ dateTime }}</div>
   </header>
 </template>
 
