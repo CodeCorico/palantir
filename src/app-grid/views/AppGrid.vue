@@ -19,6 +19,7 @@
 <script>
 import store from '@/services/store';
 import AppGithubPulls from '@/app-github-pulls/views/AppGithubPulls';
+import AppBitbucketPulls from '@/app-bitbucket-pulls/views/AppBitbucketPulls';
 import AppTimeline from '@/app-timeline/views/AppTimeline';
 import AppFrame from '@/app-frame/views/AppFrame.vue';
 import AppPages from '@/app-pages/views/AppPages.vue';
@@ -30,6 +31,7 @@ export default {
   store,
   components: {
     AppGithubPulls,
+    AppBitbucketPulls,
     AppTimeline,
     AppFrame,
     AppPages,
