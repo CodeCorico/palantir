@@ -92,6 +92,12 @@ const callback = async (req, res) => {
   const trelloLists = await trello.getListsOnBoard(board);
   let listId = null;
 
+  if (typeof trelloLists === 'string') {
+    res.json({ error: trelloLists });
+
+    return;
+  }
+
   trelloLists.some((trelloList) => {
     if (trelloList.name === list) {
       listId = trelloList.id
