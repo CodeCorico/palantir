@@ -1,0 +1,24 @@
+{
+  "name": "PalantirJira",
+  "version": "0.1",
+  "description": "PalantirJira",
+  "manifest_version": 2,
+  "content_scripts": [{
+    "all_frames": true,
+    "matches": [
+      "https://[DOMAIN]/*",
+      "http://[DOMAIN]/*"
+    ],
+    "js": [
+      "inject-jira-rapidboard.js"
+    ],
+    "run_at": "document_end"
+  }],
+  "permissions": [
+    "http://[DOMAIN]/*",
+    "https://[DOMAIN]/*",
+    "webRequest",
+    "webRequestBlocking",
+    "tabs"
+  ]
+}
