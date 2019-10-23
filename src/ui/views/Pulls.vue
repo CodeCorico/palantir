@@ -87,7 +87,7 @@ import UiScrolls from '@/ui/views/Scrolls.vue';
 import UiPullChart from './PullChart.vue';
 
 export default {
-  name: 'pulls',
+  name: 'ui-pulls',
   components: { UiPullChart, UiScrolls },
   props: {
     config: Object,
