@@ -1,0 +1,29 @@
+{
+  "name": "Palantir",
+  "version": "0.1",
+  "description": "Palantir",
+  "manifest_version": 2,
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_scripts": [{
+    "all_frames": true,
+    "matches": [
+      "https://outlook.office365.com/*",
+      "http://outlook.office365.com/*"
+    ],
+    "js": [
+      "inject-outlook-calendar.js"
+    ],
+    "run_at": "document_end"
+  }],
+  "permissions": [
+    "http://outlook.office365.com/*",
+    "https://outlook.office365.com/*",
+    "http://localhost:3000/*",
+    "webRequest",
+    "webRequestBlocking",
+    "tabs"
+  ]
+}
