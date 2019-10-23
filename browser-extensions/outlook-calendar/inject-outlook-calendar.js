@@ -1,4 +1,6 @@
 (function() {
+  'use strict';
+
   let repeatTimeout = null;
 
   const message = (name, data) =>
