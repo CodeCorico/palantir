@@ -60,7 +60,7 @@
       const label = el.getAttribute('aria-label');
       const colorEl = el.querySelector('div');
       const event = {
-        color: colorEl && colorEl.style.backgroundColor || null,
+        color: colorEl && colorEl.style.borderColor || null,
       };
 
       consumeRules.forEach((rule) => {
