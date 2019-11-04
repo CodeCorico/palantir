@@ -20,6 +20,7 @@ import AppPages from '@/app-pages/views/AppPages.vue';
 import AppGoogleCalendar from '@/app-google-calendar/views/AppGoogleCalendar.vue';
 import AppOutlookCalendar from '@/app-outlook-calendar/views/AppOutlookCalendar.vue';
 import AppTrello from '@/app-trello/views/AppTrello.vue';
+import AppFreshteam from '@/app-freshteam/views/AppFreshteam.vue';
 import AppGrid from '@/app-grid/views/AppGrid.vue';
 
 export default {
@@ -35,6 +36,7 @@ export default {
     AppGoogleCalendar,
     AppOutlookCalendar,
     AppTrello,
+    AppFreshteam,
     AppGrid,
   },
   mounted() {

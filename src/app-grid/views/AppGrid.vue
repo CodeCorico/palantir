@@ -26,6 +26,7 @@ import AppPages from '@/app-pages/views/AppPages.vue';
 import AppGoogleCalendar from '@/app-google-calendar/views/AppGoogleCalendar.vue';
 import AppOutlookCalendar from '@/app-outlook-calendar/views/AppOutlookCalendar.vue';
 import AppTrello from '@/app-trello/views/AppTrello.vue';
+import AppFreshteam from '@/app-freshteam/views/AppFreshteam.vue';
 
 export default {
   name: 'app-grid',
@@ -39,6 +40,7 @@ export default {
     AppGoogleCalendar,
     AppOutlookCalendar,
     AppTrello,
+    AppFreshteam,
   },
   props: {
     config: Object,
