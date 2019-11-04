@@ -1,0 +1,34 @@
+{
+  "name": "PalantirFreshteam",
+  "version": "0.1",
+  "description": "PalantirFreshteam",
+  "manifest_version": 2,
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_scripts": [{
+    "all_frames": true,
+    "matches": [
+      "https://[DOMAIN]/*",
+      "http://[DOMAIN]/*"
+    ],
+    "js": [
+      "inject-freshteam.js"
+    ],
+    "run_at": "document_end"
+  }],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "permissions": [
+    "http://[DOMAIN]/*",
+    "https://[DOMAIN]/*",
+    "http://localhost:3000/*",
+    "webRequest",
+    "webRequestBlocking",
+    "tabs"
+  ]
+}
