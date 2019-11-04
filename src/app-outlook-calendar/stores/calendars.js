@@ -1,7 +1,7 @@
 const name = 'OutlookCalendar';
 
 const digestEvents = (events) => {
-  let lastEvent = null;
+  let filteredEvents = {};
 
   return events
     .map((eventRaw) => {
@@ -41,26 +41,33 @@ const digestEvents = (events) => {
         responseStatus: 'accepted',
       }];
 
+      event.id = [
+        `${event.summary}||${event.pStart.hours}||${event.pStart.minutes}||`,
+        `${event.pTime.hours}||${event.pTime.minutes}||${event.location}`,
+      ].join('');
+
       return event;
     })
     .sort((a, b) => a.pTime.fullMinutes - b.pTime.fullMinutes)
     // Remove duplicates
     .filter((event) => {
-      const eventString = `
-        ${event.summary}||${event.pStart.hours}||${event.pStart.minutes}||
-        ${event.pTime.hours}||${event.pTime.minutes}||${event.location}
-      `;
+      if (filteredEvents[event.id]) {
+        if (filteredEvents[event.id].attendeesEmails.indexOf(event.user) < 0) {
+          filteredEvents[event.id].attendeesEmails.push(event.email);
 
-      if (lastEvent && eventString === lastEvent.string) {
-        lastEvent.event.attendees.push({
-          email: event.user,
-          responseStatus: 'accepted',
-        });
+          filteredEvents[event.id].event.attendees.push({
+            email: event.user,
+            responseStatus: 'accepted',
+          });
+        }
 
         return false;
       }
 
-      lastEvent = { event, string: eventString };
+      filteredEvents[event.id] = {
+        event,
+        attendeesEmails: [event.user],
+      };
 
       return true;
     });
