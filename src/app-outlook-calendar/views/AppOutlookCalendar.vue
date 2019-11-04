@@ -43,7 +43,7 @@ export default {
         .postMessage(Object.assign({ name }, data || {}), 'https://outlook.office365.com');
     },
     onMessage(event) {
-      if (!event.data.name) {
+      if (!event.data.name || event.origin.indexOf('https://outlook.office365.com') < 0) {
         return;
       }
 
