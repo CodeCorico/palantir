@@ -50,6 +50,13 @@
     user: userInterface(users[request.user_id]),
   });
 
+  const requestSortStartDate = (a, b) => a.startDate > b.startDate
+    ? 1
+    : a.startDate < b.startDate ? -1 : 0;
+  const requestSortEndDate= (a, b) => a.endDate > b.endDate
+    ? 1
+    : a.endDate < b.endDate ? -1 : 0;
+
   const collectRequests = (domain, groupId, result) => new Promise((resolve, reject) => {
     try {
       const types = {};
@@ -61,8 +68,12 @@
       result.nextDaysUsers.forEach(user => (users[user.id] = user));
 
       resolve({
-        today: result.todayRequests.map(requestInterface(types, users)),
-        nextDays: result.nextDaysRequests.map(requestInterface(types, users)),
+        today: result.todayRequests
+          .map(requestInterface(types, users))
+          .sort(requestSortEndDate),
+        nextDays: result.nextDaysRequests
+          .map(requestInterface(types, users))
+          .sort(requestSortStartDate),
       });
     } catch(err) {
       reject(err);
