@@ -30,7 +30,7 @@ export default {
   display: inline-block;
   height: 62px;
   min-width: 48px;
-  margin: 0 30px 0 20px;
+  margin: 0 30px 10px 20px;
 
   .user {
     display: inline-block;
@@ -74,22 +74,22 @@ export default {
   }
 
   &.type-success {
-    .target {
-      background: #389393;
+    .user, .target-dots {
+      border-color: #389393;
     }
 
-    .target-dots {
-      border-top-color: #389393;
+    .target {
+      background: #389393;
     }
   }
 
   &.type-error {
-    .target {
-      background: #f39d4c;
+    .user, .target-dots {
+      border-color: #f39d4c;
     }
 
-    .target-dots {
-      border-top-color: #f39d4c;
+    .target {
+      background: #f39d4c;
     }
   }
 }

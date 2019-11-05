@@ -5,7 +5,7 @@
     </div>
 
     <div class="container">
-      <div v-if="requests.today.remote.length || requests.today.off.length">
+      <div v-if="requests.today.remote.length || requests.today.off.length" class="group">
         <h2>Today</h2>
 
         <div v-if="requests.today.remote.length">
@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div v-if="requests.nextDays.remote.length || requests.nextDays.off.length">
+      <div v-if="requests.nextDays.remote.length || requests.nextDays.off.length" class="group">
         <h2>Next days</h2>
 
         <div v-if="requests.nextDays.remote.length">
@@ -200,13 +200,18 @@ export default {
   }
 
   h3 {
-    margin: 5px 0;
+    margin: 5px 0 10px;
     font-size: 12px;
     opacity: 0.7;
   }
 
   .container {
+    display: flex;
     padding: 40px;
+  }
+
+  .group {
+    flex-grow: 1;
   }
 }
 </style>
