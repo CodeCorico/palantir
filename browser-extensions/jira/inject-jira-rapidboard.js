@@ -53,7 +53,7 @@
     }
 
     const dayBefore = new Date();
-    dayBefore.setDate(dayBefore.getDate() - 1);
+    dayBefore.setDate(dayBefore.getDate() - (dayBefore.getDay() === 1 ? 3 : 1));
     dayBefore.setHours(10);
     dayBefore.setMinutes(0);
     dayBefore.setSeconds(0);
