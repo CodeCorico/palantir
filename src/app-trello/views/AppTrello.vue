@@ -78,8 +78,8 @@ export default {
 
   .card {
     position: relative;
-    margin: 30px 10px;
-    padding: 15px;
+    margin: 20px 10px;
+    padding: 5px;
     background: #27828233;
     box-shadow: #2782827d 0px 0px 7px 5px;
   }
