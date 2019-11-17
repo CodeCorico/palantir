@@ -6,8 +6,17 @@
       <div v-for="card in cards" :key="card.id" class="card"
           :style="`background: ${card.color}33; box-shadow: 0 0 7px 5px ${card.color}7d`">
         <div class="members">
-          <div v-for="member in card.members" :key="member.id" class="member">
-            <img :src="member.avatarUrl && `${member.avatarUrl}/50.png` || avatarDefault" />
+          <div
+            v-for="member in card.members"
+            :key="member.id"
+            class="member"
+            :title="member.fullName"
+          >
+            <img :src="
+              member.avatarUrlLocal
+              || (member.avatarUrl && `${member.avatarUrl}/50.png`)
+              || avatarDefault
+            " />
           </div>
         </div>
 
