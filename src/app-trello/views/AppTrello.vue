@@ -7,7 +7,7 @@
           :style="`background: ${card.color}33; box-shadow: 0 0 7px 5px ${card.color}7d`">
         <div class="members">
           <div v-for="member in card.members" :key="member.id" class="member">
-            <img :src="`${member.avatarUrl}/50.png`" />
+            <img :src="member.avatarUrl && `${member.avatarUrl}/50.png` || avatarDefault" />
           </div>
         </div>
 
@@ -24,12 +24,18 @@
 <script>
 import { mapState } from 'vuex';
 import store from '@/services/store';
+import avatarDefault from '../assets/avatar-default.png';
 
 export default {
   name: 'app-trello',
   store,
   props: {
     config: Object,
+  },
+  data() {
+    return {
+      avatarDefault,
+    };
   },
   destroyed() {
     this.$store.dispatch('Trello/clear');
