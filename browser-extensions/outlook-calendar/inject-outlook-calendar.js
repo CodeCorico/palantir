@@ -27,12 +27,12 @@
   });
 
   const consumeRules = [
-    ['^événement du du \\w+ \\d+ \\w+ \\d+ (.*?) à (.*?) (.*?) emplacement (.*?) organisateur .*$', [1, 2, 3, 4]],
-    ['^événement du du \\w+ \\d+ \\w+ \\d+ (.*?) à (.*?) (.*?) emplacement (.*?) périodique$', [1, 2, 3, 4]],
-    ['^événement du du \\w+ \\d+ \\w+ \\d+ (.*?) à (.*?) (.*?) emplacement (.*?)$', [1, 2, 3, 4]],
-    ['^événement du du \\w+ \\d+ \\w+ \\d+ (.*?) à (.*?) (.*?) organisateur .*?$', [1, 2, 3]],
-    ['^événement du du \\w+ \\d+ \\w+ \\d+ (.*?) à (.*?) (.*?) périodique$', [1, 2, 3]],
-    ['^événement du du \\w+ \\d+ \\w+ \\d+ (.*?) à (.*?) (.*?)$', [1, 2, 3]],
+    [/^événement du du \w+ \d+ .*? \d+ (.*?) à (.*?) (.*?) emplacement (.*?) organisateur .*$/i, [1, 2, 3, 4]],
+    [/^événement du du \w+ \d+ .*? \d+ (.*?) à (.*?) (.*?) emplacement (.*?) périodique$/i, [1, 2, 3, 4]],
+    [/^événement du du \w+ \d+ .*? \d+ (.*?) à (.*?) (.*?) emplacement (.*?)$/i, [1, 2, 3, 4]],
+    [/^événement du du \w+ \d+ .*? \d+ (.*?) à (.*?) (.*?) organisateur .*?$/i, [1, 2, 3]],
+    [/^événement du du \w+ \d+ .*? \d+ (.*?) à (.*?) (.*?) périodique$/i, [1, 2, 3]],
+    [/^événement du du \w+ \d+ .*? \d+ (.*?) à (.*?) (.*?)$/i, [1, 2, 3]],
   ];
 
   const usersColors = () => {
@@ -57,7 +57,7 @@
     const events = [];
 
     document.querySelectorAll('[role="main"] [draggable="true"] [role="button"]').forEach((el) => {
-      const label = el.getAttribute('aria-label');
+      const label = (el.getAttribute('aria-label') || '').trim();
       const colorEl = el.querySelector('div');
       const event = {
         color: colorEl && colorEl.style.borderColor || null,
