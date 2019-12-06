@@ -83,7 +83,7 @@
         event.user = event.color ? colors[event.color] : null;
       });
 
-      if (event.from) {
+      if (event.from && !event.summary.match(/^(annulé|canceled):/i)) {
         events.push(event);
       }
     });
