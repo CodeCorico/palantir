@@ -88,15 +88,15 @@
     const dayBefore = new Date();
     dayBefore.setDate(dayBefore.getDate() - (dayBefore.getDay() === 1 ? 3 : 1));
     dayBefore.setHours(10);
-    dayBefore.setMinutes(0);
+    dayBefore.setMinutes(30);
     dayBefore.setSeconds(0);
     const dayBeforeTime = dayBefore.getTime();
 
     collectIssues().then((issues) => {
       issues.forEach((issue) => {
-        const updated = new Date(issue.fields.updated);
+        const updatedTime = new Date(issue.fields.updated).getTime();
 
-        if (dayBeforeTime > updated.getTime()) {
+        if (dayBeforeTime > updatedTime) {
           return;
         }
 
