@@ -33,9 +33,10 @@ export default {
   margin: 0 30px 10px 20px;
 
   .user {
-    display: inline-block;
-    position: relative;
-    margin: 8px 0 0 -10px;
+    display: block;
+    position: absolute;
+    top: 8px;
+    left: -10px;
     width: 40px;
     height: 40px;
     transform: rotate(-45deg);
@@ -55,7 +56,7 @@ export default {
   .target {
     display: inline-block;
     vertical-align: top;
-    margin: 21px 0 0 40px;
+    margin: 21px 0 0 78px;
     padding: 2px 10px;
     background: #6998fc;
     color: #fff;

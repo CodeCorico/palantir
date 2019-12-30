@@ -212,6 +212,7 @@ export default {
 
   .group {
     flex-grow: 1;
+    min-width: 250px;
   }
 }
 </style>
