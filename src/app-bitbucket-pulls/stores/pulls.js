@@ -39,7 +39,9 @@ const stringToRegExp = (patternObj) => {
   if (patternObj instanceof RegExp || patternObj === '*') {
     return patternObj;
   }
+
   let modifier = 'gi', pattern;
+
   if (Array.isArray(patternObj)) {
     if (patternObj.length === 1) {
       [pattern] = patternObj;
@@ -50,16 +52,21 @@ const stringToRegExp = (patternObj) => {
     else {
       throw Error("Accept only two-d array with [pattern, modifier].");
     }
-  } else if (typeof patternObj === 'string') {
+  }
+  else if (typeof patternObj === 'string') {
     pattern = patternObj;
-  } else {
+  }
+  else {
     throw Error(`Unsupported RegEx declaration, must be String | Array, got ${typeof patternObj}`);
   }
+
   try {
     return new RegExp(pattern, modifier);
-  } catch (err) {
-    throw Error(`Accept only '*' or valid RegExp declaration, [pattern: ${
-      pattern}, modifier: ${modifier}]`);
+  }
+  catch (err) {
+    throw Error(
+      `Accept only '*' or valid RegExp declaration, [pattern: ${pattern}, modifier: ${modifier}]`
+    );
   }
 };
 
