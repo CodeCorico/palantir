@@ -194,6 +194,7 @@ const store = {
         const cachePull = newCachePulls[pullRaw.id];
 
         groups[title].pulls.push({
+          key: `${pullRaw.palantirScope}-${pullRaw.number}`,
           id: pullRaw.id,
           number: pullRaw.number,
           createdAt: createdAt,
