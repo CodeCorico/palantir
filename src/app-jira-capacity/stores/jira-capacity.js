@@ -49,9 +49,10 @@ const store = {
       };
     },
     mutateEpics: (state, epics) => {
-      const epicsSplitted = { labels: [], values: {
-        todo: [], doing: [], done: [],
-      } };
+      const epicsSplitted = {
+        labels: [],
+        values: { todo: [], doing: [], done: [] },
+      };
 
       state.epicsDetails = epics.map((epic) => {
         epicsSplitted.labels.push(epic.name);
