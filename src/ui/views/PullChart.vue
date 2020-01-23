@@ -1,7 +1,10 @@
 <script>
+import 'chartjs-plugin-datalabels';
+import { Doughnut } from 'vue-chartjs';
+
 export default {
   name: 'ui-pull-chart',
-  extends: window.VueChartJs.Doughnut,
+  extends: Doughnut,
   props: {
     values: Array,
   },
