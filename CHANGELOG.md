@@ -1,3 +1,64 @@
+# [0.9.0](https://github.com/CodeCorico/palantir/compare/v0.8.0...v0.9.0) (2020-01-23)
+
+
+### Bug Fixes
+
+* **app freshteam:** align groups ([955244a](https://github.com/CodeCorico/palantir/commit/955244a))
+* **app outlook-calendar:** filter the frame messages ([e5e8c00](https://github.com/CodeCorico/palantir/commit/e5e8c00))
+* **app outlook-calendar:** remove duplicates events ([f7949e2](https://github.com/CodeCorico/palantir/commit/f7949e2))
+* **app trello:** decrease the card height ([6a3df1c](https://github.com/CodeCorico/palantir/commit/6a3df1c))
+* **app trello:** move the done ticker to the bottom ([92ce09b](https://github.com/CodeCorico/palantir/commit/92ce09b))
+* **app trello:** return the string error on get tasks list ([1223d8a](https://github.com/CodeCorico/palantir/commit/1223d8a))
+* **app-github-pulls:** add condition for oldMergeableState ([04314a9](https://github.com/CodeCorico/palantir/commit/04314a9))
+* **app-github-pulls:** fix condition for changes ([4daba0a](https://github.com/CodeCorico/palantir/commit/4daba0a))
+* **app-images-randomizer:** correct randomness ([759567c](https://github.com/CodeCorico/palantir/commit/759567c))
+* **browser-extension jira:** decrease the update for 3 days on monday ([b8f4d8a](https://github.com/CodeCorico/palantir/commit/b8f4d8a))
+* **browser-extensions jira:** change last update time check to 10:30 ([11aacf6](https://github.com/CodeCorico/palantir/commit/11aacf6))
+* **browser-extensions outlook-calendar:** accept accents in regexs ([9f83b94](https://github.com/CodeCorico/palantir/commit/9f83b94))
+* **browser-extensions outlook-calendar:** use the event border-color ([b3f6b3a](https://github.com/CodeCorico/palantir/commit/b3f6b3a))
+* **services cron:** use clearTimeout() instead of clearInterval ([4a1c712](https://github.com/CodeCorico/palantir/commit/4a1c712)), closes [#10](https://github.com/CodeCorico/palantir/issues/10)
+* **ui header:** better lock display ([b70bab4](https://github.com/CodeCorico/palantir/commit/b70bab4))
+* **ui header:** remove the date time icon and fix the font ([9c88b9c](https://github.com/CodeCorico/palantir/commit/9c88b9c))
+* **ui pull-chart:** update chart when values changes ([769b601](https://github.com/CodeCorico/palantir/commit/769b601))
+* **ui pulls:** add missing 'ui-' in the component's name ([d135bac](https://github.com/CodeCorico/palantir/commit/d135bac))
+* **ui user-target:** realign content on many items ([3e62b62](https://github.com/CodeCorico/palantir/commit/3e62b62))
+
+
+### Features
+
+* **app bitbucket-pulls:** create the app ([46c2962](https://github.com/CodeCorico/palantir/commit/46c2962))
+* **app freshteam:** create the app ([8dc4e32](https://github.com/CodeCorico/palantir/commit/8dc4e32))
+* **app jira-capacity:** create the new app ([045b7d0](https://github.com/CodeCorico/palantir/commit/045b7d0))
+* **app jira-capacity jira-connector-extended:** add more api methods and fixes ([33f6c9e](https://github.com/CodeCorico/palantir/commit/33f6c9e))
+* **app outlook-calendar:** create the app ([a5e26aa](https://github.com/CodeCorico/palantir/commit/a5e26aa))
+* **app trello:** create the trello app ([0123aee](https://github.com/CodeCorico/palantir/commit/0123aee))
+* **app-images-randomizer App:** play audio in start method ([99780b1](https://github.com/CodeCorico/palantir/commit/99780b1))
+* **app-images-randomizer stores:** add sounds as a state ([8303d29](https://github.com/CodeCorico/palantir/commit/8303d29))
+* **app-speech-synthesis:** add app-speech-synthesis ([54953d7](https://github.com/CodeCorico/palantir/commit/54953d7))
+* **app-trello:** add default avatar for members who don't have one ([0ca65e7](https://github.com/CodeCorico/palantir/commit/0ca65e7))
+* **app-trello:** add the possibility to override the avatars ([55e94b6](https://github.com/CodeCorico/palantir/commit/55e94b6))
+* **browser-extension:** create the outlook-calendar injection ([633eab2](https://github.com/CodeCorico/palantir/commit/633eab2))
+* **browser-extensions:** add icons ([1991287](https://github.com/CodeCorico/palantir/commit/1991287))
+* **browser-extensions freshteam:** create the frame helper ([fd91535](https://github.com/CodeCorico/palantir/commit/fd91535))
+* **browser-extensions freshteam:** sort requests by date ([403b745](https://github.com/CodeCorico/palantir/commit/403b745))
+* **browser-extensions jira:** add a ctrl+alt+k shortcut to apply symbols ([c72c77b](https://github.com/CodeCorico/palantir/commit/c72c77b))
+* **browser-extensions jira:** create the extension ([ca1c3bc](https://github.com/CodeCorico/palantir/commit/ca1c3bc))
+* **browser-extensions outlook-calendar:** remove canceled events ([f543350](https://github.com/CodeCorico/palantir/commit/f543350))
+* **cli changelog:** create the destination directory ([3254822](https://github.com/CodeCorico/palantir/commit/3254822))
+* **doc assets palantir:** add the changelog app ([5a5057b](https://github.com/CodeCorico/palantir/commit/5a5057b))
+* **github pulls:** add regex sort option ([b072e0a](https://github.com/CodeCorico/palantir/commit/b072e0a))
+* **layouts page:** display a new lock feature ([6ce5f0d](https://github.com/CodeCorico/palantir/commit/6ce5f0d))
+* **public:** add chartjs plugin datalabels ([d742b20](https://github.com/CodeCorico/palantir/commit/d742b20))
+* **server:** add to the features the possibility to create apis ([c327e2e](https://github.com/CodeCorico/palantir/commit/c327e2e))
+* **server:** listen to slack messages ([7d31a19](https://github.com/CodeCorico/palantir/commit/7d31a19))
+* **store apps:** add root ([ae7fdc0](https://github.com/CodeCorico/palantir/commit/ae7fdc0))
+* **store config:** remove error menu required ([432431b](https://github.com/CodeCorico/palantir/commit/432431b))
+* **task:** launch a task commanded by slack ([e30f29e](https://github.com/CodeCorico/palantir/commit/e30f29e))
+* **ui header:** fix animation problem on date in title with new animation ([9314c60](https://github.com/CodeCorico/palantir/commit/9314c60))
+* **views page:** disable menu ([cb6d6da](https://github.com/CodeCorico/palantir/commit/cb6d6da))
+
+
+
 # [0.8.0](https://github.com/CodeCorico/palantir/compare/v0.7.0...v0.8.0) (2019-02-11)
 
 
