@@ -10,7 +10,7 @@
 
           <a
             v-for="pull in group.pulls"
-            :key="pull.id"
+            :key="pull.key"
             :href="pull.url"
             target="_blank"
             class="pull"
