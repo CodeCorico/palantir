@@ -27,6 +27,7 @@ import AppGoogleCalendar from '@/app-google-calendar/views/AppGoogleCalendar.vue
 import AppOutlookCalendar from '@/app-outlook-calendar/views/AppOutlookCalendar.vue';
 import AppTrello from '@/app-trello/views/AppTrello.vue';
 import AppFreshteam from '@/app-freshteam/views/AppFreshteam.vue';
+import AppJiraCapacity from '@/app-jira-capacity/views/AppJiraCapacity.vue';
 
 export default {
   name: 'app-grid',
@@ -41,6 +42,7 @@ export default {
     AppOutlookCalendar,
     AppTrello,
     AppFreshteam,
+    AppJiraCapacity,
   },
   props: {
     config: Object,

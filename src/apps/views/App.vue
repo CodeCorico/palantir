@@ -22,6 +22,7 @@ import AppOutlookCalendar from '@/app-outlook-calendar/views/AppOutlookCalendar.
 import AppTrello from '@/app-trello/views/AppTrello.vue';
 import AppFreshteam from '@/app-freshteam/views/AppFreshteam.vue';
 import AppGrid from '@/app-grid/views/AppGrid.vue';
+import AppJiraCapacity from '@/app-jira-capacity/views/AppJiraCapacity.vue';
 
 export default {
   name: 'app',
@@ -38,6 +39,7 @@ export default {
     AppTrello,
     AppFreshteam,
     AppGrid,
+    AppJiraCapacity,
   },
   mounted() {
     this.routeUpdated();
