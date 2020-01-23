@@ -14,6 +14,7 @@
     "build:gh-pages": "npm run build && npm run build:docs && npm run build:changelog && cp dist/docs/doc-assets/palantir.json dist/",
     "lint": "vue-cli-service lint",
     "start": "node ./src/server/index.js",
+    "start:watch": "nodemon ./src/server/index.js",
     "storybook": "start-storybook -p 9000 -c ./src/bootstrap/storybook",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "version": "npm run changelog && git add CHANGELOG.md",
