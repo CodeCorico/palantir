@@ -64,9 +64,9 @@ if (statics) {
     const rtm = new RTMClient(slackToken);
     const web = new WebClient(slackToken);
 
-
     const registerSlack = async (apps) => {
       await rtm.start();
+
       io.on('connection', function (socket) {
         socket.on('slackMessage', function (message, channel) {
           try {
@@ -77,6 +77,7 @@ if (statics) {
           }
         });
       });
+
       rtm.on('message', async ({ text, user, channel }) => {
         if (!text) {
           return;
@@ -88,18 +89,20 @@ if (statics) {
           if (command === 'help') {
             rtm.sendMessage(`<@${user}>, here are the available commands: ${
               apps.map(command => `\n- \`${command}\``)
-              }`, channel);
+            }`, channel);
           }
 
           return;
         }
 
         const response = await web.users.info({ user });
+
         io.emit(command, {
           parameters,
           user: response.user.profile.display_name,
           channel,
         });
+
         rtm.sendMessage([
           'Receiving...\n',
           `command: \`${command}\`\n`,
@@ -113,8 +116,8 @@ if (statics) {
       .reduce((acc, { tasks }) => tasks ? [
         ...acc,
         ...tasks
-          .filter(({ slackCommand }) => slackCommand)
-          .map(({ slackCommand }) => slackCommand)] : acc, []);
+        .filter(({ slackCommand }) => slackCommand)
+        .map(({ slackCommand }) => slackCommand)] : acc, []);
 
     if (slackApps.some(slackCommand => slackCommand.match(/\s/))) {
       throw Error('slackCommand should not have any whitespace.');
@@ -124,8 +127,6 @@ if (statics) {
   }
 }
 
-
-
 // eslint-disable-next-line no-console
-const server = app.listen(port, () => console.log(`Server started on :${port}`));
+const server = app.listen(port, () => console.log(`Server started on http://localhost:${port}`));
 const io = socket(server);
