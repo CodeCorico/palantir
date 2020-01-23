@@ -1,7 +1,10 @@
 <script>
+import 'chartjs-plugin-datalabels';
+import { Line } from 'vue-chartjs';
+
 export default {
   name: 'sprints-chart',
-  extends: window.VueChartJs.Line,
+  extends: Line,
   props: {
     labels: Array,
     values: Array,

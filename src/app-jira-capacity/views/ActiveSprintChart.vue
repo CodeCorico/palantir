@@ -1,7 +1,10 @@
 <script>
+import 'chartjs-plugin-datalabels';
+import { Pie } from 'vue-chartjs';
+
 export default {
   name: 'active-sprint-chart',
-  extends: window.VueChartJs.Pie,
+  extends: Pie,
   props: {
     values: Array,
   },

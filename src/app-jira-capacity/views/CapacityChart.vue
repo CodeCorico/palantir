@@ -1,7 +1,10 @@
 <script>
+import 'chartjs-plugin-datalabels';
+import { HorizontalBar } from 'vue-chartjs';
+
 export default {
   name: 'capacity-chart',
-  extends: window.VueChartJs.HorizontalBar,
+  extends: HorizontalBar,
   props: {
     labels: Array,
     values: Object,
@@ -84,6 +87,10 @@ export default {
             },
           }
         },
+        dataset: {
+          categoryPercentage: 1.0,
+          barPercentage: 0.99,
+        },
         layout: {
           padding: {
             top: 0,
@@ -99,8 +106,6 @@ export default {
           }],
           yAxes: [{
             stacked: true,
-            categoryPercentage: 1.0,
-            barPercentage: 0.99,
             ticks: {
               fontSize: 16,
               fontColor: 'rgba(255, 255, 255, 0.8)',
