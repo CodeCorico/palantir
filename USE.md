@@ -47,10 +47,10 @@ palantir changelog "../my-project/CHANGELOG.md" "./my-project.json"
 palantir doc "../my-project/{*.md,\!(node_modules)/**/*.md}" "./my-project" "../my-project/"
 ```
 
-### Internal variables
+### Internal options
 
 ```json
-"variables": {
+"options": {
   "upgrade.button": false, // no upgrade button in the header
   "upgrade.reload": false  // no automatic reload when the server's version changed
 }

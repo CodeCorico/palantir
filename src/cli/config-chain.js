@@ -26,8 +26,7 @@ const findIndex = (arr, attr, value) => {
 
 // ----- CONFIG
 
-const palantirFile =
-  file => file ? path.resolve(file) : `${process.env.SERVER_STATICS}/palantir.json`;
+const palantirFile = file => path.resolve(file || process.env.PALANTIR_FILE);
 
 const load = (file) => {
   const fileReal = palantirFile(file);
@@ -63,23 +62,6 @@ const display = () => {
   log(configData);
 
   return base();
-};
-
-
-// ----- VARIABLES
-
-const variables = {
-  get: name => base({
-    value: configData.variables ? configData.variables[name] : configData.variables
-  }),
-  set: (name, value) => {
-    configData.variables = configData.variables || {};
-    configData.variables[name] = value;
-
-    return base({
-      value: configData.variables[name],
-    });
-  },
 };
 
 // ----- APPS
@@ -402,7 +384,6 @@ const menuLink = (menuItemId, sectionId, id) => {
 // ----- BASE
 
 const base = (obj = {}) => {
-  obj.variables = variables;
   obj.apps = apps;
   obj.menu = menu;
   obj.save = save;

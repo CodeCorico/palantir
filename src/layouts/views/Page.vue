@@ -79,7 +79,7 @@ export default {
   },
   computed: {
     ...mapState('Page', ['leftSidebars', 'rightSidebars']),
-    ...mapState('Config', ['variables']),
+    ...mapState('Config', ['options']),
     upgrade() {
       const { versions } = this.$store.state.Page;
 
@@ -104,12 +104,12 @@ export default {
       return versions;
     },
     hasUpgradeButton() {
-      return typeof this.variables['upgrade.button'] === 'undefined'
-        || this.variables['upgrade.button'];
+      return typeof this.options['upgrade.button'] === 'undefined'
+        || this.options['upgrade.button'];
     },
     hasUpgradeReload() {
-      return typeof this.variables['upgrade.reload'] === 'undefined'
-        || this.variables['upgrade.reload'];
+      return typeof this.options['upgrade.reload'] === 'undefined'
+        || this.options['upgrade.reload'];
     },
     menu() {
       return this.$store.state.Menu.menu;

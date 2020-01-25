@@ -27,13 +27,13 @@ const configValidation = (config) => {
   const errs = [];
 
   if (!config || Object.keys(config).length === 0) {
-    errs.push(`The "palantir.json" file is empty`);
+    errs.push(`The Palantir JSON description file is empty`);
   }
 
   const apps = [];
 
   if (!config.apps || !Object.keys(config.apps).length) {
-    errs.push(`At least one app is required in the "palantir.json" config file`);
+    errs.push(`At least one app is required in the Palantir JSON description file`);
   } else {
     itemsValidation(config.apps, 'apps', ['tasks'], ({ el, key, treeNamespace, subTree }) => {
       if (subTree === 'apps') {
@@ -62,7 +62,7 @@ const configValidation = (config) => {
     });
   }
 
-  return errs.length ? `Invalid "palantir.json" description:\n- ${errs.join('\n- ')}\n` : null;
+  return errs.length ? `Invalid Palantir JSON description:\n- ${errs.join('\n- ')}\n` : null;
 };
 
 const errorConfig = (data, err) => {
@@ -100,11 +100,11 @@ const store = {
   namespaced: true,
   state: {
     config: {},
-    variables: {},
+    options: {},
   },
   mutations: {
-    updateVariables: (state, variables) => {
-      state.variables = variables;
+    updateOptions: (state, options) => {
+      state.options = options;
     },
     updateConfig: (state, payload) => {
       state.config = payload;
@@ -118,33 +118,27 @@ const store = {
 
       loaded = true;
 
-      let data = null;
+      let config = null;
       let err = null;
 
       try {
-        const payload = await axios.get('/palantir.json');
-        data = payload.data;
+        const payload = await axios.get('/api/config');
+        config = payload.data;
       } catch(ex) {
-        err = `Impossible to load the "palantir.json" description file.`;
+        err = `Impossible to load the Palantir JSON description file.`;
       }
 
-      err = err || configValidation(data);
+      err = err || configValidation(config);
 
-      errorConfig(data, err);
+      errorConfig(config, err);
 
-      const { variables = {} } = data;
-
-      const config = JSON.parse(JSON
-        .stringify(data)
-        .replace(/#{(.*?)}/g, (match, key) => variables[key] || ''));
-
-      const { apps = [] } = config;
+      const { options = {}, apps = [] } = config;
 
       Object.keys(apps).forEach((key) => {
         apps[key].url = `/app/${key}`;
       });
 
-      commit('updateVariables', variables);
+      commit('updateOptions', options);
       commit('updateConfig', config);
 
       Object.keys(rootState).forEach((namespace) => {
