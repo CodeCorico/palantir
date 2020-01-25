@@ -14,8 +14,11 @@ Accept an array of regular expressions to be used in sorting. Regular expression
 ```
 "pulls": {
   "type": "github-pulls",
+  "secrets": {
+    "username": "#{BITBUCKET_USERNAME}",
+    "password": "#{BITBUCKET_PASSWORD}"
+  }
   "config": {
-    "token": "#{github-token}",
     "order": [
       "^\\[fastlane\\]",
       "*",

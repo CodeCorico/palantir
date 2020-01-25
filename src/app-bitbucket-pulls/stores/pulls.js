@@ -1,27 +1,8 @@
-import bitbucket from '../bitbucket';
+import axios from 'axios';
 
 const name = 'BitbucketPulls';
 
-const fetchRepo = async (key, repo) => {
-  const { data } = await bitbucket.get(`repositories/${repo}/pullrequests?q=state="OPEN"`);
-  const { values } = data;
-
-  values.palantirScope = key;
-
-  return values;
-};
-
-const fetchPull = async (pullSummary) => {
-  const pull = await bitbucket.get(pullSummary.url);
-  const data = Object.assign({}, pull.data);
-
-  const diffstat = await bitbucket.get(data.links.diffstat.href);
-  data.pDiffstat = diffstat.data.values;
-
-  data.palantirScope = pullSummary.palantirScope;
-
-  return data;
-};
+const BITBUCKET_PULLS_API_URL = '/api/bitbucket-pulls';
 
 const sortByDate = arr =>
   arr.sort((a, b) => a.createdAt < b.createdAt ? -1 : (a.createdAt > b.createdAt ? 1 : 0));
@@ -269,30 +250,17 @@ const store = {
   },
   actions: {
     async reload({ commit }, task) {
-      const { username = '', password = '', repositories = [], order = [] } = task.config;
+      const { order = [] } = task.config;
+      const { data } = await axios.get(`${BITBUCKET_PULLS_API_URL}?appId=${task.appId}`);
 
-      bitbucket.defaults.auth = { username, password };
+      if (data.error) {
+        // eslint-disable-next-line no-console
+        console.error(data.error);
 
-      const pullsSubArrays = await Promise.all(
-        Object.keys(repositories).map(key => fetchRepo(key, repositories[key]))
-      );
+        return;
+      }
 
-      const pullsSummary = [];
-
-      pullsSubArrays.forEach((pullsSubArray) => {
-        pullsSubArray.forEach((pull) => {
-          pullsSummary.push({
-            url: pull.links.self.href,
-            palantirScope: pullsSubArray.palantirScope,
-          })
-        });
-      });
-
-      const pulls = await Promise.all(
-        pullsSummary.map(pullSummary => fetchPull(pullSummary))
-      );
-
-      commit('mutatePulls', { taskId: task.id, pulls, order });
+      commit('mutatePulls', { taskId: task.id, pulls: data.pulls, order });
     },
     clear({ commit }) {
       commit('clear');
