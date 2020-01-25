@@ -1,10 +1,6 @@
 const { load } = require('./');
 
-const callback = async (req, res) => {
-  const config = load();
-
-  res.json(config);
-};
+const callback = (req, res) => res.json(load(null, true));
 
 const routes = [{ path: 'config', method: 'GET', callback }];
 
