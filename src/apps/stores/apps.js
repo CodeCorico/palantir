@@ -39,6 +39,7 @@ const store = {
 
           const disabled = !(tasksTypes[app.type] && tasksTypes[app.type].static);
 
+          task.appId = appId;
           task.number = state.tasksNumbers < 10 ? `0${state.tasksNumbers}` : state.tasksNumbers;
           task.disabled = disabled;
 

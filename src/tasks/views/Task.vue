@@ -25,6 +25,7 @@ export default {
   name: 'task',
   props: {
     id: String,
+    appId: String,
     number: String,
     status: {
       type: String,
@@ -57,6 +58,7 @@ export default {
 
       this.$store.dispatch(this.dispatch, {
         id: this.id,
+        appId: this.appId,
         config: this.config,
         slack: slackParameters
       });
