@@ -6,7 +6,7 @@ Sort Github Pulls using regular expressions. Use it by adding an `order` object 
 
 Accept an array of regular expressions to be used in sorting. Regular expressions can be specified using either:
 - a string, in this case a default `gi` modifier is used.
-- an array, using this model: Array[pattern, modifier]. 
+- an array, using this model: Array[pattern, modifier].
 - a wildcard `*` to negate all other regular expressions inside your array.
 
 ### Example
@@ -14,8 +14,10 @@ Accept an array of regular expressions to be used in sorting. Regular expression
 ```
 "pulls": {
   "type": "github-pulls",
+  "secrets": {
+    "token": "#{GITHUB_TOKEN}",
+  },
   "config": {
-    "token": "#{github-token}",
     "order": [
       "^\\[fastlane\\]",
       "*",

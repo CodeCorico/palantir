@@ -1,31 +1,8 @@
-import github from '../github';
+import axios from 'axios';
 
 const name = 'GithubPulls';
 
-const fetchRepo = async (key, repo) => {
-  const { data } = await github.get(`repos/${repo}/pulls`);
-
-  data.palantirScope = key;
-
-  return data;
-};
-
-const fetchPull = async (pullSummary) => {
-  const pull = await github.get(pullSummary.url);
-  const data = Object.assign({}, pull.data);
-
-  const reviews = await github.get(`${pullSummary.url}/reviews`);
-  data.pReviews = reviews.data;
-
-  if (data.statuses_url) {
-    const status = await github.get(data.statuses_url);
-    data.pStatus = status.data;
-  }
-
-  data.palantirScope = pullSummary.palantirScope;
-
-  return data;
-};
+const GITHUB_PULLS_API_URL = '/api/github-pulls';
 
 const sortByDate = arr =>
   arr.sort((a, b) => a.createdAt < b.createdAt ? -1 : (a.createdAt > b.createdAt ? 1 : 0));
@@ -249,30 +226,17 @@ const store = {
   },
   actions: {
     async reload({ commit }, task) {
-      const { token = '', repositories = [], order = [] } = task.config;
+      const { order = [] } = task.config;
+      const { data } = await axios.get(`${GITHUB_PULLS_API_URL}?appId=${task.appId}`);
 
-      github.defaults.headers.common.Authorization = `token ${token}`;
+      if (data.error) {
+        // eslint-disable-next-line no-console
+        console.error(data.error);
 
-      const pullsSubArrays = await Promise.all(
-        Object.keys(repositories).map(key => fetchRepo(key, repositories[key]))
-      );
+        return;
+      }
 
-      const pullsSummary = [];
-
-      pullsSubArrays.forEach((pullsSubArray) => {
-        pullsSubArray.forEach((pull) => {
-          pullsSummary.push({
-            url: pull.url,
-            palantirScope: pullsSubArray.palantirScope,
-          })
-        });
-      });
-
-      const pulls = await Promise.all(
-        pullsSummary.map(pullSummary => fetchPull(pullSummary))
-      );
-
-      commit('mutatePulls', { taskId: task.id, pulls, order });
+      commit('mutatePulls', { taskId: task.id, pulls: data.pulls, order });
     },
     clear({ commit }) {
       commit('clear');
