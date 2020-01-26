@@ -4,9 +4,7 @@ const name = 'JiraCapacity';
 
 const API_URL = '/api/jira-capacity';
 
-const timestampQuery = () => `&_=${new Date().getTime() / 1000}`;
-
-const api = (path, query) => axios.get(`${API_URL}/${path}?${query}${timestampQuery()}`);
+const api = (path, appId) => axios.get(`${API_URL}/${path}?appId=${appId}`);
 
 const store = {
   namespaced: true,
@@ -72,27 +70,7 @@ const store = {
   },
   actions: {
     async reload({ commit }, task) {
-      const { jira, velocity, sprints, epics } = task.config;
-      const jiraParams = {
-        jiraHost: jira.host,
-        jiraEmail: jira.email,
-        jiraToken: jira.token,
-      };
-
-      const sprintsParams = {
-        ...jiraParams,
-        velocitySprintsCount: velocity.sprintsCount,
-        sprintsBoardId: sprints.boardId,
-        sprintsNameFilter: sprints.nameFilter,
-        sprintsMax: sprints.max,
-        sprintsWeeks: sprints.weeks,
-      };
-
-      api('sprints', Object
-        .keys(sprintsParams)
-        .map(key => `${key}=${sprintsParams[key]}`)
-        .join('&')
-      ).then(({ data }) => {
+      api('sprints', task.appId).then(({ data }) => {
         if (data.error) {
           // eslint-disable-next-line no-console
           console.error(data.error);
@@ -105,17 +83,7 @@ const store = {
         commit('mutateActiveSprint', data.activeSprint);
       });
 
-      const epicsParams = {
-        ...jiraParams,
-        sprintsBoardId: sprints.boardId,
-        epicsFilterId: epics.filterId,
-      };
-
-      api('epics', Object
-        .keys(epicsParams)
-        .map(key => `${key}=${epicsParams[key]}`)
-        .join('&')
-      ).then(({ data }) => {
+      api('epics', task.appId).then(({ data }) => {
         if (data.error) {
           // eslint-disable-next-line no-console
           console.error(data.error);

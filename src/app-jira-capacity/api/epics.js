@@ -1,3 +1,4 @@
+const { app } = require('../../config');
 const createJiraClientExtended = require('./jira-connector-extended.js');
 
 const pullEpicsReports = async (jiraClient, boardId, epics, reports = []) => {
@@ -48,40 +49,39 @@ const pullEpicsReports = async (jiraClient, boardId, epics, reports = []) => {
 };
 
 const callback = async (req, res) => {
-  const {
-    jiraHost,
-    jiraEmail,
-    jiraToken,
-    sprintsBoardId,
-    epicsFilterId,
-  } = req.query;
+  const { appId = null } = req.query;
 
-  if (!jiraHost || !jiraEmail || !jiraToken) {
-    res.json({ error: 'The "jira" parameters are missing' });
+  if (!appId) {
+    res.json({ error: 'The "appId" parameter is missing' });
 
     return;
   }
 
-  const result = { epics: [] };
+  const appConfig = app(appId);
+
+  if (!appConfig) {
+    res.json({ error: `The app ${appId} doesn't exist` });
+
+    return;
+  }
+
+  const { host, email, token } = appConfig.secrets;
+  const { epics, sprints } = appConfig.config;
 
   const jiraClient = createJiraClientExtended({
-    host: jiraHost,
+    host: host,
     basic_auth: {
-      email: jiraEmail,
-      api_token: jiraToken,
+      email: email,
+      api_token: token,
     },
   });
 
-  const filter = await jiraClient.filter.getFilter({ filterId: epicsFilterId });
+  const filter = await jiraClient.filter.getFilter({ filterId: epics.filterId });
   const search = await jiraClient.search.search({ jql: filter.jql });
 
-  result.epics = await pullEpicsReports(
-    jiraClient,
-    sprintsBoardId,
-    search.issues,
-  );
-
-  res.json(result);
+  res.json({
+    epics: await pullEpicsReports(jiraClient, sprints.boardId, search.issues),
+  });
 };
 
 module.exports = callback;

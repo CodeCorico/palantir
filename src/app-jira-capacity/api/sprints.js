@@ -1,3 +1,4 @@
+const { app } = require('../../config');
 const createJiraClientExtended = require('./jira-connector-extended.js');
 
 const pullSprints = async (jiraClient, boardId, sprints = []) => {
@@ -45,22 +46,24 @@ const pullSprintsReports = async (jiraClient, boardId, sprints, reports = []) =>
 };
 
 const callback = async (req, res) => {
-  const {
-    jiraHost,
-    jiraEmail,
-    jiraToken,
-    velocitySprintsCount,
-    sprintsBoardId,
-    sprintsNameFilter,
-    sprintsMax,
-    sprintsWeeks,
-  } = req.query;
+  const { appId = null } = req.query;
 
-  if (!jiraHost || !jiraEmail || !jiraToken) {
-    res.json({ error: 'The "jira" parameters are missing' });
+  if (!appId) {
+    res.json({ error: 'The "appId" parameter is missing' });
 
     return;
   }
+
+  const appConfig = app(appId);
+
+  if (!appConfig) {
+    res.json({ error: `The app ${appId} doesn't exist` });
+
+    return;
+  }
+
+  const { host, email, token } = appConfig.secrets;
+  const { sprints, velocity } = appConfig.config;
 
   const result = {
     velocity: {
@@ -72,17 +75,17 @@ const callback = async (req, res) => {
   };
 
   const jiraClient = createJiraClientExtended({
-    host: jiraHost,
+    host: host,
     basic_auth: {
-      email: jiraEmail,
-      api_token: jiraToken,
+      email: email,
+      api_token: token,
     },
   });
 
   // Sprints
 
-  const sprintsNameFilterRe = sprintsNameFilter ? new RegExp(sprintsNameFilter, 'i') : null;
-  const allSprints = (await pullSprints(jiraClient, sprintsBoardId))
+  const sprintsNameFilterRe = sprints.nameFilter ? new RegExp(sprints.nameFilter, 'i') : null;
+  const allSprints = (await pullSprints(jiraClient, sprints.boardId))
     .filter((sprint) => {
       if (sprint.state.toLowerCase() === 'future') {
         return false;
@@ -91,9 +94,10 @@ const callback = async (req, res) => {
       return sprintsNameFilterRe ? !!sprint.name.match(sprintsNameFilterRe) : true;
     })
 
-  const sprints = allSprints.slice(Math.max(allSprints.length - sprintsMax, 0));
-
-  result.sprints = await pullSprintsReports(jiraClient, sprintsBoardId, sprints);
+  result.sprints = await pullSprintsReports(
+    jiraClient,
+    sprints.boardId,
+    allSprints.slice(Math.max(allSprints.length - sprints.max, 0)));
 
   // Active sprint
 
@@ -105,7 +109,7 @@ const callback = async (req, res) => {
   const velocityFilteredSprints = result.sprints.filter(sprint => sprint.state !== 'active');
 
   const velocitySprintsRealCount = Math.max(
-    velocityFilteredSprints.length - velocitySprintsCount, 0);
+    velocityFilteredSprints.length - velocity.sprintsCount, 0);
 
   const velocitySelectedSprints = velocityFilteredSprints.slice(velocitySprintsRealCount);
 
@@ -114,7 +118,7 @@ const callback = async (req, res) => {
     .reduce((accumulator, currentValue) => accumulator + currentValue)
     / velocitySelectedSprints.length);
 
-  result.velocity.weekly = result.velocity.sprint / sprintsWeeks;
+  result.velocity.weekly = result.velocity.sprint / sprints.weeks;
 
   res.json(result);
 };
