@@ -19,17 +19,7 @@ const store = {
   },
   actions: {
     async reload({ commit }, task) {
-      const key = task.config['api-key'];
-      const token = task.config['api-token'];
-      const { board, list } = task.config;
-      const queryParams = { key, token, board, list };
-
-      const query = Object
-        .keys(queryParams)
-        .map(key => `${key}=${queryParams[key]}`)
-        .join('&');
-
-      const { data } = await axios.get(`${TRELLO_API_URL}?${query}`);
+      const { data } = await axios.get(`${TRELLO_API_URL}?appId=${task.appId}`);
 
       if (data.error) {
         // eslint-disable-next-line no-console

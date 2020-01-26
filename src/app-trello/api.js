@@ -1,5 +1,7 @@
 const Trello = require('trello');
 
+const { app } = require('../config');
+
 const membersCache = {};
 
 const membersFromCard = async (trello, card, i = 0, members = []) => {
@@ -67,25 +69,24 @@ const fetchCards = async (trello, trelloCards, i = 0, cards = []) => {
 };
 
 const callback = async (req, res) => {
-  const { key = null, token = null, board = null, list = null } = req.query;
+  const { appId = null } = req.query;
 
-  if (!key || !token) {
-    res.json({ error: 'The "key" and "token" parameters are missing' });
-
-    return;
-  }
-
-  if (!board) {
-    res.json({ error: 'The "board" id parameter is missing' });
+  if (!appId) {
+    res.json({ error: 'The "appId" parameter is missing' });
 
     return;
   }
 
-  if (!list) {
-    res.json({ error: 'The "list" name parameter is missing' });
+  const appConfig = app(appId);
+
+  if (!appConfig) {
+    res.json({ error: `The app ${appId} doesn't exist` });
 
     return;
   }
+
+  const { key, token } = appConfig.secrets;
+  const { board, list } = appConfig.config;
 
   const trello = new Trello(key, token);
 
