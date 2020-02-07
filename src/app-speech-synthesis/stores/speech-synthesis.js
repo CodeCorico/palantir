@@ -1,11 +1,10 @@
 import axios from 'axios';
 import io from 'socket.io-client';
 
-const socket = io.connect('/');
-
 const name = 'SpeechSynthesis';
-
 const SPEECH_SYNTHESIS_API_URL = '/api/speech-synthesis';
+
+let socket = null;
 
 const store = {
   namespaced: true,
@@ -29,6 +28,8 @@ const store = {
   },
   actions: {
     async start({ commit }, task) {
+      socket = socket || io.connect('/');
+
       const slack = task.slack || null;
       const text = slack ? slack.parameters : task.text;
       const queryParams = { text };
@@ -37,7 +38,7 @@ const store = {
         .keys(queryParams)
         .map(key => `${key}=${queryParams[key]}`)
         .join('&');
-      
+
       const { data } = await axios.get(`${SPEECH_SYNTHESIS_API_URL}?${query}`);
 
       if (data.error) {
@@ -61,10 +62,10 @@ const store = {
 
         return;
       }
-      
+
       if (slack) {
         socket.emit(
-          'slackMessage', 
+          'slackMessage',
           [
             `*App(${name})*`,
             `<@${slack.user}>,`,
