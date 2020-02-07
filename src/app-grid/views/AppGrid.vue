@@ -18,31 +18,21 @@
 
 <script>
 import store from '@/services/store';
-import AppGithubPulls from '@/app-github-pulls/views/AppGithubPulls';
-import AppBitbucketPulls from '@/app-bitbucket-pulls/views/AppBitbucketPulls';
-import AppTimeline from '@/app-timeline/views/AppTimeline';
-import AppFrame from '@/app-frame/views/AppFrame.vue';
-import AppPages from '@/app-pages/views/AppPages.vue';
-import AppGoogleCalendar from '@/app-google-calendar/views/AppGoogleCalendar.vue';
-import AppOutlookCalendar from '@/app-outlook-calendar/views/AppOutlookCalendar.vue';
-import AppTrello from '@/app-trello/views/AppTrello.vue';
-import AppFreshteam from '@/app-freshteam/views/AppFreshteam.vue';
-import AppJiraCapacity from '@/app-jira-capacity/views/AppJiraCapacity.vue';
 
 export default {
   name: 'app-grid',
   store,
   components: {
-    AppGithubPulls,
-    AppBitbucketPulls,
-    AppTimeline,
-    AppFrame,
-    AppPages,
-    AppGoogleCalendar,
-    AppOutlookCalendar,
-    AppTrello,
-    AppFreshteam,
-    AppJiraCapacity,
+    AppGithubPulls: () => import('@/app-github-pulls/views/AppGithubPulls'),
+    AppBitbucketPulls: () => import('@/app-bitbucket-pulls/views/AppBitbucketPulls'),
+    AppTimeline: () => import('@/app-timeline/views/AppTimeline'),
+    AppFrame: () => import('@/app-frame/views/AppFrame.vue'),
+    AppPages: () => import('@/app-pages/views/AppPages.vue'),
+    AppGoogleCalendar: () => import('@/app-google-calendar/views/AppGoogleCalendar.vue'),
+    AppOutlookCalendar: () => import('@/app-outlook-calendar/views/AppOutlookCalendar.vue'),
+    AppTrello: () => import('@/app-trello/views/AppTrello.vue'),
+    AppFreshteam: () => import('@/app-freshteam/views/AppFreshteam.vue'),
+    AppJiraCapacity: () => import('@/app-jira-capacity/views/AppJiraCapacity.vue'),
   },
   props: {
     config: Object,
