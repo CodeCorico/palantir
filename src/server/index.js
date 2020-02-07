@@ -133,4 +133,6 @@ if (statics) {
 
 // eslint-disable-next-line no-console
 const server = app.listen(port, () => console.log(`Server started on http://localhost:${port}`));
+// 10min
+server.setTimeout(10 * 60 * 1000);
 const io = socket(server);
