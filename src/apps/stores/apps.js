@@ -16,10 +16,12 @@ const store = {
   namespaced: true,
   state: {
     hasConfig: true,
+    configLoaded: false,
     appRoot: null,
     apps: {},
     tasks: [],
     tasksNumbers: 0,
+    activeAppId: null,
     activeApp: null,
   },
   mutations: {
@@ -67,13 +69,25 @@ const store = {
           });
         });
       });
+
+      state.configLoaded = true;
     },
     updateActiveApp: (state, id) => {
       let appId = id || state.appRoot;
+      state.activeAppId = appId;
+
+      if (!state.configLoaded) {
+        return;
+      }
 
       if (!appId || !state.apps[appId]) {
         appId = '$error';
-        state.apps[appId].config.error = 'No app found';
+        state.apps[appId] = {
+          type: 'error',
+          config: {
+            error: 'No app found',
+          },
+        };
       }
 
       state.activeApp = state.apps[appId];
@@ -133,8 +147,9 @@ const store = {
     },
   },
   actions: {
-    config({ commit }, payload) {
+    config({ commit, state }, payload) {
       commit('config', payload);
+      commit('updateActiveApp', state.activeAppId);
     },
     activeApp({ commit }, appId) {
       commit('updateActiveApp', appId);
