@@ -9,6 +9,7 @@
     "serve": "vue-cli-service serve ./src/bootstrap/index.js",
     "build": "vue-cli-service build ./src/bootstrap/index.js",
     "build:watch": "vue-cli-service build --watch ./src/bootstrap/index.js",
+    "build:report": "vue-cli-service build --report ./src/bootstrap/index.js",
     "build:docs": "palantir doc \"./{*.md,!(node_modules)/**/*.md,*.mmd,!(node_modules)/**/*.mmd}\" dist/docs/ ./ && cp -R doc-assets dist/docs/",
     "build:changelog": "palantir changelog changelog.md dist/changelog/changelog.json",
     "build:gh-pages": "npm run build && npm run build:docs && npm run build:changelog && cp dist/docs/doc-assets/palantir.json dist/",
