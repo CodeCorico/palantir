@@ -4,7 +4,14 @@
       class="grid-app"
       v-for="app in apps"
       :key="app.app"
-      :style="`top: ${app.y}; left: ${app.x}; width: ${app.width}; height: ${app.height};`"
+      :style="`
+        top: ${typeof app.top === 'undefined' ? 'auto' : app.top};
+        left: ${typeof app.left === 'undefined' ? 'auto' : app.left};
+        right: ${typeof app.right === 'undefined' ? 'auto' : app.right};
+        bottom: ${typeof app.bottom === 'undefined' ? 'auto' : app.bottom};
+        width: ${typeof app.width === 'undefined' ? 'auto' : app.width};
+        height: ${typeof app.height === 'undefined' ? 'auto' : app.height};
+      `"
     >
       <component
         :is="`app-${app.def.type}`"
