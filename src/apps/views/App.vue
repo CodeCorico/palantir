@@ -11,35 +11,23 @@
 <script>
 import { mapState } from 'vuex';
 import store from '@/services/store';
-import AppError from '@/app-error/views/AppError';
-import AppGithubPulls from '@/app-github-pulls/views/AppGithubPulls';
-import AppBitbucketPulls from '@/app-bitbucket-pulls/views/AppBitbucketPulls';
-import AppTimeline from '@/app-timeline/views/AppTimeline';
-import AppFrame from '@/app-frame/views/AppFrame.vue';
-import AppPages from '@/app-pages/views/AppPages.vue';
-import AppGoogleCalendar from '@/app-google-calendar/views/AppGoogleCalendar.vue';
-import AppOutlookCalendar from '@/app-outlook-calendar/views/AppOutlookCalendar.vue';
-import AppTrello from '@/app-trello/views/AppTrello.vue';
-import AppFreshteam from '@/app-freshteam/views/AppFreshteam.vue';
-import AppGrid from '@/app-grid/views/AppGrid.vue';
-import AppJiraCapacity from '@/app-jira-capacity/views/AppJiraCapacity.vue';
 
 export default {
   name: 'app',
   store,
   components: {
-    AppError,
-    AppGithubPulls,
-    AppBitbucketPulls,
-    AppTimeline,
-    AppFrame,
-    AppPages,
-    AppGoogleCalendar,
-    AppOutlookCalendar,
-    AppTrello,
-    AppFreshteam,
-    AppGrid,
-    AppJiraCapacity,
+    AppError: () => import('@/app-error/views/AppError'),
+    AppGithubPulls: () =>import('@/app-github-pulls/views/AppGithubPulls'),
+    AppBitbucketPulls: () =>import('@/app-bitbucket-pulls/views/AppBitbucketPulls'),
+    AppTimeline: () =>import('@/app-timeline/views/AppTimeline'),
+    AppFrame: () =>import('@/app-frame/views/AppFrame.vue'),
+    AppPages: () =>import('@/app-pages/views/AppPages.vue'),
+    AppGoogleCalendar: () =>import('@/app-google-calendar/views/AppGoogleCalendar.vue'),
+    AppOutlookCalendar: () =>import('@/app-outlook-calendar/views/AppOutlookCalendar.vue'),
+    AppTrello: () =>import('@/app-trello/views/AppTrello.vue'),
+    AppFreshteam: () =>import('@/app-freshteam/views/AppFreshteam.vue'),
+    AppGrid: () =>import('@/app-grid/views/AppGrid.vue'),
+    AppJiraCapacity: () =>import('@/app-jira-capacity/views/AppJiraCapacity.vue'),
   },
   mounted() {
     this.routeUpdated();
