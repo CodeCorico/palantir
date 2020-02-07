@@ -1,5 +1,5 @@
-const { app } = require('../../config');
-const createJiraClientExtended = require('./jira-connector-extended.js');
+const { app } = require('../config');
+const createJiraClientExtended = require('../jira/jira-connector-extended.js');
 
 const pullSprints = async (jiraClient, boardId, sprints = []) => {
   const result = await jiraClient.board.getAllSprints({ boardId, startAt: sprints.length });
@@ -124,3 +124,6 @@ const callback = async (req, res) => {
 };
 
 module.exports = callback;
+
+
+module.exports = [{ path: 'jira-run', method: 'GET', callback }];

@@ -40,6 +40,7 @@ export default {
     AppTrello: () => import('@/app-trello/views/AppTrello.vue'),
     AppFreshteam: () => import('@/app-freshteam/views/AppFreshteam.vue'),
     AppJiraCapacity: () => import('@/app-jira-capacity/views/AppJiraCapacity.vue'),
+    AppJiraRun: () => import('@/app-jira-run/views/AppJiraRun.vue'),
   },
   props: {
     config: Object,

@@ -2,49 +2,18 @@ import axios from 'axios';
 
 const name = 'JiraCapacity';
 
-const API_URL = '/api/jira-capacity';
-
-const api = (path, appId) => axios.get(`${API_URL}/${path}?appId=${appId}`);
+const api = appId => axios.get(`/api/jira-capacity?appId=${appId}`);
 
 const store = {
   namespaced: true,
   state: {
-    velocity: {},
-    sprints: { labels: [], values: [] },
-    activeSprint: { labels: [], values: [] },
     epics: { labels: [], values: {} },
     epicsDetails: [],
   },
   mutations: {
     clear(state) {
-      state.velocity = {};
-      state.sprints = { labels: [], values: [] };
-      state.activeSprint = { labels: [], values: [] };
       state.epics = { labels: [], values: {} };
       state.epicsDetails = [];
-    },
-    mutateVelocity: (state, velocity) => {
-      state.velocity = velocity;
-    },
-    mutateSprints: (state, sprints) => {
-      const sprintsSplitted = { labels: [], values: [] };
-
-      sprints.forEach((sprint) => {
-        sprintsSplitted.labels.push(sprint.name);
-        sprintsSplitted.values.push(sprint.estimate.done);
-      });
-
-      state.sprints = sprintsSplitted;
-    },
-    mutateActiveSprint: (state, activeSprint) => {
-      state.activeSprint = {
-        name: activeSprint.name,
-        values: [
-          activeSprint.estimate.todo,
-          activeSprint.estimate.doing,
-          activeSprint.estimate.done,
-        ],
-      };
     },
     mutateEpics: (state, epics) => {
       const epicsSplitted = {
@@ -70,29 +39,16 @@ const store = {
   },
   actions: {
     async reload({ commit }, task) {
-      api('sprints', task.appId).then(({ data }) => {
-        if (data.error) {
-          // eslint-disable-next-line no-console
-          console.error(data.error);
+      const { data } = await api(task.appId);
 
-          return;
-        }
+      if (data.error) {
+        // eslint-disable-next-line no-console
+        console.error(data.error);
 
-        commit('mutateVelocity', data.velocity);
-        commit('mutateSprints', data.sprints);
-        commit('mutateActiveSprint', data.activeSprint);
-      });
+        return;
+      }
 
-      api('epics', task.appId).then(({ data }) => {
-        if (data.error) {
-          // eslint-disable-next-line no-console
-          console.error(data.error);
-
-          return;
-        }
-
-        commit('mutateEpics', data.epics);
-      });
+      commit('mutateEpics', data.epics);
     },
     clear({ commit }) {
       commit('clear');
