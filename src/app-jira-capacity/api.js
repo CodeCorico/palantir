@@ -1,5 +1,5 @@
 const { app } = require('../config');
-const createJiraClientExtended = require('../jira/jira-connector-extended.js');
+const { createJiraClientExtended } = require('../services/jira');
 
 const pullEpicsReports = async (jiraClient, boardId, epics, reports = []) => {
   const report = await jiraClient.rapid.getEpicReport({

@@ -2,12 +2,15 @@
 import 'chartjs-plugin-datalabels';
 import { Line } from 'vue-chartjs';
 
+const COLORS = { stories: '#997f36', debts: '#c2865a' };
+
 export default {
   name: 'sprints-chart',
   extends: Line,
   props: {
     labels: Array,
-    values: Array,
+    stories: Array,
+    debts: Array,
   },
   mounted () {
     this.updateChart();
@@ -16,7 +19,10 @@ export default {
     labels() {
       this.updateChart();
     },
-    values() {
+    stories() {
+      this.updateChart();
+    },
+    debts() {
       this.updateChart();
     },
   },
@@ -25,35 +31,50 @@ export default {
       this.renderChart({
         labels: this.labels,
         datasets: [{
+          yAxisID: 'y-axis-stories',
           fill: false,
-          pointBackgroundColor: '#997f36',
-          pointBorderColor: '#997f36',
-          borderColor: '#997f36',
-          data: this.values,
+          pointBackgroundColor: COLORS.stories,
+          pointBorderColor: COLORS.stories,
+          borderColor: COLORS.stories,
+          data: this.stories,
+          datalabels: {
+            color: COLORS.stories,
+          }
+        }, {
+          yAxisID: 'y-axis-debts',
+          fill: false,
+          pointBackgroundColor: COLORS.debts,
+          pointBorderColor: COLORS.debts,
+          borderColor: COLORS.debts,
+          data: this.debts,
+          datalabels: {
+            color: COLORS.debts,
+            formatter: value => `${value}%`,
+          },
         }],
       }, {
         layout: {
-          padding: {
-            top: 50,
-          },
+          padding: { top: 50 },
         },
         plugins: {
           datalabels: {
-            color: '#997f36',
             align: 'top',
             offset: 10,
-            font: {
-              size: 20,
-            },
+            font: { size: 20 },
           }
         },
         scales: {
           yAxes: [{
+            id: 'y-axis-stories',
             display: false,
+          }, {
+            id: 'y-axis-debts',
+            display: false,
+            ticks: { min: 0, max: 100 },
           }],
           xAxes: [{
             ticks: {
-              fontColor: '#997f36',
+              fontColor: COLORS.stories,
               fontSize: 16,
             },
             gridLines: {

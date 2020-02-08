@@ -5,7 +5,12 @@
       <div class="title">VELOCITY</div>
     </div>
     <div class="sprints">
-      <sprints-chart class="chart" :labels="sprints.labels" :values="sprints.values" />
+      <sprints-chart
+        class="chart"
+        :labels="sprints.labels"
+        :stories="sprints.stories"
+        :debts="sprints.debts"
+      />
     </div>
     <div class="active-sprint">
       <active-sprint-chart class="chart" :values="activeSprint.values" />

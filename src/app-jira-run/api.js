@@ -1,5 +1,5 @@
 const { app } = require('../config');
-const createJiraClientExtended = require('../jira/jira-connector-extended.js');
+const { createJiraClientExtended, extactGoal } = require('../services/jira');
 
 const pullSprints = async (jiraClient, boardId, sprints = []) => {
   const result = await jiraClient.board.getAllSprints({ boardId, startAt: sprints.length });
@@ -11,11 +11,14 @@ const pullSprints = async (jiraClient, boardId, sprints = []) => {
 };
 
 const pullSprintsReports = async (jiraClient, boardId, sprints, reports = []) => {
-  const report = await jiraClient.rapid.getSprintReport({
-    rapidViewId: boardId,
-    sprintId: sprints[reports.length].id,
-  });
+  const sprintId = sprints[reports.length].id;
+  const report = await jiraClient.rapid.getSprintReport({ rapidViewId: boardId, sprintId });
+  const { issues } = await jiraClient.board.getIssuesForSprint({ boardId, sprintId });
 
+  // For Jira : 8h === 1d
+  const days = issues.reduce((sec, issue) => sec + (issue.fields.timespent || 0), 0) / 3600 / 8;
+
+  const goalExtracted = extactGoal(report.sprint);
   const { contents } = report;
 
   const reportFormatted = {
@@ -26,6 +29,11 @@ const pullSprintsReports = async (jiraClient, boardId, sprints, reports = []) =>
       todo: 0,
       doing: 0,
       done: contents.completedIssuesEstimateSum.value,
+    },
+    tracking: {
+      workdays: goalExtracted.workdays,
+      daysSpent: days,
+      percentSpent: goalExtracted.workdays ? Math.round(days * 100 / goalExtracted.workdays) : null,
     },
   };
 
@@ -92,7 +100,7 @@ const callback = async (req, res) => {
       }
 
       return sprintsNameFilterRe ? !!sprint.name.match(sprintsNameFilterRe) : true;
-    })
+    });
 
   result.sprints = await pullSprintsReports(
     jiraClient,

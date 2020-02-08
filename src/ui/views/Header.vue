@@ -220,7 +220,7 @@ export default {
       100% { width: 118px; margin-top: 5px; padding: 5px 25px 5px 10px; font-size: 19px; background: $colorBg; }
     }
 
-     @keyframes fadeOut {
+    @keyframes fadeOut {
       99% { visibility: hidden; }
       100% { visibility: visible; }
     }

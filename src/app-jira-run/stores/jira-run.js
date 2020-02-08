@@ -8,24 +8,25 @@ const store = {
   namespaced: true,
   state: {
     velocity: {},
-    sprints: { labels: [], values: [] },
+    sprints: { labels: [], stories: [], debts: [] },
     activeSprint: { labels: [], values: [] },
   },
   mutations: {
     clear(state) {
       state.velocity = {};
-      state.sprints = { labels: [], values: [] };
+      state.sprints = { labels: [], stories: [], debts: [] };
       state.activeSprint = { labels: [], values: [] };
     },
     mutateVelocity: (state, velocity) => {
       state.velocity = velocity;
     },
     mutateSprints: (state, sprints) => {
-      const sprintsSplitted = { labels: [], values: [] };
+      const sprintsSplitted = { labels: [], stories: [], debts: [] };
 
       sprints.forEach((sprint) => {
         sprintsSplitted.labels.push(sprint.name);
-        sprintsSplitted.values.push(sprint.estimate.done);
+        sprintsSplitted.stories.push(sprint.estimate.done);
+        sprintsSplitted.debts.push(sprint.tracking.percentSpent);
       });
 
       state.sprints = sprintsSplitted;
