@@ -9,8 +9,10 @@
         :key="epicDetail.id"
         :style="`height: ${100 / epicsDetails.length}%`"
       >
-        <span class="estimation" v-if="epicDetail.todo">
-          <span>•</span> {{ planningTime(epicDetail) }} weeks</span>
+        <!-- There is not possible to have the velocity anymore -->
+        <span class="estimation" v-if="false && epicDetail.todo">
+          <span>•</span> {{ planningTime(epicDetail) }} weeks
+        </span>
         <span
           class="unestimated"
           v-if="epicDetail.unestimatedPercent"
