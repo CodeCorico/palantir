@@ -28,6 +28,7 @@ export default {
     AppFreshteam: () =>import('@/app-freshteam/views/AppFreshteam.vue'),
     AppGrid: () =>import('@/app-grid/views/AppGrid.vue'),
     AppJiraCapacity: () =>import('@/app-jira-capacity/views/AppJiraCapacity.vue'),
+    AppJiraRoadmap: () => import('@/app-jira-roadmap/views/AppJiraRoadmap.vue'),
     AppJiraRun: () =>import('@/app-jira-run/views/AppJiraRun.vue'),
   },
   mounted() {
