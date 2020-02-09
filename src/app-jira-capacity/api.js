@@ -3,7 +3,7 @@ const { createJiraClientExtended } = require('../services/jira');
 
 const pullEpicsReports = async (jiraClient, boardId, epics, reports = []) => {
   const report = await jiraClient.rapid.getEpicReport({
-    rapidViewId: boardId,
+    boardId,
     epicKey: epics[reports.length].key,
   });
 

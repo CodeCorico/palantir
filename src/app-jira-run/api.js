@@ -1,18 +1,9 @@
 const { app } = require('../config');
 const { createJiraClientExtended, extactGoal } = require('../services/jira');
 
-const pullSprints = async (jiraClient, boardId, sprints = []) => {
-  const result = await jiraClient.board.getAllSprints({ boardId, startAt: sprints.length });
-  const allSprints = sprints.concat(result.values);
-
-  return result.isLast
-    ? allSprints
-    : await pullSprints(jiraClient, boardId, allSprints);
-};
-
 const pullSprintsReports = async (jiraClient, boardId, sprints, reports = []) => {
   const sprintId = sprints[reports.length].id;
-  const report = await jiraClient.rapid.getSprintReport({ rapidViewId: boardId, sprintId });
+  const report = await jiraClient.rapid.getSprintReport({ boardId, sprintId });
   const { issues } = await jiraClient.board.getIssuesForSprint({ boardId, sprintId });
 
   // For Jira : 8h === 1d
@@ -93,7 +84,7 @@ const callback = async (req, res) => {
   // Sprints
 
   const sprintsNameFilterRe = sprints.nameFilter ? new RegExp(sprints.nameFilter, 'i') : null;
-  const allSprints = (await pullSprints(jiraClient, sprints.boardId))
+  const allSprints = (await jiraClient.board.getAllSprintsFull({ boardId: sprints.boardId }))
     .filter((sprint) => {
       if (sprint.state.toLowerCase() === 'future') {
         return false;

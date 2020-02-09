@@ -16,7 +16,19 @@ const createJiraClientExtended = (options) => {
     },
   });
 
+  // Add full recursive method
+  jiraClient.board.getAllSprintsFull = async (opts, sprints = []) => {
+    const { boardId } = opts;
+    const result = await jiraClient.board.getAllSprints({ boardId, startAt: sprints.length });
+    const allSprints = sprints.concat(result.values);
+
+    return result.isLast
+      ? allSprints
+      : await jiraClient.board.getAllSprintsFull(opts, allSprints);
+  };
+
   // Add the greenhopper API
+
   jiraClient.greenHopperApiVersion = '1.0';
 
   jiraClient.buildGreenHopperURL = (path, forcedVersion) => {
@@ -40,7 +52,7 @@ const createJiraClientExtended = (options) => {
     followAllRedirects: true,
     json: true,
     qs: {
-      rapidViewId: opts.rapidViewId,
+      rapidViewId: opts.boardId,
       sprintId: opts.sprintId,
     },
   });
@@ -51,7 +63,7 @@ const createJiraClientExtended = (options) => {
     followAllRedirects: true,
     json: true,
     qs: {
-      rapidViewId: opts.rapidViewId,
+      rapidViewId: opts.boardId,
       epicKey: opts.epicKey,
     },
   });
