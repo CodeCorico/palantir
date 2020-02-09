@@ -25,15 +25,24 @@ const goalWorkdays = (lines, key, result) => lines.reduce((prev, line) => {
   return match && !isNaN(match[1]) ? Number(match[1]) : prev;
 }, result[key]);
 
-const goalEvents = (lines, key, result) => result[key];
+const goalEvents = (lines, key, result) => lines.reduce((prev, line) => {
+  const match = line.trim().match(/^#\[(.*?)\](.*?)$/);
+
+  const date = match ? new Date(match[1]).getTime() : null;
+  const prevDate = date ? new Date(result.date[0]).getTime() : null;
+  const nextDate = date ? new Date(result.date[1]).getTime() : null;
+  const percent = date ? Math.round((date - prevDate) * 100 / (nextDate - prevDate)) : null;
+
+  return date ? prev.concat([{ date: match[1], percent, title: match[2].trim() }]) : prev;
+}, result[key]);
 
 const extactGoal = sprint => GoalFunctor(sprint.goal || '')
   .splitInLines()
   .map({
     date: goalDate,
     workdays: goalWorkdays,
-    events: goalEvents,
   })
+  .map({ events: goalEvents })
   .result;
 
 module.exports = { extactGoal };
