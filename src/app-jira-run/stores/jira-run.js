@@ -21,15 +21,11 @@ const store = {
       state.velocity = velocity;
     },
     mutateSprints: (state, sprints) => {
-      const sprintsSplitted = { labels: [], stories: [], debts: [] };
-
-      sprints.forEach((sprint) => {
-        sprintsSplitted.labels.push(sprint.name);
-        sprintsSplitted.stories.push(sprint.estimate.done);
-        sprintsSplitted.debts.push(sprint.tracking.percentSpent);
-      });
-
-      state.sprints = sprintsSplitted;
+      state.sprints = sprints.reduce((prev, sprint) => ({
+        labels: prev.labels.concat(sprint.name),
+        stories: prev.stories.concat([sprint.estimate.done]),
+        debts: prev.debts.concat([sprint.tracking.percentSpent]),
+      }), { labels: [], stories: [], debts: [] });
     },
     mutateActiveSprint: (state, activeSprint) => {
       state.activeSprint = {

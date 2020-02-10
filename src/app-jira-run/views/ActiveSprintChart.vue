@@ -33,9 +33,7 @@ export default {
         plugins: {
           datalabels: {
             color: '#ffffffdd',
-            display: function(context) {
-              return !!context.dataset.data[context.dataIndex];
-            },
+            display: context => !!context.dataset.data[context.dataIndex],
           },
         },
         title: { display: false },

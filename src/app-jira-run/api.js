@@ -6,11 +6,19 @@ const pullSprintsReports = async (jiraClient, boardId, sprints, reports = []) =>
   const report = await jiraClient.rapid.getSprintReport({ boardId, sprintId });
   const { issues } = await jiraClient.board.getIssuesForSprint({ boardId, sprintId });
 
-  // For Jira : 8h === 1d
-  const days = issues.reduce((sec, issue) => sec + (issue.fields.timespent || 0), 0) / 3600 / 8;
-
   const goalExtracted = extactGoal(report.sprint);
+  const sprintStart = goalExtracted.date ? new Date(goalExtracted.date[0]).getTime() : 0;
+  const sprintEnd = goalExtracted.date ? new Date(goalExtracted.date[1]).getTime() : 0;
   const { contents } = report;
+
+  // For Jira : 8h === 1d
+  const days = sprintStart
+    ? issues.reduce((sec, issue) =>
+      sec + issue.fields.worklog.worklogs.reduce((worklogSec, worklog) => {
+        const time = new Date(worklog.created).getTime();
+        return worklogSec + (time > sprintStart && time < sprintEnd ? worklog.timeSpentSeconds : 0);
+      }, 0), 0) / 3600 / 8
+    : 0;
 
   const reportFormatted = {
     id: report.sprint.id,
@@ -19,7 +27,7 @@ const pullSprintsReports = async (jiraClient, boardId, sprints, reports = []) =>
     estimate: {
       todo: 0,
       doing: 0,
-      done: contents.completedIssuesEstimateSum.value,
+      done: contents.completedIssuesEstimateSum.value || 0,
     },
     tracking: {
       workdays: goalExtracted.workdays,

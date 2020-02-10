@@ -179,7 +179,6 @@ const callback = async (req, res) => {
 
   const merged = await mergeSprintsInEpics(allSprintsWithIssues, allEpics, pointsCustomField);
   result.epics = merged.epics;
-  result.sprintsOrig = merged.sprints;
   result.sprints = merged.sprints.map(sprint => `${sprint.name} (${sprint.estimate.total}pt)`);
 
   // Events
