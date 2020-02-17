@@ -14,6 +14,9 @@
     "build:changelog": "palantir changelog changelog.md dist/changelog/changelog.json",
     "build:gh-pages": "npm run build && npm run build:docs && npm run build:changelog && cp dist/docs/doc-assets/palantir.json dist/",
     "lint": "vue-cli-service lint",
+    "test:unit": "cross-env NODE_ENV=test jest --verbose --coverage",
+    "test:unit:watch": "cross-env NODE_ENV=test jest --watchAll --verbose",
+    "test:unit:coverage": "cross-env NODE_ENV=test jest --watchAll --coverage",
     "start": "node ./src/server/index.js",
     "start:watch": "nodemon ./src/server/index.js",
     "storybook": "start-storybook -p 9000 -c ./src/bootstrap/storybook",
@@ -55,8 +58,10 @@
     "babel-plugin-prismjs": "^2.0.1",
     "babel-preset-vue": "^2.0.2",
     "conventional-changelog-cli": "^2.0.31",
+    "cross-env": "^7.0.0",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.2.0",
+    "jest": "^25.1.0",
     "mermaid": "^8.4.7",
     "moment": "^2.24.0",
     "moment-locales-webpack-plugin": "^1.1.2",
@@ -105,12 +110,35 @@
     ],
     "parserOptions": {
       "parser": "babel-eslint"
+    },
+    "globals": {
+      "describe": true,
+      "it": true,
+      "expect": true,
+      "after": true,
+      "before": true,
+      "afterEach": true,
+      "beforeEach": true,
+      "afterAll": true,
+      "beforeAll": true,
+      "jest": true
     }
   },
   "postcss": {
     "plugins": {
       "autoprefixer": {}
     }
+  },
+  "jest": {
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/**/*.spec.js"
+    ],
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/*.spec.js"
+    ]
   },
   "browserslist": [
     "> 1%",
