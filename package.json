@@ -49,6 +49,7 @@
     "@vue/cli-plugin-babel": "^4.2.2",
     "@vue/cli-plugin-eslint": "^4.2.2",
     "@vue/cli-service": "^4.2.2",
+    "@vue/eslint-config-airbnb": "^5.0.2",
     "babel-eslint": "^10.0.3",
     "babel-plugin-import-glob": "^2.0.0",
     "babel-plugin-prismjs": "^2.0.1",
@@ -72,13 +73,7 @@
   },
   "babel": {
     "presets": [
-      "@vue/app",
-      [
-        "@babel/preset-env",
-        {
-          "modules": false
-        }
-      ]
+      "@vue/app"
     ],
     "plugins": [
       "import-glob",
@@ -106,9 +101,8 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "eslint:recommended"
+      "@vue/airbnb"
     ],
-    "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
     }
