@@ -7,7 +7,7 @@ const axios = require('axios');
 const express = require('express');
 const { RTMClient } = require('@slack/rtm-api');
 const { WebClient } = require('@slack/web-api');
-const socket = require('socket.io');
+const socketIo = require('socket.io');
 const { load } = require('../config');
 
 const app = express();
@@ -18,7 +18,7 @@ const statics = process.env.SERVER_STATICS || null;
 const PROJECT_URL = 'https://hub.docker.com/r/codecorico/palantir/tags';
 const PACKAGE_URL = 'https://raw.githubusercontent.com/CodeCorico/palantir/master/package.json';
 
-const resolve = file => path.join(__dirname, '../../', file);
+const resolve = (file) => path.join(__dirname, '../../', file);
 
 const version = () => JSON.parse(fs.readFileSync(resolve('package.json'), 'utf8')).version;
 
@@ -28,6 +28,7 @@ if (statics) {
 app.use(express.static(resolve('dist')));
 
 glob.sync(resolve('src/*/api.js')).forEach((file) => {
+  // eslint-disable-next-line global-require, import/no-dynamic-require
   const routes = require(file);
 
   routes.forEach((route) => {
@@ -55,6 +56,12 @@ app.use((req, res) => {
   }
 });
 
+// eslint-disable-next-line no-console
+const server = app.listen(port, () => console.log(`Server started on http://localhost:${port}`));
+// 10min
+server.setTimeout(10 * 60 * 1000);
+const io = socketIo(server);
+
 if (statics) {
   const config = load();
 
@@ -70,8 +77,8 @@ if (statics) {
       const registerSlack = async (apps) => {
         await rtm.start();
 
-        io.on('connection', function (socket) {
-          socket.on('slackMessage', function (message, channel) {
+        io.on('connection', (socket) => {
+          socket.on('slackMessage', (message, channel) => {
             try {
               rtm.sendMessage(message, channel);
             } catch (error) {
@@ -86,12 +93,12 @@ if (statics) {
             return;
           }
 
-          const [command, parameters] = text.split(/ (.*)/).filter(e => e.length > 1);
+          const [command, parameters] = text.split(/ (.*)/).filter((e) => e.length > 1);
 
           if (apps.indexOf(command) === -1) {
             if (command === 'help') {
               rtm.sendMessage(`<@${user}>, here are the available commands: ${
-                apps.map(command => `\n- \`${command}\``)
+                apps.map((appCmd) => `\n- \`${appCmd}\``)
               }`, channel);
             }
 
@@ -112,17 +119,17 @@ if (statics) {
             parameters ? `parameters: \`${parameters}\`\n` : '',
           ].join(''), channel);
         });
-      }
+      };
 
       const slackApps = Object
         .values(config.apps)
-        .reduce((acc, { tasks }) => tasks ? [
+        .reduce((acc, { tasks }) => (tasks ? [
           ...acc,
           ...tasks
-          .filter(({ slackCommand }) => slackCommand)
-          .map(({ slackCommand }) => slackCommand)] : acc, []);
+            .filter(({ slackCommand }) => slackCommand)
+            .map(({ slackCommand }) => slackCommand)] : acc), []);
 
-      if (slackApps.some(slackCommand => slackCommand.match(/\s/))) {
+      if (slackApps.some((slackCommand) => slackCommand.match(/\s/))) {
         throw Error('slackCommand should not have any whitespace.');
       }
 
@@ -130,9 +137,3 @@ if (statics) {
     }
   }
 }
-
-// eslint-disable-next-line no-console
-const server = app.listen(port, () => console.log(`Server started on http://localhost:${port}`));
-// 10min
-server.setTimeout(10 * 60 * 1000);
-const io = socket(server);

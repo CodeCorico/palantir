@@ -54,7 +54,7 @@ export default {
       selected: this.selectors ? this.selectors[0] : null,
     };
   },
-  created () {
+  created() {
     this.$parent.$on('accordion-close', (except) => {
       if (except === this) {
         return;
@@ -92,9 +92,9 @@ export default {
 
       this.$nextTick(() => this.refreshLayout());
 
-      return list.filter(item => !item.selectors
+      return list.filter((item) => (!item.selectors
         ? true
-        : item.selectors.indexOf(this.selected) > -1);
+        : item.selectors.indexOf(this.selected) > -1));
     },
   },
 };

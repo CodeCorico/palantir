@@ -4,8 +4,10 @@ const name = 'BitbucketPulls';
 
 const BITBUCKET_PULLS_API_URL = '/api/bitbucket-pulls';
 
-const sortByDate = arr =>
-  arr.sort((a, b) => a.createdAt < b.createdAt ? -1 : (a.createdAt > b.createdAt ? 1 : 0));
+const sortByDate = (arr) => arr.sort((a, b) => {
+  const status = a.createdAt > b.createdAt ? 1 : 0;
+  return status || (a.createdAt < b.createdAt ? -1 : 0);
+});
 
 const presetIndex = (patterns, input) => {
   for (let i = 0; i < patterns.length; i += 1) {
@@ -21,40 +23,35 @@ const stringToRegExp = (patternObj) => {
     return patternObj;
   }
 
-  let modifier = 'gi', pattern;
+  let modifier = 'gi'; let
+    pattern;
 
   if (Array.isArray(patternObj)) {
     if (patternObj.length === 1) {
       [pattern] = patternObj;
-    }
-    else if (patternObj.length === 2) {
+    } else if (patternObj.length === 2) {
       [pattern, modifier] = patternObj;
+    } else {
+      throw Error('Accept only two-d array with [pattern, modifier].');
     }
-    else {
-      throw Error("Accept only two-d array with [pattern, modifier].");
-    }
-  }
-  else if (typeof patternObj === 'string') {
+  } else if (typeof patternObj === 'string') {
     pattern = patternObj;
-  }
-  else {
+  } else {
     throw Error(`Unsupported RegEx declaration, must be String | Array, got ${typeof patternObj}`);
   }
 
   try {
     return new RegExp(pattern, modifier);
-  }
-  catch (err) {
+  } catch (err) {
     throw Error(
-      `Accept only '*' or valid RegExp declaration, [pattern: ${pattern}, modifier: ${modifier}]`
+      `Accept only '*' or valid RegExp declaration, [pattern: ${pattern}, modifier: ${modifier}]`,
     );
   }
 };
 
-const regexSort = (list, patternsRaw, key = item => item) => {
-  const patterns = patternsRaw.map(pattern => stringToRegExp(pattern));
-  const defaultIndex =
-    patterns.indexOf('*') > -1 ? patterns.indexOf('*') : Infinity;
+const regexSort = (list, patternsRaw, key = (item) => item) => {
+  const patterns = patternsRaw.map((pattern) => stringToRegExp(pattern));
+  const defaultIndex = patterns.indexOf('*') > -1 ? patterns.indexOf('*') : Infinity;
 
   return list
     .map((input, oldIndex) => ({
@@ -69,7 +66,7 @@ const regexSort = (list, patternsRaw, key = item => item) => {
       index: item.index === 0 ? defaultIndex + 1 : item.index,
     }))
     .sort((a, b) => a.index - b.index || b.oldIndex)
-    .map(c => c.input);
+    .map((c) => c.input);
 };
 
 const store = {
@@ -98,7 +95,7 @@ const store = {
       };
       const newCachePulls = {};
 
-      pulls.forEach(pullRaw => {
+      pulls.forEach((pullRaw) => {
         const { title } = pullRaw;
 
         groups[title] = groups[title] || {
@@ -116,9 +113,8 @@ const store = {
         const warningDays = 4 * (3600 * 24) * 1000; // 4d
         const alertDays = 7 * (3600 * 24) * 1000; // 7d
 
-        const type = pullDateDiff >= alertDays
-          ? 'alert'
-          : (pullDateDiff >= warningDays ? 'warning' : '');
+        let type = pullDateDiff >= alertDays ? 'alert' : '';
+        type = type || (pullDateDiff >= warningDays ? 'warning' : '');
 
         if (!firstMutation && !changes.new) {
           changes.new = !state.cachePulls[pullRaw.id];
@@ -215,7 +211,7 @@ const store = {
           animationDuration: cachePull.animationDuration,
           reviewers: (pullRaw.reviewers || []).map((reviewer) => {
             cachePull.reviewers[reviewer.uuid] = cachePull.reviewers[reviewer.uuid] || {
-              spaceIndex: Math.floor(Math.random() * (10 + 1))
+              spaceIndex: Math.floor(Math.random() * (10 + 1)),
             };
 
             const cacheReviwer = cachePull.reviewers[reviewer.uuid];
@@ -237,15 +233,15 @@ const store = {
         }
       });
 
-      Object.keys(groups).forEach(key => sortByDate(groups[key].pulls));
+      Object.keys(groups).forEach((key) => sortByDate(groups[key].pulls));
 
       state.lastTaskId = taskId;
-      state.changes = Object.keys(changes).filter(key => changes[key]);
+      state.changes = Object.keys(changes).filter((key) => changes[key]);
       state.cachePulls = newCachePulls;
-      state.groups = Object.keys(groups).map(title => groups[title]);
+      state.groups = Object.keys(groups).map((title) => groups[title]);
 
       sortByDate(state.groups);
-      state.groups = regexSort(state.groups, order, item => item.title);
+      state.groups = regexSort(state.groups, order, (item) => item.title);
     },
   },
   actions: {

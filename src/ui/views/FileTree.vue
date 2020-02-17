@@ -48,7 +48,7 @@ export default {
         md: 'fas fa-align-left',
         mmd: 'fas fa-project-diagram',
         uknown: 'fas fa-file',
-      }
+      },
     };
   },
   methods: {

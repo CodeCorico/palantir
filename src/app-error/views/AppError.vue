@@ -13,8 +13,8 @@ export default {
   computed: {
     error() {
       return this.config.error.replace(/\n/g, '<br />');
-    }
-  }
+    },
+  },
 };
 </script>
 

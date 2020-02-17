@@ -8,7 +8,7 @@ export default {
   props: {
     values: Array,
   },
-  mounted () {
+  mounted() {
     this.updateChart();
   },
   watch: {

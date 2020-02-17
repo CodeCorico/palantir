@@ -30,22 +30,23 @@ const pullEpicsReports = async (jiraClient, boardId, epics, reports = []) => {
       return;
     }
 
-    reportFormatted.estimate[issue.status.statusCategory.key === 'new' ? 'todo' : 'doing'] +=
-      issue.estimateStatistic.statFieldValue.value || 0;
+    reportFormatted.estimate[issue.status.statusCategory.key === 'new' ? 'todo' : 'doing']
+      += issue.estimateStatistic.statFieldValue.value || 0;
   });
 
   const issuesEstimatedTotal = contents.completedIssues.length
     + contents.incompleteEstimatedIssues.length
     + contents.incompleteUnestimatedIssues.length;
 
-  reportFormatted.estimate.unestimatedPercent =
-    Math.round(contents.incompleteUnestimatedIssues.length * 100 / issuesEstimatedTotal) || 0;
+  reportFormatted.estimate.unestimatedPercent = Math.round(
+    (contents.incompleteUnestimatedIssues.length * 100) / issuesEstimatedTotal,
+  ) || 0;
 
   const allReports = reports.concat([reportFormatted]);
 
   return epics.length === allReports.length
     ? allReports
-    : await pullEpicsReports(jiraClient, boardId, epics, allReports);
+    : pullEpicsReports(jiraClient, boardId, epics, allReports);
 };
 
 const callback = async (req, res) => {
@@ -69,9 +70,9 @@ const callback = async (req, res) => {
   const { epics, sprints } = appConfig.config;
 
   const jiraClient = createJiraClientExtended({
-    host: host,
+    host,
     basic_auth: {
-      email: email,
+      email,
       api_token: token,
     },
   });

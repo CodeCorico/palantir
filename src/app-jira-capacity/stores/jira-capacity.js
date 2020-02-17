@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const name = 'JiraCapacity';
 
-const api = appId => axios.get(`/api/jira-capacity?appId=${appId}`);
+const api = (appId) => axios.get(`/api/jira-capacity?appId=${appId}`);
 
 const store = {
   namespaced: true,

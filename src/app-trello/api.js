@@ -21,11 +21,9 @@ const membersFromCard = async (trello, card, i = 0, members = []) => {
     url: trelloMember.url,
   });
 
-  if (card.idMembers[i + 1]) {
-    return await membersFromCard(trello, card, i + 1, newMembers);
-  }
-
-  return newMembers;
+  return card.idMembers[i + 1]
+    ? membersFromCard(trello, card, i + 1, newMembers)
+    : newMembers;
 };
 
 const fetchCards = async (trello, trelloCards, i = 0, cards = []) => {
@@ -61,11 +59,9 @@ const fetchCards = async (trello, trelloCards, i = 0, cards = []) => {
     members,
   });
 
-  if (trelloCards[i + 1]) {
-    return await fetchCards(trello, trelloCards, i + 1, newCards);
-  }
-
-  return newCards;
+  return trelloCards[i + 1]
+    ? fetchCards(trello, trelloCards, i + 1, newCards)
+    : newCards;
 };
 
 const callback = async (req, res) => {
@@ -101,7 +97,7 @@ const callback = async (req, res) => {
 
   trelloLists.some((trelloList) => {
     if (trelloList.name === list) {
-      listId = trelloList.id
+      listId = trelloList.id;
 
       return true;
     }

@@ -39,6 +39,7 @@ const store = {
       commit('mutateCards', data.cards.map((card) => {
         if (avatars) {
           (card.members || []).forEach((member) => {
+            // eslint-disable-next-line no-param-reassign
             member.avatarUrlLocal = avatars[member.fullName.toLowerCase()] || null;
           });
         }

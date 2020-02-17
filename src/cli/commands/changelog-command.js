@@ -2,27 +2,25 @@ const path = require('path');
 const fs = require('fs');
 const mkp = require('mkp');
 const marked = require('marked');
-const { banner, log, logDate, logSuccess, logWarning } =
-  require(path.resolve(__dirname, '../command-console-format'));
+
+const {
+  banner, log, logDate, logSuccess, logWarning,
+} = require('../command-console-format');
 
 const TYPES = {
   'breaking changes': 'idle',
-  'features': 'success',
+  features: 'success',
   'bug fixes': 'warning',
   'performance improvements': 'perf',
 };
 
-const unescapeHtml = (text) => {
-  var map = {
-    '&amp;': '&',
-    '&lt;': '<',
-    '&gt;': '>',
-    '&quot;': '"',
-    '&#039;': '\'',
-  };
-
-  return text.replace(/&[#0-9a-z]+;/gi, m => map[m]);
-}
+const unescapeHtml = (text) => text.replace(/&[#0-9a-z]+;/gi, (m) => ({
+  '&amp;': '&',
+  '&lt;': '<',
+  '&gt;': '>',
+  '&quot;': '"',
+  '&#039;': '\'',
+}[m]));
 
 const handler = (argv) => {
   banner();
@@ -43,8 +41,8 @@ const handler = (argv) => {
   const html = marked(markdown).replace(/<a /g, () => '<a target="_blank" ');
   const contents = html
     .split('<h2')
-    .filter(content => !!content)
-    .map(content => `<h2${content}`.replace(/\n/g, ' '));
+    .filter((content) => !!content)
+    .map((content) => `<h2${content}`.replace(/\n/g, ' '));
 
   const dates = [];
 
@@ -67,7 +65,7 @@ const handler = (argv) => {
       return;
     }
 
-    date.title = match[0];
+    date.title = match[0] || '';
 
     if (match.length > 1) {
       date.subtitle = match[1].replace(/[()]/g, '');
@@ -89,8 +87,8 @@ const handler = (argv) => {
         matchTypeBlock = typeBlock.match(/<li.*?>.*?<\/li>/g);
 
         matchTypeBlock.forEach((eventBlock) => {
-          let matchEventBlock = eventBlock.match(/<strong>(.*?):<\/strong>/);
-          let matchEventBlockText = eventBlock.match(/<\/strong>(.*?)\(<a/);
+          const matchEventBlock = eventBlock.match(/<strong>(.*?):<\/strong>/);
+          const matchEventBlockText = eventBlock.match(/<\/strong>(.*?)\(<a/);
 
           if (
             !matchEventBlock || matchEventBlock.length < 2
@@ -124,7 +122,7 @@ const handler = (argv) => {
 module.exports = {
   command: 'changelog <source> <destination>',
   desc: 'Generate a timeline configuration from a changelog file',
-  builder: yargs => yargs
+  builder: (yargs) => yargs
     .positional('source', {
       describe: 'Markdown file to parse',
       type: 'string',

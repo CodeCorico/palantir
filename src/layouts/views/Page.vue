@@ -91,7 +91,7 @@ export default {
         if (this.lastVersionChecked && this.lastVersionChecked !== versions.version) {
           window.location.reload();
 
-          return;
+          return null;
         }
 
         this.$set(this, 'lastVersionChecked', versions.version);
@@ -159,7 +159,7 @@ export default {
       this.$store.dispatch('Page/version');
 
       // 12h
-      setTimeout(() => this.checkVersion(), 3600 * 12* 1000);
+      setTimeout(() => this.checkVersion(), 3600 * 12 * 1000);
     },
   },
 };

@@ -48,7 +48,7 @@ const store = {
           }
         }
 
-        dateIndex++;
+        dateIndex += 1;
 
         const datesColumn = {
           title: date.title,
@@ -90,15 +90,14 @@ const store = {
             isSingle = true;
             types.push(eventKeys[0]);
             texts.push(event[eventKeys[0]][0]);
-          }
-          else {
-            ['idle', 'success', 'warning', 'perf'].forEach((state) => {
-              if (!event[state]) {
+          } else {
+            ['idle', 'success', 'warning', 'perf'].forEach((eventState) => {
+              if (!event[eventState]) {
                 return;
               }
 
-              types.push(state);
-              texts.push(event[state].length);
+              types.push(eventState);
+              texts.push(event[eventState].length);
             });
           }
 
@@ -130,7 +129,10 @@ const store = {
           }
         });
 
-        events.sort((a, b) => a.domain > b.domain ? 1 : (a.domain < b.domain ? -1 : 0));
+        events.sort((a, b) => {
+          const status = a.domain > b.domain ? 1 : 0;
+          return status || (a.domain < b.domain ? -1 : 0);
+        });
 
         datesEvents.push({ title: date.title, events, content: date.content });
       });

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const name = 'JiraRoadmap';
 
-const api = appId => axios.get(`/api/jira-roadmap?appId=${appId}`);
+const api = (appId) => axios.get(`/api/jira-roadmap?appId=${appId}`);
 
 const store = {
   namespaced: true,

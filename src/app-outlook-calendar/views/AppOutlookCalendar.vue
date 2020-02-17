@@ -40,7 +40,7 @@ export default {
   methods: {
     message(name, data) {
       this.$refs.frame.contentWindow
-        .postMessage(Object.assign({ name }, data || {}), 'https://outlook.office365.com');
+        .postMessage({ name, ...data || {} }, 'https://outlook.office365.com');
     },
     onMessage(event) {
       if (!event.data.name || event.origin.indexOf('https://outlook.office365.com') < 0) {
@@ -49,8 +49,7 @@ export default {
 
       if (event.data.name === 'ready') {
         this.$store.dispatch('OutlookCalendar/frameReady');
-      }
-      else if (event.data.name === 'events') {
+      } else if (event.data.name === 'events') {
         this.$store.dispatch('OutlookCalendar/collectEvents', event.data.events);
       }
     },

@@ -48,7 +48,7 @@ export default {
       this.$nextTick(() => this.$refs.sidebar.refresh());
 
       return this.$store.state.Apps.tasks;
-    }
+    },
   },
 };
 </script>

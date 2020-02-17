@@ -36,8 +36,9 @@ const store = {
       Object.keys(apps).forEach((appId) => {
         const app = apps[appId];
 
-        (app.tasks || []).forEach((task) => {
-          state.tasksNumbers++;
+        (app.tasks || []).forEach((appTask) => {
+          const task = { ...appTask };
+          state.tasksNumbers += 1;
 
           const disabled = !(tasksTypes[app.type] && tasksTypes[app.type].static);
 
@@ -47,15 +48,13 @@ const store = {
 
           if (!tasksTypes[app.type] || !tasksTypes[app.type][task.trigger]) {
             task.status = 'error';
-          }
-          else {
+          } else {
             task.status = disabled ? 'disabled' : 'idle';
             task.dispatch = tasksTypes[app.type][task.trigger];
             task.config = app.config;
           }
 
           cron.register(task);
-
           state.tasks.push(task);
         });
       });
@@ -93,7 +92,9 @@ const store = {
       state.activeApp = state.apps[appId];
 
       (state.activeApp.tasks || []).forEach((task) => {
+        // eslint-disable-next-line no-param-reassign
         task.disabled = false;
+        // eslint-disable-next-line no-param-reassign
         task.status = 'idle';
 
         cron.update(task.id, {
@@ -104,14 +105,16 @@ const store = {
 
       const apps = {};
 
-      Object.keys(state.apps).forEach((id) => {
-        const app = state.apps[id];
+      Object.keys(state.apps).forEach((stateAppId) => {
+        const app = state.apps[stateAppId];
 
         const isStatic = tasksTypes[app.type] && tasksTypes[app.type].static;
 
-        if (id !== appId && !isStatic) {
+        if (stateAppId !== appId && !isStatic) {
           (app.tasks || []).forEach((task) => {
+            // eslint-disable-next-line no-param-reassign
             task.disabled = true;
+            // eslint-disable-next-line no-param-reassign
             task.status = 'disabled';
 
             cron.update(task.id, {
@@ -121,12 +124,12 @@ const store = {
           });
         }
 
-        apps[id] = app;
+        apps[stateAppId] = app;
       });
 
       state.apps = apps;
 
-      state.tasks = state.tasks.map(task => task);
+      state.tasks = state.tasks.map((task) => task);
     },
     mutateTasksEnable: (state, { appsIds, enable }) => {
       Object.keys(state.apps).forEach((id) => {
@@ -134,7 +137,9 @@ const store = {
 
         if (appsIds.indexOf(id) > -1) {
           (app.tasks || []).forEach((task) => {
+            // eslint-disable-next-line no-param-reassign
             task.disabled = !enable;
+            // eslint-disable-next-line no-param-reassign
             task.status = enable ? 'idle' : 'disabled';
 
             cron.update(task.id, {
@@ -157,7 +162,7 @@ const store = {
     switchTasks({ commit }, { appsIds, enable }) {
       commit('mutateTasksEnable', { appsIds, enable });
     },
-  }
+  },
 };
 
 export default { name, store };

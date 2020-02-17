@@ -1,5 +1,5 @@
 export default {
-  'trello': {
+  trello: {
     reload: 'Trello/reload',
   },
 };

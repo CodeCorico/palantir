@@ -100,7 +100,7 @@ export default {
     },
     groups() {
       this.$nextTick(() => this.$refs.scrolls.refresh());
-    }
+    },
   },
   data() {
     return {
@@ -111,21 +111,21 @@ export default {
     playChanges() {
       const changesEvents = ['new', 'merged', 'unclean'];
 
-      for (let i = 0; i < changesEvents.length; i++) {
-        const name = changesEvents[i];
-
+      changesEvents.some((name) => {
         if (this.changes.indexOf(name) > -1 && this.config.sounds && this.config.sounds[name]) {
           const audio = new Audio(this.config.sounds[name]);
           audio.loop = false;
           // eslint-disable-next-line no-console
           audio.play().catch(() => console.warn(
             `Impossible to play "${this.config.sounds[name]}"`,
-            `(maybe the user didn't interact with the page)`
+            '(maybe the user didn\'t interact with the page)',
           ));
 
-          break;
+          return true;
         }
-      }
+
+        return false;
+      });
 
       const isNew = this.changes.indexOf('new') > -1;
       const isInit = this.changes.indexOf('init') > -1;
@@ -133,7 +133,7 @@ export default {
       if (isNew || isInit) {
         const pullsCache = {};
 
-        this.groups.forEach(group => group.pulls.forEach((pull) => {
+        this.groups.forEach((group) => group.pulls.forEach((pull) => {
           if (this.pullsCache[pull.id]) {
             pullsCache[pull.id] = this.pullsCache[pull.id];
           } else if (isInit) {

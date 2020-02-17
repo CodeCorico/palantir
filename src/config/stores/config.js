@@ -13,7 +13,9 @@ const itemsValidation = (tree, namespace, subTrees, validFunc, subTree = namespa
     const el = tree[key];
     const treeNamespace = `${namespace}[${key}]`;
 
-    validFunc({ el, tree, key, treeNamespace, namespace, subTrees, subTree });
+    validFunc({
+      el, tree, key, treeNamespace, namespace, subTrees, subTree,
+    });
 
     if (subTrees && subTrees.length) {
       const nextSubtrees = subTrees.slice(0);
@@ -27,15 +29,17 @@ const configValidation = (config) => {
   const errs = [];
 
   if (!config || Object.keys(config).length === 0) {
-    errs.push(`The Palantir JSON description file is empty`);
+    errs.push('The Palantir JSON description file is empty');
   }
 
   const apps = [];
 
   if (!config.apps || !Object.keys(config.apps).length) {
-    errs.push(`At least one app is required in the Palantir JSON description file`);
+    errs.push('At least one app is required in the Palantir JSON description file');
   } else {
-    itemsValidation(config.apps, 'apps', ['tasks'], ({ el, key, treeNamespace, subTree }) => {
+    itemsValidation(config.apps, 'apps', ['tasks'], ({
+      el, key, treeNamespace, subTree,
+    }) => {
       if (subTree === 'apps') {
         apps.push(key);
       }
@@ -65,12 +69,12 @@ const configValidation = (config) => {
   return errs.length ? `Invalid Palantir JSON description:\n- ${errs.join('\n- ')}\n` : null;
 };
 
-const errorConfig = (data, err) => {
-  data = data || {};
-  data.apps = data.apps || {};
-  data.menu = data.menu || [];
+const errorConfig = (config, err) => {
+  const newConfig = { ...config };
+  newConfig.apps = newConfig.apps || {};
+  newConfig.menu = newConfig.menu || [];
 
-  data.apps.$error = {
+  newConfig.apps.$error = {
     type: 'error',
     config: {
       error: err,
@@ -78,7 +82,7 @@ const errorConfig = (data, err) => {
   };
 
   if (err) {
-    data.menu = [{
+    newConfig.menu = [{
       id: '$error-menu',
       title: 'Error',
       sections: [{
@@ -94,6 +98,8 @@ const errorConfig = (data, err) => {
       }],
     }];
   }
+
+  return newConfig;
 };
 
 const store = {
@@ -124,13 +130,13 @@ const store = {
       try {
         const payload = await axios.get('/api/config');
         config = payload.data;
-      } catch(ex) {
-        err = `Impossible to load the Palantir JSON description file.`;
+      } catch (ex) {
+        err = 'Impossible to load the Palantir JSON description file.';
       }
 
       err = err || configValidation(config);
 
-      errorConfig(config, err);
+      config = errorConfig(config, err);
 
       const { options = {}, apps = [] } = config;
 

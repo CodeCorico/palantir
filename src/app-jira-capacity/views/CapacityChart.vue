@@ -9,7 +9,7 @@ export default {
     labels: Array,
     values: Object,
   },
-  mounted () {
+  mounted() {
     this.updateChart();
   },
   watch: {
@@ -25,30 +25,30 @@ export default {
       this.renderChart({
         labels: this.labels,
         datasets: [{
-            name: 'todo',
-            backgroundColor: '#67676733',
-            stack: 'stack 0',
-            data: this.values.todo || [],
-            datalabels: {
-              backgroundColor: '#676767',
-            }
-          }, {
-            name: 'doing',
-            backgroundColor: '#07b3b933',
-            stack: 'stack 0',
-            data: this.values.doing || [],
-            datalabels: {
-              backgroundColor: '#07b3b9',
-            }
-          }, {
-            name: 'done',
-            backgroundColor: '#07b94e33',
-            stack: 'stack 0',
-            data: this.values.done || [],
-            datalabels: {
-              backgroundColor: '#07b94e',
-            }
-          }],
+          name: 'todo',
+          backgroundColor: '#67676733',
+          stack: 'stack 0',
+          data: this.values.todo || [],
+          datalabels: {
+            backgroundColor: '#676767',
+          },
+        }, {
+          name: 'doing',
+          backgroundColor: '#07b3b933',
+          stack: 'stack 0',
+          data: this.values.doing || [],
+          datalabels: {
+            backgroundColor: '#07b3b9',
+          },
+        }, {
+          name: 'done',
+          backgroundColor: '#07b94e33',
+          stack: 'stack 0',
+          data: this.values.done || [],
+          datalabels: {
+            backgroundColor: '#07b94e',
+          },
+        }],
       }, {
         title: { display: false },
         legend: { display: false },
@@ -70,10 +70,10 @@ export default {
               left: 5,
               bottom: 5,
             },
-            display: function(context) {
+            display(context) {
               return !!context.dataset.data[context.dataIndex];
             },
-            formatter: function(value, context) {
+            formatter(value, context) {
               if (context.dataset.name !== 'done') {
                 return value;
               }
@@ -81,11 +81,11 @@ export default {
               const { datasets } = context.chart.data;
               const todoCount = datasets[0].data[context.dataIndex];
               const doingCount = datasets[1].data[context.dataIndex];
-              const percent = Math.round(value * 100 / (todoCount + doingCount + value));
+              const percent = Math.round((value * 100) / (todoCount + doingCount + value));
 
               return `${value} (${percent}%)`;
             },
-          }
+          },
         },
         dataset: {
           categoryPercentage: 1.0,
@@ -114,10 +114,11 @@ export default {
               color: '#2c293c',
               lineWidth: 2,
             },
-            afterFit: function(scaleInstance) {
+            afterFit(scaleInstance) {
+              // eslint-disable-next-line no-param-reassign
               scaleInstance.width = 200;
             },
-          }]
+          }],
         },
       });
     },

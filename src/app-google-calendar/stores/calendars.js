@@ -3,16 +3,18 @@ const name = 'GoogleCalendar';
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'];
 const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
 
-const gapi = window.gapi;
+const { gapi } = window;
 
-const initGApi = ({ apiClient, apiKey, calendars, commit }) => new Promise((resolve, reject) => {
+const initGApi = ({
+  apiClient, apiKey, calendars, commit,
+}) => new Promise((resolve, reject) => {
   gapi.load('client:auth2', async () => {
     try {
       await gapi.client.init({
-        apiKey: apiKey,
+        apiKey,
         clientId: apiClient,
         discoveryDocs: DISCOVERY_DOCS,
-        scope: SCOPES
+        scope: SCOPES,
       });
     } catch (err) {
       reject(err);
@@ -24,6 +26,7 @@ const initGApi = ({ apiClient, apiKey, calendars, commit }) => new Promise((reso
       commit('mutateSigned', signed);
 
       if (signed) {
+        // eslint-disable-next-line no-use-before-define
         loadCalendars({ calendars, commit });
       } else {
         commit('clear');
@@ -39,9 +42,9 @@ const initGApi = ({ apiClient, apiKey, calendars, commit }) => new Promise((reso
 });
 
 const fetchCalendar = async (id) => {
-  let timeMin = new Date();
+  const timeMin = new Date();
   timeMin.setHours(0, 0, 0, 0);
-  let timeMax = new Date();
+  const timeMax = new Date();
   timeMax.setHours(23, 59, 59, 999);
 
   const response = await gapi.client.calendar.events.list({
@@ -52,6 +55,7 @@ const fetchCalendar = async (id) => {
   });
 
   return response.result.items.map((item) => {
+    // eslint-disable-next-line no-param-reassign
     item.calendarId = id;
 
     return item;
@@ -59,7 +63,7 @@ const fetchCalendar = async (id) => {
 };
 
 const loadCalendars = async ({ calendars, commit }) => {
-  const calendarsEvents = await Promise.all(calendars.map(id => fetchCalendar(id)));
+  const calendarsEvents = await Promise.all(calendars.map((id) => fetchCalendar(id)));
 
   const eventsObj = {};
   calendarsEvents.forEach((calendarEvents) => {
@@ -145,7 +149,9 @@ const store = {
       if (state.taskId !== task.id) {
         commit('mutateTaskId', task.id);
 
-        signed = await initGApi({ apiClient, apiKey, calendars, commit });
+        signed = await initGApi({
+          apiClient, apiKey, calendars, commit,
+        });
       }
 
       if (signed) {

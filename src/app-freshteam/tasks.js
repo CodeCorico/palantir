@@ -1,5 +1,5 @@
 export default {
-  'freshteam': {
+  freshteam: {
     reload: 'Freshteam/reload',
   },
 };

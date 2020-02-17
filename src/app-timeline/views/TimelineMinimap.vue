@@ -118,19 +118,21 @@ export default {
         return;
       }
 
-      const { x, y, originSelectorY, originSelectorX } = this.dragging;
+      const {
+        x, y, originSelectorY, originSelectorX,
+      } = this.dragging;
       const { pageY, pageX } = event;
 
       const newY = originSelectorY + (pageY - y);
       const newX = originSelectorX + (pageX - x);
 
       if (this.selectorHeight < this.minimapHeight) {
-        const percentY = newY * 100 / (this.minimapHeight - this.selectorHeight);
+        const percentY = (newY * 100) / (this.minimapHeight - this.selectorHeight);
 
         this.$parent.$emit('scrollToY', Math.max(0, Math.min(100, percentY)));
       }
       if (this.selectorWidth < this.minimapWidth) {
-        const percentX = newX * 100 / (this.minimapWidth - this.selectorWidth);
+        const percentX = (newX * 100) / (this.minimapWidth - this.selectorWidth);
 
         this.$parent.$emit('scrollToX', Math.max(0, Math.min(100, percentX)));
       }
@@ -152,8 +154,9 @@ export default {
       const eventWidth = 92;
       const eventMargin = 20;
       const width = Math.ceil(((eventWidth + eventMargin) * columns) + eventMargin);
-      const height =
-        Math.ceil(((eventHeight + eventMargin) * lines) + (eventHeight / 2) + eventMargin);
+      const height = Math.ceil(
+        ((eventHeight + eventMargin) * lines) + (eventHeight / 2) + eventMargin,
+      );
       const scale = Math.min(this.$el.clientWidth / width, this.$el.clientHeight / height);
 
       this.$refs.minimap.width = this.$el.clientWidth;
@@ -202,37 +205,34 @@ export default {
         eventsImages[types.join('-')] = typesImage;
       });
 
-      for (let axisX = 0; axisX < columns; axisX++) {
+      for (let axisX = 0; axisX < columns; axisX += 1) {
         const dateEvents = this.datesEvents[axisX];
 
-        if (!dateEvents.events) {
-          continue;
-        }
+        if (dateEvents.events) {
+          for (let axisY = 0; axisY < lines; axisY += 1) {
+            const domain = this.domains[axisY];
 
-        for (let axisY = 0; axisY < lines; axisY++) {
-          const domain = this.domains[axisY];
+            for (let eventI = 0; eventI < dateEvents.events.length; eventI += 1) {
+              const event = dateEvents.events[eventI];
 
-          for (let eventI = 0; eventI < dateEvents.events.length; eventI++) {
-            const event =  dateEvents.events[eventI];
+              if (event.domain === domain) {
+                const x = ((eventWidth + eventMargin) * axisX) + eventMargin;
+                const y = ((eventHeight + eventMargin) * axisY) + (eventHeight / 2) + eventMargin;
 
-            if (event.domain === domain) {
-              const x = ((eventWidth + eventMargin) * axisX) + eventMargin;
-              const y = ((eventHeight + eventMargin) * axisY) + (eventHeight / 2) + eventMargin;
+                if (event.types.length === 1) {
+                  imageContext.beginPath();
+                  imageContext.moveTo(x, y);
+                  imageContext.lineTo(x + eventWidth - eventMargin, y);
+                  imageContext.lineWidth = eventHeight;
+                  imageContext.strokeStyle = this.colors[event.type];
+                  imageContext.lineCap = 'round';
+                  imageContext.stroke();
+                } else {
+                  imageContext.drawImage(eventsImages[event.type], x - 12, y - (eventHeight / 2));
+                }
 
-              if (event.types.length === 1) {
-                imageContext.beginPath();
-                imageContext.moveTo(x, y);
-                imageContext.lineTo(x + eventWidth - eventMargin, y);
-                imageContext.lineWidth = eventHeight;
-                imageContext.strokeStyle = this.colors[event.type],
-                imageContext.lineCap = 'round';
-                imageContext.stroke();
+                break;
               }
-              else {
-                imageContext.drawImage(eventsImages[event.type], x - 12, y - (eventHeight / 2));
-              }
-
-              break;
             }
           }
         }
@@ -249,15 +249,15 @@ export default {
       this.refreshSelectorPosition();
     },
     refreshSelector() {
-      const selectorWidth = Math.round(this.visibleAreaWidth * this.minimapWidth / 100);
-      const selectorHeight = Math.round(this.visibleAreaHeight * this.minimapHeight / 100);
+      const selectorWidth = Math.round((this.visibleAreaWidth * this.minimapWidth) / 100);
+      const selectorHeight = Math.round((this.visibleAreaHeight * this.minimapHeight) / 100);
 
       this.$set(this, 'selectorWidth', Math.max(0, Math.min(this.minimapWidth, selectorWidth)));
       this.$set(this, 'selectorHeight', Math.max(0, Math.min(this.minimapHeight, selectorHeight)));
     },
     refreshSelectorPosition() {
-      const selectorY = this.scrollY * (this.minimapHeight - this.selectorHeight) / 100;
-      const selectorX = this.scrollX * (this.minimapWidth - this.selectorWidth) / 100;
+      const selectorY = (this.scrollY * (this.minimapHeight - this.selectorHeight)) / 100;
+      const selectorX = (this.scrollX * (this.minimapWidth - this.selectorWidth)) / 100;
 
       this.$set(this, 'selectorY', selectorY);
       this.$set(this, 'selectorX', selectorX);

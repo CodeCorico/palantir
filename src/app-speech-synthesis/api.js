@@ -17,12 +17,12 @@ const callback = async (req, res) => {
   const client = new textToSpeech.TextToSpeechClient();
 
   const languages = {
-    'default': 'fr-FR',
-    'fr': Math.random() > 0.5 ? 'fr-FR' : 'fr-CA', 
-    'en': Math.random() > 0.5 ? 'en-GB' : 'en-US',
+    default: 'fr-FR',
+    fr: Math.random() > 0.5 ? 'fr-FR' : 'fr-CA',
+    en: Math.random() > 0.5 ? 'en-GB' : 'en-US',
   };
   const guess = language.guess(text, ['fr', 'en'], 1);
-  const languageCode = languages[guess[0].alpha2] || languages['default'];
+  const languageCode = languages[guess[0].alpha2] || languages.default;
 
   const ssmlGender = Math.random() > 0.5 ? 'FEMALE' : 'MALE';
 
@@ -38,9 +38,9 @@ const callback = async (req, res) => {
   // Performs the Text-to-Speech request
   try {
     const [response] = await client.synthesizeSpeech(request);
-    res.json({ audioContent: response.audioContent })
+    res.json({ audioContent: response.audioContent });
   } catch (error) {
-    res.json({ error })
+    res.json({ error });
   }
 };
 const routes = [{ path: 'speech-synthesis', method: 'GET', callback }];

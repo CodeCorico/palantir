@@ -2,7 +2,7 @@
   <section class="app-speech-synthesis">
     <div class="speech" v-show="!paused">
       <div class="text">
-        <span class="emitter">{{ emitter }} dit</span> 
+        <span class="emitter">{{ emitter }} dit</span>
         <span class="content">{{ text }}</span>
         <span class="error" v-if="error">{{ error }}</span>
       </div>
@@ -36,19 +36,23 @@ export default {
   computed: {
     ...mapState('SpeechSynthesis', ['id', 'text', 'emitter', 'error']),
     ...mapState('SpeechSynthesis', {
-      speech: state => {
-        return state.speech && `data:audio/mpeg;base64,${btoa(
-          String.fromCharCode(...new Uint8Array(state.speech)))}`;
-      },
+      speech: (state) => state.speech && `data:audio/mpeg;base64,${btoa(
+        String.fromCharCode(...new Uint8Array(state.speech)),
+      )}`,
     }),
   },
   methods: {
     updatePaused(event) {
-      const paused = event.target.paused;
-      paused ?
-        setTimeout(() => this.paused = paused, 2000):
+      const { paused } = event.target;
+
+      if (paused) {
+        setTimeout(() => {
+          this.paused = paused;
+        }, 2000);
+      } else {
         this.paused = paused;
-    }
+      }
+    },
   },
 };
 </script>

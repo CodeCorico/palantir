@@ -1,8 +1,7 @@
-
 const path = require('path');
 const fs = require('fs');
 
-const palantirFile = file => path.resolve(file || process.env.PALANTIR_FILE);
+const palantirFile = (file) => path.resolve(file || process.env.PALANTIR_FILE);
 
 const load = (file, removeSecrets = false) => {
   const filePath = palantirFile(file);
@@ -26,15 +25,15 @@ const load = (file, removeSecrets = false) => {
 
 const app = (id, file, removeSecrets) => {
   const config = load(file, removeSecrets);
-  let app = null;
+  let appConfig = null;
 
   Object.keys(config.apps || {}).every((appId) => {
-    app = appId === id ? config.apps[appId] : app;
+    appConfig = appId === id ? config.apps[appId] : appConfig;
 
-    return !app;
+    return !appConfig;
   });
 
-  return app;
+  return appConfig;
 };
 
 module.exports = {

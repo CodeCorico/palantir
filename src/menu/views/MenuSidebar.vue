@@ -52,7 +52,7 @@ export default {
       this.$nextTick(() => this.$refs.sidebar.refresh());
 
       return this.$store.state.Menu.menu;
-    }
+    },
   },
   methods: {
     onOpenCloseItem() {

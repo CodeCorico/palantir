@@ -3,7 +3,7 @@ import axios from 'axios';
 const name = 'Pages';
 
 const unescapeHtml = (text) => {
-  var map = {
+  const map = {
     '&amp;': '&',
     '&lt;': '<',
     '&gt;': '>',
@@ -11,12 +11,13 @@ const unescapeHtml = (text) => {
     '&#039;': '\'',
   };
 
-  return text.replace(/&[#0-9a-z]+;/gi, m => map[m]);
-}
+  return text.replace(/&[#0-9a-z]+;/gi, (m) => map[m]);
+};
 
 const sortTree = (tree) => {
   tree.sort((a, b) => {
-    return a.file && b.path ? 1 : a.path && b.file ? -1 : 0;
+    const status = a.file && b.path ? 1 : 0;
+    return status || (a.path && b.file ? -1 : 0);
   });
 
   tree.forEach((obj) => {

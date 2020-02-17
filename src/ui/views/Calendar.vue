@@ -69,28 +69,23 @@ export default {
   },
   methods: {
     statusCls(event) {
-      let invited = 0;
-      let accepted = 0;
+      const usersKeys = Object.keys(this.config.users || {});
+      const attendeesCounts = (event.attendees || []).reduce((result, attendee) => {
+        const countable = !(usersKeys.indexOf(attendee.email) < 0 || attendee.organizer);
 
-      if (!event.attendees) {
-        return 'accepted';
-      }
+        return {
+          invited: result.invited + countable ? 1 : 0,
+          accepted: result.accepted + countable && attendee.responseStatus === 'accepted' ? 1 : 0,
+        };
+      }, { invited: 0, accepted: 0 });
+      let status = 'accepted';
 
-      const usersKeys = Object.keys(this.config.users);
+      status = attendeesCounts.invited !== attendeesCounts.accepted && attendeesCounts.accepted > 0
+        ? 'some' : status;
+      status = attendeesCounts.invited !== attendeesCounts.accepted && attendeesCounts.accepted < 1
+        ? 'unaccepted' : status;
 
-      event.attendees.forEach(attendee => {
-        if (usersKeys.indexOf(attendee.email) < 0 || attendee.organizer) {
-          return;
-        }
-
-        invited++;
-
-        if (attendee.responseStatus === 'accepted') {
-          accepted++;
-        }
-      });
-
-      return invited === accepted ? 'accepted' : (accepted > 0 ? 'some' : 'unaccepted');
+      return status;
     },
     isRemind(event) {
       if (!this.config.reminder) {
@@ -138,14 +133,8 @@ export default {
       this.$set(this, 'actualMinutes', (date.getHours() * 60) + date.getMinutes());
 
       if (this.config.sounds && this.config.sounds.reminder && this.config.reminder) {
-        let notif = false;
-        for (let i = 0; i < this.events.length; i++) {
-          if (this.events[i].pTime.fullMinutes - this.config.reminder === this.actualMinutes) {
-            notif = true;
-
-            break;
-          }
-        }
+        const notif = this.events
+          .some((event) => event.pTime.fullMinutes - this.config.reminder === this.actualMinutes);
 
         if (notif) {
           const audio = new Audio(this.config.sounds.reminder);
@@ -153,7 +142,7 @@ export default {
           // eslint-disable-next-line no-console
           audio.play().catch(() => console.warn(
             `Impossible to play "${this.config.sounds.reminder}"`,
-            `(maybe the user didn't interact with the page)`
+            '(maybe the user didn\'t interact with the page)',
           ));
         }
       }

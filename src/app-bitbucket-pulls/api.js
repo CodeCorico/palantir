@@ -12,7 +12,7 @@ const fetchRepo = async (key, repo) => {
 
 const fetchPull = async (pullSummary) => {
   const pull = await bitbucket.get(pullSummary.url);
-  const data = Object.assign({}, pull.data);
+  const data = { ...pull.data };
 
   const diffstat = await bitbucket.get(data.links.diffstat.href);
   data.pDiffstat = diffstat.data.values;
@@ -45,7 +45,7 @@ const callback = async (req, res) => {
   bitbucket.defaults.auth = { username, password };
 
   const pullsSubArrays = await Promise.all(
-    Object.keys(repositories).map(key => fetchRepo(key, repositories[key]))
+    Object.keys(repositories).map((key) => fetchRepo(key, repositories[key])),
   );
 
   const pullsSummary = [];
@@ -55,12 +55,12 @@ const callback = async (req, res) => {
       pullsSummary.push({
         url: pull.links.self.href,
         palantirScope: pullsSubArray.palantirScope,
-      })
+      });
     });
   });
 
   const pulls = await Promise.all(
-    pullsSummary.map(pullSummary => fetchPull(pullSummary))
+    pullsSummary.map((pullSummary) => fetchPull(pullSummary)),
   );
 
   res.json({ pulls });

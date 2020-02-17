@@ -11,7 +11,7 @@ const fetchRepo = async (key, repo) => {
 
 const fetchPull = async (pullSummary) => {
   const pull = await github.get(pullSummary.url);
-  const data = Object.assign({}, pull.data);
+  const data = { ...pull.data };
 
   const reviews = await github.get(`${pullSummary.url}/reviews`);
   data.pReviews = reviews.data;
@@ -49,7 +49,7 @@ const callback = async (req, res) => {
   github.defaults.headers.common.Authorization = `token ${token}`;
 
   const pullsSubArrays = await Promise.all(
-    Object.keys(repositories).map(key => fetchRepo(key, repositories[key]))
+    Object.keys(repositories).map((key) => fetchRepo(key, repositories[key])),
   );
 
   const pullsSummary = [];
@@ -59,12 +59,12 @@ const callback = async (req, res) => {
       pullsSummary.push({
         url: pull.url,
         palantirScope: pullsSubArray.palantirScope,
-      })
+      });
     });
   });
 
   const pulls = await Promise.all(
-    pullsSummary.map(pullSummary => fetchPull(pullSummary))
+    pullsSummary.map((pullSummary) => fetchPull(pullSummary)),
   );
 
   res.json({ pulls });

@@ -111,11 +111,12 @@ export default {
         requests[branch].forEach((originRequest) => {
           const isRemote = remoteTypes.indexOf(originRequest.type) > -1;
 
-          const request = Object.assign({
+          const request = {
             avatar: avatars[originRequest.user.name] || null,
             target: null,
             userType: isRemote ? 'success' : 'error',
-          }, originRequest);
+            ...originRequest,
+          };
 
           const startDate = new Date(originRequest.startDate);
           const endDate = new Date(originRequest.endDate);
@@ -126,13 +127,16 @@ export default {
             request.target = `→ ${moment(endDate).format(`dddd Do ${addEndMonth}`)}`;
           }
           if (branch === 'nextDays') {
+            let targetFormatted = originRequest.startDate !== originRequest.endDate
+              ? ` → ${moment(endDate).format(`dddd Do ${addEndMonth}`)}`
+              : '';
+            targetFormatted = targetFormatted || (request.units !== 1
+              ? ` [${request.units}]`
+              : '');
+
             request.target = [
               moment(new Date(originRequest.startDate)).format(`dddd Do ${addStartMonth}`),
-              originRequest.startDate !== originRequest.endDate
-                ? ` → ${moment(endDate).format(`dddd Do ${addEndMonth}`)}`
-                : (request.units !== 1
-                ? ` [${request.units}]`
-                : '')
+              targetFormatted,
             ].join('');
           }
 
@@ -146,7 +150,7 @@ export default {
   methods: {
     message(name, data) {
       this.$refs.frame.contentWindow
-        .postMessage(Object.assign({ name }, data || {}), `https://${this.config.domain}`);
+        .postMessage({ name, ...data || {} }, `https://${this.config.domain}`);
     },
     onMessage(event) {
       if (!event.data.name || event.origin.indexOf(`https://${this.config.domain}`) < 0) {
@@ -155,8 +159,7 @@ export default {
 
       if (event.data.name === 'ready') {
         this.$store.dispatch('Freshteam/frameReady');
-      }
-      else if (event.data.name === 'requests') {
+      } else if (event.data.name === 'requests') {
         this.$store.dispatch('Freshteam/collectRequests', event.data.requests);
       }
     },

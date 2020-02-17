@@ -26,14 +26,12 @@ const store = {
     start({ commit }, task) {
       commit('updateRandomizer', {});
       setTimeout(() => {
-        commit('updateRandomizer', Object.assign({
-          id: task.id,
-        }, task.config));
+        commit('updateRandomizer', { id: task.id, ...task.config });
       });
     },
     stop({ commit }) {
       commit('updateRandomizer', {});
-    }
+    },
   },
 };
 

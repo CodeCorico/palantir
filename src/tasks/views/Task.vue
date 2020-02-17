@@ -30,7 +30,7 @@ export default {
     status: {
       type: String,
       default: 'idle',
-      validator: value => ['idle', 'disabled', 'running', 'success', 'error'].indexOf(value) > -1,
+      validator: (value) => ['idle', 'disabled', 'running', 'success', 'error'].indexOf(value) > -1,
     },
     title: String,
     description: String,
@@ -40,9 +40,9 @@ export default {
     slackCommand: String,
   },
   mounted() {
-    if(this.slackCommand) {
+    if (this.slackCommand) {
       const socket = io.connect('/');
-      socket.on(this.slackCommand, parameters => this.start(parameters));
+      socket.on(this.slackCommand, (parameters) => this.start(parameters));
     }
   },
   methods: {
@@ -60,7 +60,7 @@ export default {
         id: this.id,
         appId: this.appId,
         config: this.config,
-        slack: slackParameters
+        slack: slackParameters,
       });
     },
   },

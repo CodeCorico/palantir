@@ -20,7 +20,7 @@ export default {
     position: {
       type: String,
       required: true,
-      validator: value => ['left', 'right'].indexOf(value) > -1,
+      validator: (value) => ['left', 'right'].indexOf(value) > -1,
     },
     opened: {
       type: Boolean,
@@ -28,12 +28,12 @@ export default {
     },
   },
   data() {
-    return  {
+    return {
       openSb: 0,
       openSbTimeout: null,
     };
   },
-  created () {
+  created() {
     this.$on('navigate', () => this.$parent.$emit('navigate'));
   },
   methods: {

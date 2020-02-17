@@ -48,13 +48,13 @@ export default {
   },
   mounted() {
     this.$store.dispatch('Apps/switchTasks', {
-      appsIds: this.config.apps.map(app => app.app),
+      appsIds: this.config.apps.map((app) => app.app),
       enable: true,
     });
   },
   destroyed() {
     this.$store.dispatch('Apps/switchTasks', {
-      appsIds: this.config.apps.map(app => app.app),
+      appsIds: this.config.apps.map((app) => app.app),
       enable: false,
     });
   },
@@ -63,9 +63,7 @@ export default {
       return this.$store.state.Config.config;
     },
     apps() {
-      return this.config.apps.map(app => Object.assign({
-        def: this.mainConfig.apps[app.app]
-      }, app));
+      return this.config.apps.map((app) => ({ def: this.mainConfig.apps[app.app], ...app }));
     },
   },
 };

@@ -151,15 +151,15 @@ export default {
       const eventPath = e.path || (e.composedPath ? e.composedPath() : null);
 
       if (eventPath) {
-        for (let i = 0; i < eventPath.length; i++) {
+        for (let i = 0; i < eventPath.length; i += 1) {
           if (
             eventPath[i].nodeName
             && eventPath[i].nodeName.toLowerCase() === 'a'
             && eventPath[i].getAttribute('local') === 'router-link') {
-              el = eventPath[i];
+            el = eventPath[i];
 
-              break;
-            }
+            break;
+          }
         }
       }
 
@@ -242,7 +242,10 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
 
       pre[class*="language-"] {
         border-radius: 0;
-        box-shadow: 0 0 8px 0 rgba(0,0,0,.08), 0 0 15px 0 rgba(0,0,0,.02), 0 0 20px 4px rgba(0,0,0,.06);
+        box-shadow:
+          0 0 8px 0 rgba(0,0,0,.08),
+          0 0 15px 0 rgba(0,0,0,.02),
+          0 0 20px 4px rgba(0,0,0,.06);
       }
 
       a, a:hover, a:visited, a:focus {

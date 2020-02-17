@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     planningTime(epicDetail) {
-      return Math.round(epicDetail.todo / 1 /*this.velocity.weekly*/ * 10) / 10;
+      return Math.round((epicDetail.todo / 1) /* this.velocity.weekly */ * 10) / 10;
     },
   },
 };

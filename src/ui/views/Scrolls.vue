@@ -149,7 +149,7 @@ export default {
       const area = this.$refs.container[type === 'v' ? 'scrollHeight' : 'scrollWidth'];
       const bar = this.$refs[type === 'v' ? 'barAreaV' : 'barAreaH'];
       const max = bar[type === 'v' ? 'clientHeight' : 'clientWidth'];
-      const scrollTo = offset + ((eventOffset - cursorOffset) * area / max);
+      const scrollTo = offset + (((eventOffset - cursorOffset) * area) / max);
 
       this.$refs.container[type === 'v' ? 'scrollTop' : 'scrollLeft'] = scrollTo;
 
@@ -170,21 +170,17 @@ export default {
     },
     refresh() {
       this.$set(this, 'barVSize',
-        Math.round(this.$refs.container.clientHeight * 100 / this.$refs.content.clientHeight),
-      );
+        Math.round((this.$refs.container.clientHeight * 100) / this.$refs.content.clientHeight));
       this.$set(this, 'barHSize',
-        Math.round(this.$refs.container.clientWidth * 100 / this.$refs.content.clientWidth),
-      );
+        Math.round((this.$refs.container.clientWidth * 100) / this.$refs.content.clientWidth));
 
       this.refreshBarsPosition();
     },
     refreshBarsPosition() {
       this.$set(this, 'barVOffset',
-        Math.round(this.$refs.container.scrollTop * 100 / this.$refs.container.scrollHeight),
-      );
+        Math.round((this.$refs.container.scrollTop * 100) / this.$refs.container.scrollHeight));
       this.$set(this, 'barHOffset',
-        Math.round(this.$refs.container.scrollLeft * 100 / this.$refs.container.scrollWidth),
-      );
+        Math.round((this.$refs.container.scrollLeft * 100) / this.$refs.container.scrollWidth));
     },
     scrollToY(value) {
       this.scrollTo('y', value);
@@ -195,10 +191,10 @@ export default {
     scrollTo(type, value) {
       const container = this.$refs.container[type === 'y' ? 'clientHeight' : 'clientWidth'];
       const content = this.$refs.content[type === 'y' ? 'clientHeight' : 'clientWidth'];
-      const scrollTo = value * (content - container) / 100;
+      const scrollTo = (value * (content - container)) / 100;
 
       this.$refs.container[type === 'y' ? 'scrollTop' : 'scrollLeft'] = scrollTo;
-    }
+    },
   },
 };
 </script>

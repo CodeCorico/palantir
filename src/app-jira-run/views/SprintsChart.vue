@@ -12,7 +12,7 @@ export default {
     stories: Array,
     debts: Array,
   },
-  mounted () {
+  mounted() {
     this.updateChart();
   },
   watch: {
@@ -39,7 +39,7 @@ export default {
           data: this.stories,
           datalabels: {
             color: COLORS.stories,
-          }
+          },
         }, {
           yAxisID: 'y-axis-debts',
           fill: false,
@@ -49,7 +49,7 @@ export default {
           data: this.debts,
           datalabels: {
             color: COLORS.debts,
-            formatter: value => `${value}%`,
+            formatter: (value) => `${value}%`,
           },
         }],
       }, {
@@ -61,7 +61,7 @@ export default {
             align: 'top',
             offset: 10,
             font: { size: 20 },
-          }
+          },
         },
         scales: {
           yAxes: [{
@@ -87,7 +87,7 @@ export default {
         legend: { display: false },
         maintainAspectRatio: false,
       });
-    }
-  }
+    },
+  },
 };
 </script>

@@ -1,11 +1,11 @@
 const name = 'OutlookCalendar';
 
 const digestEvents = (events) => {
-  let filteredEvents = {};
+  const filteredEvents = {};
 
   return events
     .map((eventRaw) => {
-      const event = Object.assign({}, eventRaw);
+      const event = { ...eventRaw };
 
       const from = event.from.split(':');
       const dateStart = new Date();
@@ -25,7 +25,7 @@ const digestEvents = (events) => {
       const total = dateEnd.getDate() !== dateStart.getDate()
         ? (23 * 60) + 59 - totalStart
         : ((dateEnd.getHours() * 60) + dateEnd.getMinutes()) - totalStart;
-        event.pTime = {
+      event.pTime = {
         hours: Math.floor(total / 60),
         minutes: Math.round(total % 60),
         fullMinutes: totalStart,

@@ -14,6 +14,7 @@ const store = {
         (category.sections || []).forEach((section) => {
           (section.links || []).forEach((link) => {
             if (link.url && !link.app && !link.root) {
+              // eslint-disable-next-line no-param-reassign
               link.external = true;
             }
 
@@ -21,6 +22,7 @@ const store = {
               return;
             }
 
+            // eslint-disable-next-line no-param-reassign
             link.url = link.root ? '/' : apps[link.app].url;
           });
         });
@@ -33,7 +35,7 @@ const store = {
     config({ commit }, payload) {
       commit('config', payload);
     },
-  }
+  },
 };
 
 export default { name, store };

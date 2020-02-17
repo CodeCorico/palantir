@@ -131,7 +131,7 @@ export default {
   props: {
     config: Object,
   },
-  created () {
+  created() {
     this.$on('scrollToY', this.onScrollToY);
     this.$on('scrollToX', this.onScrollToX);
   },
@@ -192,7 +192,7 @@ export default {
         this.filterDateTimeout = setTimeout(() => {
           this.$store.dispatch('Timeline/filter', { type: 'date', value });
         }, 250);
-      }
+      },
     },
     domainFilter: {
       get() {
@@ -204,8 +204,8 @@ export default {
         this.filterDomainTimeout = setTimeout(() => {
           this.$store.dispatch('Timeline/filter', { type: 'domain', value });
         }, 250);
-      }
-    }
+      },
+    },
   },
   methods: {
     selectColumn(dateTitle) {
@@ -217,7 +217,7 @@ export default {
 
       this.$set(this, 'dateSelected', dateTitle);
 
-      for (let i = 0; i < this.datesEvents.length; i++) {
+      for (let i = 0; i < this.datesEvents.length; i += 1) {
         if (this.datesEvents[i].title === dateTitle) {
           this.$set(this, 'content', this.datesEvents[i].content || 'No content.');
 
@@ -246,10 +246,12 @@ export default {
       const paddingWidth = this.$refs.map.clientWidth - realWidth;
       const paddingHeight = this.$refs.map.clientHeight - realHeight;
 
-      return { realWidth, realHeight, paddingWidth, paddingHeight };
+      return {
+        realWidth, realHeight, paddingWidth, paddingHeight,
+      };
     },
     areaVisible() {
-      const { paddingWidth, paddingHeight }= this.containersSizes();
+      const { paddingWidth, paddingHeight } = this.containersSizes();
 
       return {
         areaVisibleWidth: this.$refs.scrolls.$el.clientWidth - paddingWidth,
@@ -271,8 +273,8 @@ export default {
 
         const { areaVisibleWidth, areaVisibleHeight } = this.areaVisible();
 
-        this.$set(this, 'visibleAreaWidth', areaVisibleWidth * 100 / realWidth);
-        this.$set(this, 'visibleAreaHeight', areaVisibleHeight * 100 / realHeight);
+        this.$set(this, 'visibleAreaWidth', (areaVisibleWidth * 100) / realWidth);
+        this.$set(this, 'visibleAreaHeight', (areaVisibleHeight * 100) / realHeight);
       });
     },
     mapScrolling(event, position) {
@@ -282,8 +284,8 @@ export default {
       const { realWidth, realHeight } = this.containersSizes();
       const { areaVisibleWidth, areaVisibleHeight } = this.areaVisible();
 
-      this.$set(this, 'scrollX', Math.round(position.x * 100 / (realWidth - areaVisibleWidth)));
-      this.$set(this, 'scrollY', Math.round(position.y * 100 / (realHeight - areaVisibleHeight)));
+      this.$set(this, 'scrollX', Math.round((position.x * 100) / (realWidth - areaVisibleWidth)));
+      this.$set(this, 'scrollY', Math.round((position.y * 100) / (realHeight - areaVisibleHeight)));
     },
     propagateWheel(event) {
       this.$refs.scrolls.propagateWheel(event);
@@ -293,7 +295,7 @@ export default {
       const prevIndex = index - 1;
       const domainsIndex = this.domains.indexOf(event.domain);
       const domainsPrevIndex = prevIndex < 0 ? -1 : this.domains.indexOf(events[prevIndex].domain);
-      let spaceEvents = domainsIndex - domainsPrevIndex - 1;
+      const spaceEvents = domainsIndex - domainsPrevIndex - 1;
 
       if (spaceEvents < 1) {
         return {};
@@ -611,19 +613,31 @@ export default {
     }
 
     &.idle-success-warning {
-      background: linear-gradient(to right, #6998fc 0%,#6089e6 32%,#4cbaab 33%,#389393 65%,#f39d4c 66%,#e48a41 100%);
+      background: linear-gradient(
+        to right, #6998fc 0%,#6089e6 32%,#4cbaab 33%,#389393 65%,
+      #f39d4c 66%,#e48a41 100%
+      );
     }
 
     &.idle-success-perf {
-      background: linear-gradient(to right, #6998fc 0%,#6089e6 32%,#4cbaab 33%,#389393 65%,#904cba 66%,#683893 100%);
+      background: linear-gradient(
+        to right, #6998fc 0%,#6089e6 32%,#4cbaab 33%,#389393 65%,
+      #904cba 66%,#683893 100%
+      );
     }
 
     &.idle-warning-perf {
-      background: linear-gradient(to right, #6998fc 0%,#6089e6 32%,#f39d4c 33%,#e48a41 65%,#904cba 66%,#683893 100%);
+      background: linear-gradient(
+        to right, #6998fc 0%,#6089e6 32%,#f39d4c 33%,#e48a41 65%,
+      #904cba 66%,#683893 100%
+      );
     }
 
     &.idle-success-warning-perf {
-      background: linear-gradient(to right, #6998fc 0%,#6089e6 24%,#4cbaab 25%,#389393 49%,#f39d4c 50%,#e48a41 74%,#904cba 75%,#683893 100%);
+      background: linear-gradient(
+        to right, #6998fc 0%,#6089e6 24%,#4cbaab 25%,#389393 49%,
+      #f39d4c 50%,#e48a41 74%,#904cba 75%,#683893 100%
+      );
     }
   }
 
@@ -634,12 +648,16 @@ export default {
     transform: translateY(-14px);
 
     &.warning-success {
-      background: linear-gradient(to right, transparent 50%, #223049 50%), linear-gradient(to right, #f39d4c, #4cbaab);
+      background:
+        linear-gradient(to right, transparent 50%, #223049 50%),
+        linear-gradient(to right, #f39d4c, #4cbaab);
       background-size: 5px 3px, 100% 3px;
     }
 
     &.warning-warning {
-      background: linear-gradient(to right, transparent 50%, #223049 50%), linear-gradient(to right, #f39d4c, #e48a41);
+      background:
+        linear-gradient(to right, transparent 50%, #223049 50%),
+        linear-gradient(to right, #f39d4c, #e48a41);
       background-size: 5px 3px, 100% 3px;
     }
   }

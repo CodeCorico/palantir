@@ -8,7 +8,7 @@ export default {
   props: {
     values: Array,
   },
-  mounted () {
+  mounted() {
     this.updateChart();
   },
   watch: {
@@ -33,7 +33,7 @@ export default {
         plugins: {
           datalabels: {
             color: '#ffffffdd',
-            display: context => !!context.dataset.data[context.dataIndex],
+            display: (context) => !!context.dataset.data[context.dataIndex],
           },
         },
         title: { display: false },

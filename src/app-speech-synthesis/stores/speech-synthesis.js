@@ -36,7 +36,7 @@ const store = {
 
       const query = Object
         .keys(queryParams)
-        .map(key => `${key}=${queryParams[key]}`)
+        .map((key) => `${key}=${queryParams[key]}`)
         .join('&');
 
       const { data } = await axios.get(`${SPEECH_SYNTHESIS_API_URL}?${query}`);
@@ -69,9 +69,9 @@ const store = {
           [
             `*App(${name})*`,
             `<@${slack.user}>,`,
-            'The message has been retrieved by Palantir and will be played.'
+            'The message has been retrieved by Palantir and will be played.',
           ].join(' '),
-          slack.channel
+          slack.channel,
         );
       }
 

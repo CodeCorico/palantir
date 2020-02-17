@@ -15,10 +15,8 @@ const store = {
     pushSidebar: (state, sidebar) => {
       const buttons = state[`${sidebar.location}Buttons`];
 
-      for (let i = 0; i < buttons.length; i++) {
-        if (buttons[i].id === sidebar.id) {
-          return;
-        }
+      if (buttons.some((button) => button.id === sidebar.id)) {
+        return;
       }
 
       state[`${sidebar.location}Buttons`].push({
@@ -40,10 +38,10 @@ const store = {
     sliceSidebar: (state, id) => {
       ['left', 'right'].forEach((location) => {
         state[`${location}Buttons`] = state[`${location}Buttons`]
-          .filter(button => button.id !== id);
+          .filter((button) => button.id !== id);
 
         state[`${location}Sidebars`] = state[`${location}Sidebars`]
-          .filter(sidebar => sidebar.id !== id);
+          .filter((sidebar) => sidebar.id !== id);
       });
     },
     updateButtonSelected: (state, payload) => {
@@ -53,6 +51,7 @@ const store = {
 
       state[`${location}Buttons`].forEach((button) => {
         const wasSelected = button.selected;
+        // eslint-disable-next-line no-param-reassign
         button.selected = !close && button.id === payload.id ? !button.selected : false;
 
         if (wasSelected && !button.selected && button.handler) {
@@ -67,18 +66,21 @@ const store = {
           }
 
           if (button.unSelectable) {
+            // eslint-disable-next-line no-param-reassign
             button.selected = false;
           }
         }
       });
 
       state[`${location}Sidebars`].forEach((sidebar) => {
+        // eslint-disable-next-line no-param-reassign
         sidebar.opened = (isSelected && sidebar.id === payload.id) || false;
       });
     },
     updateButtonDisplay: (state, visible) => {
       ['left', 'right'].forEach((location) => {
-        state[`${location}Buttons`].forEach(button => (button.hidden = !visible));
+        // eslint-disable-next-line no-param-reassign, no-return-assign
+        state[`${location}Buttons`].forEach((button) => (button.hidden = !visible));
       });
     },
     updateVersions: (state, data) => {
@@ -100,7 +102,7 @@ const store = {
       commit('updateButtonSelected', payload);
     },
     closeButton({ commit }, payload) {
-      commit('updateButtonSelected', Object.assign({ close: true }, payload));
+      commit('updateButtonSelected', { close: true, ...payload });
     },
     hideButtons({ commit }) {
       commit('updateButtonDisplay', false);
@@ -112,7 +114,7 @@ const store = {
       const { data } = await axios.get('/api/version');
 
       commit('updateVersions', data);
-    }
+    },
   },
 };
 

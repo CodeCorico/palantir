@@ -58,7 +58,7 @@ export default {
       }
 
       this.start();
-    }
+    },
   },
   methods: {
     anim(sb, steps, step, done) {
@@ -75,7 +75,7 @@ export default {
       this.animTimeout = setTimeout(() => {
         this.$set(this, sb, step);
 
-        this.anim(sb, steps, ++step, done);
+        this.anim(sb, steps, step + 1, done);
       }, steps[step]);
     },
     start() {
@@ -89,7 +89,7 @@ export default {
         // eslint-disable-next-line no-console
         audio.play().catch(() => console.warn(
           `Impossible to play "${this.sounds.start}"`,
-          `(maybe the user didn't interact with the page)`
+          '(maybe the user didn\'t interact with the page)',
         ));
       }
 
@@ -137,9 +137,9 @@ export default {
 
         this.$set(this, 'image', null);
 
-        index = index + 1 === this.images.length ? 0 : index + 1;
+        const newIndex = index + 1 === this.images.length ? 0 : index + 1;
 
-        this.randomizeImagesTimeout = setTimeout(() => this.randomizeImages(index, --loops));
+        this.randomizeImagesTimeout = setTimeout(() => this.randomizeImages(newIndex, loops - 1));
       }, 200);
     },
     goFixed() {
@@ -188,7 +188,9 @@ export default {
   0% { opacity: 0; width: 118px; height: 118px; transform: translateY(1px) translateX(1px); }
   89% { opacity: 0; width: 118px; height: 118px; transform: translateY(1px) translateX(1px); }
   90% { opacity: 1; width: 118px; height: 118px; transform: translateY(1px) translateX(1px); }
-  94.99% { opacity: 0; width: 170px; height: 170px; transform: translateY(-25px) translateX(-25px); }
+  94.99% {
+    opacity: 0; width: 170px; height: 170px; transform: translateY(-25px) translateX(-25px);
+  }
   95% { opacity: 1; width: 118px; height: 118px; transform: translateY(1px) translateX(1px); }
   100% { opacity: 0; width: 170px; height: 170px; transform: translateY(-25px) translateX(-25px); }
 }

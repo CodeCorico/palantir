@@ -7,21 +7,16 @@ const glob = require('glob');
 const yargs = require('yargs');
 const clc = require('cli-color');
 
-require('dotenv').config({
-  path: path.resolve(__dirname, '../../.env'),
-});
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
-const commandFiles = glob.sync(path.resolve(__dirname, 'commands/*-command.js'));
+glob
+  .sync(path.resolve(__dirname, 'commands/*-command.js'))
+  // eslint-disable-next-line global-require, import/no-dynamic-require
+  .forEach((commandFile) => yargs.command(require(commandFile)));
 
-yargs.usage('palantir <cmd> [args]');
-
-commandFiles.forEach((commandFile) => {
-  const command = require(commandFile);
-
-  yargs.command(command);
-});
-
+// eslint-disable-next-line no-unused-expressions
 yargs
+  .usage('palantir <cmd> [args]')
   .demandCommand(1, clc.yellowBright('Please specify a command'))
   .help()
   .wrap(yargs.terminalWidth())

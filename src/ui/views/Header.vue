@@ -73,7 +73,7 @@ export default {
     upgrade: Object,
   },
   data() {
-    return  {
+    return {
       locked: false,
       dateTimeTimeout: null,
       dateTime: null,
@@ -100,7 +100,7 @@ export default {
       setTimeout(() => {
         this.$set(this, 'appearSb', step);
 
-        this.appear(steps, ++step);
+        this.appear(steps, step + 1);
       }, steps[step]);
     },
     dateTimeClock() {
@@ -115,7 +115,8 @@ export default {
 
       this.$set(this, 'dateTime', `${hours}:${minutes} ${months}/${day}`);
 
-      this.dateTimeTimeout = setTimeout(() => this.dateTimeClock(), 60 * 1000); // 1min
+      // 1min
+      this.dateTimeTimeout = setTimeout(() => this.dateTimeClock(), 60 * 1000);
     },
   },
   mounted() {
@@ -204,7 +205,10 @@ export default {
     }
 
     @keyframes logo-lock {
-      49% { position: relative; top: auto; right: auto; margin: -26px 10px 0 0; transform: translateY(-70px) translateX(47px); }
+      49% {
+        position: relative; top: auto; right: auto; margin: -26px 10px 0 0;
+        transform: translateY(-70px) translateX(47px);
+      }
       50% { position: absolute; top: -18px; right: -2px; margin: 0; transform: scale(0.7); }
       100% { position: absolute; top: -18px; right: -2px; margin: 0; transform: scale(0.7); }
     }
@@ -216,8 +220,14 @@ export default {
 
     @keyframes title-lock {
       49% { width: auto; margin-top: 0; padding: 0; font-size: 23px; background: none; }
-      50% { width: 118px; margin-top: 5px; padding: 5px 25px 5px 10px; font-size: 19px; background: $colorBg; }
-      100% { width: 118px; margin-top: 5px; padding: 5px 25px 5px 10px; font-size: 19px; background: $colorBg; }
+      50% {
+        width: 118px; margin-top: 5px; padding: 5px 25px 5px 10px;
+        font-size: 19px; background: $colorBg;
+      }
+      100% {
+        width: 118px; margin-top: 5px; padding: 5px 25px 5px 10px;
+        font-size: 19px; background: $colorBg;
+      }
     }
 
     @keyframes fadeOut {

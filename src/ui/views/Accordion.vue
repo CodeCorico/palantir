@@ -7,8 +7,8 @@
 <script>
 export default {
   name: 'ui-accordion',
-  created () {
-    this.$on('accordion-item-open', item => this.$emit('accordion-close', item));
+  created() {
+    this.$on('accordion-item-open', (item) => this.$emit('accordion-close', item));
   },
 };
 </script>

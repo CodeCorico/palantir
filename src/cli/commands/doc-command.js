@@ -3,18 +3,20 @@ const fs = require('fs');
 const glob = require('glob');
 const marked = require('marked');
 const mkp = require('mkp');
-const { banner, log, logDate, logSuccess, logWarning } =
-  require(path.resolve(__dirname, '../command-console-format'));
+
+const {
+  banner, log, logDate, logSuccess, logWarning,
+} = require('../command-console-format');
 
 const fillTree = (tree, fileSplitted, index = 0) => {
   let actualTree = -1;
   const file = fileSplitted[index];
 
-  for (let i = 0; i < tree.length; i++) {
+  tree.forEach((item, i) => {
     if (tree[i].path === file) {
       actualTree = i;
     }
-  }
+  });
 
   if (actualTree < 0) {
     const isFile = fileSplitted.length === index + 1;
@@ -36,7 +38,7 @@ const contentProcesses = {
       const filePath = path.resolve(`${basePath}/${file}`);
       return contentProcesses.mmd(fs.readFileSync(filePath, 'utf8'));
     }),
-  mmd: content => `<div class="mermaid">${content}</div>`,
+  mmd: (content) => `<div class="mermaid">${content}</div>`,
 };
 
 const handler = (argv) => {
@@ -60,7 +62,7 @@ const handler = (argv) => {
 
     const content = contentProcesses[fileType.replace('.', '')](
       fs.readFileSync(file, 'utf8'),
-      path.dirname(path.resolve(file))
+      path.dirname(path.resolve(file)),
     )
       .replace(/<a\s+href="(.*?)"\s*>/g, (link, match) => {
         if (!match.match(/.mm?d$/i) || match.match(/^http/i)) {
@@ -84,7 +86,7 @@ const handler = (argv) => {
     fs.writeFileSync(newFilePath, content);
   });
 
-  logDate(`Generate the glossary`);
+  logDate('Generate the glossary');
 
   fs.writeFileSync(`${destination}/glossary.json`, JSON.stringify(jsonTree));
 
@@ -96,7 +98,7 @@ const handler = (argv) => {
 module.exports = {
   command: 'doc <source> <destination> [origin]',
   desc: 'Generate a HTML documentation from a markdown one',
-  builder: yargs => yargs
+  builder: (yargs) => yargs
     .positional('source', {
       describe: 'Files path(s) to parse (glob syntax)',
       type: 'string',

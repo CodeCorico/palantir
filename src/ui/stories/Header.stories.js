@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { text } from '@storybook/addon-knobs';
 
-import Header from '../Header.vue';
+import Header from '../views/Header.vue';
 import Logo from './logo.jpg';
 
 storiesOf('Layout', module)
