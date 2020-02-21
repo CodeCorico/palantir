@@ -14,7 +14,6 @@ glob
   // eslint-disable-next-line global-require, import/no-dynamic-require
   .forEach((commandFile) => yargs.command(require(commandFile)));
 
-// eslint-disable-next-line no-unused-expressions
 yargs
   .usage('palantir <cmd> [args]')
   .demandCommand(1, clc.yellowBright('Please specify a command'))
@@ -22,4 +21,4 @@ yargs
   .wrap(yargs.terminalWidth())
   .locale('en')
   .wrap(130)
-  .argv;
+  .parse();
