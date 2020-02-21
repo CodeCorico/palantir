@@ -1,3 +1,71 @@
+# [0.10.0](https://github.com/CodeCorico/palantir/compare/v0.9.0...v0.10.0) (2020-02-21)
+
+
+### Bug Fixes
+
+* apply the airbnb style ([9a78c07](https://github.com/CodeCorico/palantir/commit/9a78c075ea08c5201bc43747883908e472cc6a7c))
+* **app bitbucket-pulls:** add an api to retrieve the data from the server ([8703b58](https://github.com/CodeCorico/palantir/commit/8703b58f1f6151b7fbd693e40aa2bef5635cde04))
+* **app bitbucket-pulls:** create a unique key for indexing ([db74e88](https://github.com/CodeCorico/palantir/commit/db74e8849748bdb2246ed8b157d380b6b2329273))
+* **app github-pulls:** add an api to retrieve the data from the server ([9e95fcd](https://github.com/CodeCorico/palantir/commit/9e95fcdb697c0100d272b6d86eadd4483ff35c62))
+* **app github-pulls:** create a unique key for indexing ([0c530a5](https://github.com/CodeCorico/palantir/commit/0c530a5ddbb452aad4a3870ce39009b1fd98102f))
+* **app jira-capacity:** disable the estimated weeks indicator ([bfeba90](https://github.com/CodeCorico/palantir/commit/bfeba909ef6335e6e8f7fba91b180ff775c42c84))
+* **app jira-capacity:** move the secrets to the server side ([37383e8](https://github.com/CodeCorico/palantir/commit/37383e8c3e3193ce2c0ee65fa1701fdb6d8a05e9))
+* **app jira-capacity:** replace global ChartJs by imported one ([c7a0ce8](https://github.com/CodeCorico/palantir/commit/c7a0ce8192848067f02580cacb8b04315e20ffa9)), closes [#25](https://github.com/CodeCorico/palantir/issues/25)
+* **app jira-run:** use the worklogs to calculate the days worked ([ae81f59](https://github.com/CodeCorico/palantir/commit/ae81f5960716000f63fdd2e06df04fa2df50a55a))
+* **app trello:** move the secrets to the server side ([e2ea0e3](https://github.com/CodeCorico/palantir/commit/e2ea0e35aed484532f4d25bce50150c8425f39f4))
+* **app ui pull-chart:** replace global ChartJs by imported one ([ddbe1ac](https://github.com/CodeCorico/palantir/commit/ddbe1ac01a10f6249ad601a30f812645e4b962a0)), closes [#25](https://github.com/CodeCorico/palantir/issues/25)
+* **apps:** wait for the config to be loaded before openning the first app ([30e9678](https://github.com/CodeCorico/palantir/commit/30e96783276e4a6b748c77b9d8071812358c0093))
+* **cli:** use yargs.parse() to avoid disable linter rule ([db14d97](https://github.com/CodeCorico/palantir/commit/db14d97c44de79a9c5e2d4b6816ff529ecd804ec))
+* **public:** remove chartjs and extensions from global injection ([6860b3b](https://github.com/CodeCorico/palantir/commit/6860b3ba31e288a3d95ef04da0cba45f7538329f)), closes [#25](https://github.com/CodeCorico/palantir/issues/25)
+* **server:** use ENV variables instead of the "variables" config ([d94520a](https://github.com/CodeCorico/palantir/commit/d94520afacd8892be97bdbe133b58d2862297da1))
+* **storybook:** remove storybook bootstrap ([08a7432](https://github.com/CodeCorico/palantir/commit/08a743208c9e8a03d79032d8dfb74a37b2c04180))
+
+
+### Code Refactoring
+
+* **app jira-capacity:** split the app in two apps ([44ca459](https://github.com/CodeCorico/palantir/commit/44ca45977ade87258260cfee384d00a85eb7cdff))
+
+
+### Features
+
+* **app grid:** change the positions parameters to be more css compliant ([65d7c8b](https://github.com/CodeCorico/palantir/commit/65d7c8b7b6658ff5408ed3398121799c534502f8))
+* **app jira-roadmap:** create the new app ([b25d6c7](https://github.com/CodeCorico/palantir/commit/b25d6c7e536322728fdcc44b5e64e34ea9e7d878))
+* **app jira-run:** add the technical debt graph line ([f066881](https://github.com/CodeCorico/palantir/commit/f06688131f07aa6ed6dbe0526e3135e0e5b3abe1))
+* **config:** the client doesn't load the Palantir description secrets ([5c1c083](https://github.com/CodeCorico/palantir/commit/5c1c083d250e214a7f2936e23a4e2b8edaee733b))
+* **env:** add a PALANTIR_FILE env variable ([c5d0cd5](https://github.com/CodeCorico/palantir/commit/c5d0cd5bb0bd9a9fdea6d44260c9a6f8c95c61d4))
+* **tasks:** publish the app id to the tasks ([3fe6b4c](https://github.com/CodeCorico/palantir/commit/3fe6b4cd9882bfe84f31144031e831bfaad92499))
+
+
+### Performance Improvements
+
+* **app grid:** use webpack import() for code splitting ([97aa8b8](https://github.com/CodeCorico/palantir/commit/97aa8b8d300c876a82aa3aa400be975be3a378a7))
+* **app speech-synthesis:** unable websocket only if needed ([d897c3f](https://github.com/CodeCorico/palantir/commit/d897c3f558fceaf03f9ec3bce2d6388b12a60bb2))
+* **apps:** use webpack import() for code splitting ([572aeda](https://github.com/CodeCorico/palantir/commit/572aeda412db52afc621abe20977d194284aae71))
+* **server:** change the server timeout to 10min ([72955c8](https://github.com/CodeCorico/palantir/commit/72955c875eea1c6cf614df4522940367896de7c5))
+
+
+### BREAKING CHANGES
+
+* **app jira-capacity:** The jira-capacity app only kept the epics graph.
+The new jira-run app took the banner velocity and sprints graphs
+* **app grid:** The grid apps positions parameters have changed.
+"x" and "y" are now "left" and "top".
+"right" and "bottom" have beend added
+* **app jira-capacity:** The Jira Capacity "host", email" and "token" are now available in the
+"secrets" app description instead of the "config" one.
+* **app trello:** The Trello "key" and "token" are now available in the
+"secrets" app description instead of the "config" one.
+* **app github-pulls:** The Github "token" is now available in the
+"secrets" app description instead of the "config" one.
+* **app bitbucket-pulls:** The Bitbucket "username" and "password" are now available in the
+"secrets" app description instead of the "config" one.
+* **env:** The new env variable PALANTIR_FILE is needed to locate the
+palantir.json description file.
+* **server:** The "variables" config attribute is no longer supported.
+Please use real ENV variables instead (in the .env file for example)
+
+
+
 # [0.9.0](https://github.com/CodeCorico/palantir/compare/v0.8.0...v0.9.0) (2020-01-23)
 
 
