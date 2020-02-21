@@ -122,6 +122,16 @@
       "afterAll": true,
       "beforeAll": true,
       "jest": true
+    },
+    "rules": {
+      "import/no-extraneous-dependencies": [
+        "warn",
+        {
+            "devDependencies": true,
+            "optionalDependencies": true,
+            "peerDependencies": true
+        }
+      ]
     }
   },
   "postcss": {
