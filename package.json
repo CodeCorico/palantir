@@ -1,6 +1,6 @@
 {
   "name": "palantir",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "private": true,
   "bin": {
     "palantir": "src/cli/index.js"
@@ -127,9 +127,9 @@
       "import/no-extraneous-dependencies": [
         "warn",
         {
-            "devDependencies": true,
-            "optionalDependencies": true,
-            "peerDependencies": true
+          "devDependencies": true,
+          "optionalDependencies": true,
+          "peerDependencies": true
         }
       ]
     }

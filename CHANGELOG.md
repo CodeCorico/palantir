@@ -1,3 +1,12 @@
+## [0.10.1](https://github.com/CodeCorico/palantir/compare/v0.10.0...v0.10.1) (2020-02-21)
+
+
+### Bug Fixes
+
+* move some dependencies to the devDependencies to build the Docker image
+
+
+
 # [0.10.0](https://github.com/CodeCorico/palantir/compare/v0.9.0...v0.10.0) (2020-02-21)
 
 
