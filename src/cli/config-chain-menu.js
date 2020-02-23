@@ -63,6 +63,18 @@ const SectionSource = (ConfigSource, config, menuId, menuIndex, id) => {
     },
     getTitle: () => sections
       .reduce((value, section) => (section.id === id ? section.title : value), null),
+    selectors: (newSelectors) => {
+      sections[index] = { ...sections[index], selectors: newSelectors };
+
+      return SectionSource(ConfigSource, passConfig, menuId, menuIndex, id);
+    },
+    tapSelectors: (fn) => {
+      sections[index].selectors = fn(sections[index].selectors || []);
+
+      return SectionSource(ConfigSource, passConfig, menuId, menuIndex, id);
+    },
+    getSelectors: () => sections
+      .reduce((value, section) => (section.id === id ? section.selectors : value), null),
     links: LinksSource(ConfigSource, passConfig, menuId, menuIndex, id, index),
     // eslint-disable-next-line no-use-before-define
     end: () => SectionsSource(ConfigSource, passConfig, menuId, menuIndex),
