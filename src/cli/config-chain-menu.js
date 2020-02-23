@@ -63,7 +63,7 @@ const SectionSource = (ConfigSource, config, menuId, menuIndex, id) => {
     },
     getTitle: () => sections
       .reduce((value, section) => (section.id === id ? section.title : value), null),
-    links: () => LinksSource(ConfigSource, passConfig, menuId, menuIndex, id, index),
+    links: LinksSource(ConfigSource, passConfig, menuId, menuIndex, id, index),
     // eslint-disable-next-line no-use-before-define
     end: () => SectionsSource(ConfigSource, passConfig, menuId, menuIndex),
   };
@@ -109,7 +109,7 @@ const MenuItemSource = (ConfigSource, config, id) => {
       return MenuItemSource(ConfigSource, passConfig, id, findIndex(passConfig.menu, id));
     },
     getTitle: () => passConfig.menu[index].title || '',
-    sections: () => SectionsSource(ConfigSource, passConfig, id),
+    sections: SectionsSource(ConfigSource, passConfig, id, index),
     // eslint-disable-next-line no-use-before-define
     end: () => MenuSource(ConfigSource, passConfig),
   };
