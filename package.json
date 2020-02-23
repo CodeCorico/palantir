@@ -17,6 +17,7 @@
     "test:unit": "cross-env NODE_ENV=test jest --verbose --coverage",
     "test:unit:watch": "cross-env NODE_ENV=test jest --watchAll --verbose",
     "test:unit:coverage": "cross-env NODE_ENV=test jest --watchAll --coverage",
+    "test:pack": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
     "start": "node ./src/server/index.js",
     "start:watch": "nodemon ./src/server/index.js",
     "storybook": "start-storybook -p 9000 -c ./src/bootstrap/storybook",
