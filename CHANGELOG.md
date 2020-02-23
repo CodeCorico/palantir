@@ -1,3 +1,17 @@
+## [0.10.3](https://github.com/CodeCorico/palantir/compare/v0.10.2...v0.10.3) (2020-02-23)
+
+
+### Bug Fixes
+
+* **cli config-chain-menu:** use direct "links" and "sections" instead of functions ([942c010](https://github.com/CodeCorico/palantir/commit/942c01076cfb5907191ceca346d4818f8d06ea60))
+
+
+### Features
+
+* **cli config-chain-menu:** add sections "selectors" options ([7a80c83](https://github.com/CodeCorico/palantir/commit/7a80c8307d168ebd9647c485a0648ef908f7baec))
+
+
+
 ## [0.10.2](https://github.com/CodeCorico/palantir/compare/v0.10.1...v0.10.2) (2020-02-22)
 
 
