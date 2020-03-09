@@ -185,7 +185,10 @@ const callback = async (req, res) => {
 
   result.events = allSprints.map((sprint) => ({
     name: sprint.name,
-    events: sprint.goalExtracted.events,
+    events: sprint.goalExtracted.events.map((event) => ({
+      ...event,
+      date: stripYearFromDate(event.date),
+    })),
   }));
 
   res.json(result);

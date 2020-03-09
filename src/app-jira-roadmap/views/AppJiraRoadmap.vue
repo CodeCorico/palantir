@@ -1,6 +1,6 @@
 <template>
   <div class="app-jira-roadmap">
-    <div class="events">
+    <div class="events" :style="`height: ${20 + (maxEvents * 30)}px`">
       <div
         v-for="sprint in events"
         :key="sprint.name"
@@ -8,14 +8,16 @@
         :style="`width: ${100 / events.length}%`"
       >
         <div
-          v-for="event in sprint.events"
+          v-for="(event, eventIndex) in sprint.events"
           :key="event.date"
           class="event"
-          :style="`left: ${event.percent}%`"
+          :style="`
+            left: ${event.percent}%;
+            height: ${15 + ((sprint.events.length - (eventIndex + 1)) * 30)}px;
+          `"
         >
           <div class="event-title">
-            <div>{{ event.title }}</div>
-            {{ event.date }}
+            <strong>{{ event.date }}</strong> {{ event.title }}
           </div>
         </div>
       </div>
@@ -90,7 +92,7 @@ export default {
     this.$store.dispatch('JiraRoadmap/clear');
   },
   computed: {
-    ...mapState('JiraRoadmap', ['events', 'sprints', 'epics']),
+    ...mapState('JiraRoadmap', ['events', 'maxEvents', 'sprints', 'epics']),
   },
 };
 </script>
@@ -147,18 +149,26 @@ $doneWidth: 100px;
         height: 15px;
         width: 0;
         border-left: 2px solid #07b3b994;
-        border-radius: 10px;
 
         .event-title {
           position: absolute;
-          bottom: 15px;
-          width: 160px;
-          padding: 4px 2px;
+          box-sizing: border-box;
+          left: -2px;
+          top: -25px;
+          height: 25px;
+          max-width: 220px;
+          padding: 4px;
           border-radius: 5px;
-          transform: translateX(-50%);
+          border-bottom-left-radius: 0;
           background: #07b3b994;
-          text-align: center;
           line-height: 1.5;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+
+          strong {
+            font-weight: 600;
+          }
         }
       }
     }

@@ -8,17 +8,22 @@ const store = {
   namespaced: true,
   state: {
     events: [],
+    maxEvents: 0,
     sprints: [],
     epics: [],
   },
   mutations: {
     clear(state) {
       state.events = [];
+      state.maxEvents = 0;
       state.sprints = [];
       state.epics = [];
     },
     mutateEvents: (state, events) => {
       state.events = events;
+      state.maxEvents = events.reduce(
+        (maxEvents, sprint) => Math.max(sprint.events.length, maxEvents), 0,
+      );
     },
     mutateSprints: (state, sprints) => {
       state.sprints = sprints;
