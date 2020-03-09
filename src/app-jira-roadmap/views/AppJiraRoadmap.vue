@@ -26,10 +26,14 @@
 
       <div
         v-for="sprint in sprints"
-        :key="sprint"
+        :key="sprint.title"
         class="sprint"
         :style="`width: ${100 / sprints.length}%`"
-      >{{ sprint }}</div>
+      >
+        <div class="title">{{ sprint.title }}</div>
+        <div class="date-start" v-if="sprint.date[0]">{{ sprint.date[0] }}</div>
+        <div class="date-end" v-if="sprint.date[1]">{{ sprint.date[1] }}</div>
+      </div>
 
       <div class="sprint done">Awesome</div>
     </div>
@@ -187,6 +191,22 @@ $doneWidth: 100px;
         width: $doneWidth;
         min-width: $doneWidth;
         max-width: $doneWidth;
+      }
+
+      .date-start, .date-end {
+        position: absolute;
+        top: 2px;
+        font-size: 10px;
+        font-weight: 300;
+        opacity: 0.5
+      }
+
+      .date-start {
+        left: 2px;
+      }
+
+      .date-end {
+        right: 2px;
       }
     }
   }

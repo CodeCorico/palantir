@@ -1,15 +1,12 @@
 const { app } = require('../config');
 const { createJiraClientExtended, extactGoal } = require('../services/jira');
 
+const stripYearFromDate = (date) => date.replace(/.*?\/(.*?\/.*?)$/, '$1');
+
 const pullEpicsReports = async (jiraClient, boardId, epics, reports = []) => {
   const epic = epics[reports.length];
-  const report = await jiraClient.rapid.getEpicReport({
-    boardId,
-    epicKey: epic.key,
-  });
-
+  const report = await jiraClient.rapid.getEpicReport({ boardId, epicKey: epic.key });
   const { contents } = report;
-
   const backlog = contents.incompletedIssuesEstimateSum.value;
   const done = contents.completedIssuesEstimateSum.value;
   const estimateTotal = backlog + done;
@@ -54,10 +51,7 @@ const pullSprints = async (jiraClient, boardId, nameFilter, max) => (await jiraC
       return prevSprints;
     }
 
-    return prevSprints.concat({
-      ...sprint,
-      goalExtracted: extactGoal(sprint),
-    });
+    return prevSprints.concat({ ...sprint, goalExtracted: extactGoal(sprint) });
   }, []);
 
 const pullIssuesFromSprints = async (jiraClient, boardId, sprints, newSprints = []) => {
@@ -182,7 +176,10 @@ const callback = async (req, res) => {
 
   const merged = await mergeSprintsInEpics(allSprintsWithIssues, allEpics, pointsCustomField);
   result.epics = merged.epics;
-  result.sprints = merged.sprints.map((sprint) => `${sprint.name} (${sprint.estimate.total}pt)`);
+  result.sprints = merged.sprints.map((sprint) => ({
+    title: `${sprint.name} (${sprint.estimate.total}pt)`,
+    date: (sprint.goalExtracted.date || []).map((date) => stripYearFromDate(date)),
+  }));
 
   // Events
 
