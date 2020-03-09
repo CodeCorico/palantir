@@ -18,7 +18,9 @@ const dailyLoop = (task) => {
   const date = new Date();
   const nextDate = new Date();
 
-  const [hours, minutes] = task.time.split(':');
+  const timeSplitted = task.time.split(':');
+  const hours = parseInt(timeSplitted[0] || 0, 10);
+  const minutes = parseInt(timeSplitted[1] || 0, 10);
 
   if (hours < date.getHours() || (hours === date.getHours() && minutes <= date.getMinutes())) {
     nextDate.setDate(date.getDate() + 1);
