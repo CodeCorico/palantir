@@ -306,21 +306,21 @@ $readFont: -apple-system, BlinkMacSystemFont, Calibri, Carlito, Helvetica, Arial
       }
 
       table tr:nth-child(2n) {
-        background: #14272f;
+        background: #eef0f1;
       }
 
       td {
         padding: 6px 13px;
-        border-top: 1px solid #525252;
-        border-left: 1px dashed #525252;
+        border-top: 1px solid #eef0f1;
+        border-left: 1px dashed #eef0f1;
 
         &:last-child {
-          border-right: 1px dashed #525252;
+          border-right: 1px dashed #eef0f1;
         }
       }
 
       tr:last-child td {
-        border-bottom: 1px solid #525252;
+        border-bottom: 1px solid #eef0f1;
       }
 
       p > code, li > code, h1 > code, h2 > code, h3 > code, h4 > code, th > code, td > code {
