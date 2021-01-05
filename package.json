@@ -31,7 +31,7 @@
     "@google-cloud/text-to-speech": "^2.2.0",
     "@slack/rtm-api": "^5.0.3",
     "@slack/web-api": "^5.7.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "cli-color": "^2.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
