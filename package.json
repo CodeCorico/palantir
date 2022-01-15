@@ -37,7 +37,7 @@
     "express": "^4.17.1",
     "glob": "^7.1.6",
     "jira-connector": "^3.1.0",
-    "marked": "^0.8.0",
+    "marked": "^4.0.10",
     "mkp": "^1.0.1",
     "node-nlp": "^4.1.1",
     "socket.io": "^2.3.0",
