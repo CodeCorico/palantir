@@ -65,7 +65,7 @@
     "mermaid": "^8.4.7",
     "moment": "^2.24.0",
     "moment-locales-webpack-plugin": "^1.1.2",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "nodemon": "^2.0.2",
     "prismjs": "^1.19.0",
     "sass-loader": "^8.0.2",
