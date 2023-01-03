@@ -49,7 +49,7 @@
     "@storybook/vue": "^5.3.13",
     "@vue/cli-plugin-babel": "^4.2.2",
     "@vue/cli-plugin-eslint": "^4.2.2",
-    "@vue/cli-service": "^4.2.2",
+    "@vue/cli-service": "^5.0.8",
     "@vue/eslint-config-airbnb": "^5.0.2",
     "babel-eslint": "^10.0.3",
     "babel-plugin-import-glob": "^2.0.0",
